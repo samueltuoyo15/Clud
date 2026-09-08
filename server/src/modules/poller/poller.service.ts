@@ -6,8 +6,14 @@ import { projects } from "../../db/schema"
 import { fetchSpec, SpecAuth } from "../projects/utils/fetch-spec"
 import { validateOpenApiSpec } from "../projects/utils/validate-openapi"
 import { hashSpec } from "../projects/utils/hash-spec"
-import openapiDiff from "openapi-diff"
+import * as os from "os"
+import * as path from "path"
+import { exec } from "child_process"
+import { promisify } from "util"
+import * as fs from "fs/promises"
 import crypto from "crypto"
+
+const execAsync = promisify(exec)
 
 @Injectable()
 export class PollerService {
@@ -94,40 +100,44 @@ export class PollerService {
 
             const newSpecStr = JSON.stringify(spec)
 
-            let breakingCount = 0
-            let nonBreakingCount = 0
-            let unclassifiedCount = 0
-
             const previousSpecStr = project.last_spec ? this.decrypt(project.last_spec) : null
 
             if (previousSpecStr) {
-                const oldSpecObj = JSON.parse(previousSpecStr) as Record<string, unknown>
-                const newSpecObj = spec as Record<string, unknown>
-                const oldFormat = typeof oldSpecObj.swagger === "string" ? "swagger2" : "openapi3"
-                const newFormat = typeof newSpecObj.swagger === "string" ? "swagger2" : "openapi3"
-
                 try {
-                    const result = await openapiDiff.diffSpecs({
-                        sourceSpec: { content: previousSpecStr, location: "previous", format: oldFormat },
-                        destinationSpec: { content: newSpecStr, location: "current", format: newFormat },
-                    })
-
-                    if (result.breakingDifferencesFound) {
-                        breakingCount = result.breakingDifferences.length
-                    }
-                    nonBreakingCount = result.nonBreakingDifferences.length
-                    unclassifiedCount = result.unclassifiedDifferences.length
+                    const isWin = os.platform() === 'win32';
+                    const binaryName = isWin ? 'oasdiff-win.exe' : 'oasdiff-linux';
+                    const binaryPath = path.join(process.cwd(), 'bin', binaryName);
                     
-                    this.logger.warn(`Full diff result for ${project.id}:\n${JSON.stringify(result, null, 2)}`)
+                    const oldFilePath = path.join(os.tmpdir(), `old-${project.id}.json`);
+                    const newFilePath = path.join(os.tmpdir(), `new-${project.id}.json`);
+                    
+                    await fs.writeFile(oldFilePath, previousSpecStr);
+                    await fs.writeFile(newFilePath, newSpecStr);
+
+                    let resultStr = "";
+                    try {
+                        const { stdout } = await execAsync(`"${binaryPath}" diff "${oldFilePath}" "${newFilePath}" -f json`);
+                        resultStr = stdout;
+                    } catch (execErr: any) {
+                        if (execErr.stdout) {
+                            resultStr = execErr.stdout;
+                        } else {
+                            throw execErr;
+                        }
+                    }
+
+                    const diffResult = JSON.parse(resultStr);
+
+                    this.logger.warn(`Full oasdiff result for ${project.id}:\n${JSON.stringify(diffResult, null, 2)}`);
+                    
+                    await fs.unlink(oldFilePath).catch(() => {});
+                    await fs.unlink(newFilePath).catch(() => {});
                 } catch (diffErr: any) {
                     this.logger.warn(`Diff failed for project "${project.name}": ${diffErr.message}. Skipping diff but updating spec.`)
                 }
             }
 
-            this.logger.warn(
-                `[SPEC CHANGED] "${project.name}" (${project.id}) | ` +
-                `Breaking: ${breakingCount} | Non-breaking: ${nonBreakingCount} | Unclassified: ${unclassifiedCount}`
-            )
+            this.logger.warn(`[SPEC CHANGED] "${project.name}" (${project.id})`)
 
             await db
                 .update(projects)

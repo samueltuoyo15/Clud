@@ -57,6 +57,8 @@ export class AuthController {
 
         return {
             message: "Logged in successfully",
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
         }
     }
 

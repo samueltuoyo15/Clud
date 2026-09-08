@@ -1,8 +1,7 @@
 import { ConflictException, Injectable, Logger, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import * as argon2 from "argon2"
 import { eq, and, isNull, gt, desc } from "drizzle-orm"
-import { randomInt } from "crypto"
+import { randomInt, createHash } from "crypto"
 import db from "../../db"
 import { users, otpCodes } from "../../db/schema"
 import { SignupDto } from "./dto/auth.dto"
@@ -18,8 +17,13 @@ export class AuthService {
         private readonly mailService: MailService,
     ) {}
 
+    private hashOtp(code: string): string {
+        return createHash('sha256').update(code).digest('hex')
+    }
+
     async signup(dto: SignupDto) {
-        const { email, country, firstName, lastName } = dto
+        let { email, country, firstName, lastName } = dto
+        email = email.toLowerCase()
 
         const [existing] = await db
             .select({ id: users.id, email_verified: users.email_verified })
@@ -56,7 +60,7 @@ export class AuthService {
         await db.delete(otpCodes).where(eq(otpCodes.email, email))
 
         const code = randomInt(100000, 999999).toString()
-        const codeHash = await argon2.hash(code)
+        const codeHash = this.hashOtp(code)
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
         await db.insert(otpCodes).values({ email, code_hash: codeHash, expires_at: expiresAt })
@@ -67,6 +71,7 @@ export class AuthService {
     }
 
     async login(email: string) {
+        email = email.toLowerCase()
         const [user] = await db
             .select({ id: users.id, email_verified: users.email_verified })
             .from(users)
@@ -83,7 +88,7 @@ export class AuthService {
         await db.delete(otpCodes).where(eq(otpCodes.email, email))
 
         const code = randomInt(100000, 999999).toString()
-        const codeHash = await argon2.hash(code)
+        const codeHash = this.hashOtp(code)
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
         await db.insert(otpCodes).values({ email, code_hash: codeHash, expires_at: expiresAt })
@@ -94,6 +99,7 @@ export class AuthService {
     }
 
     async resendOtp(email: string) {
+        email = email.toLowerCase()
         const [user] = await db
             .select({ id: users.id })
             .from(users)
@@ -106,7 +112,7 @@ export class AuthService {
         await db.delete(otpCodes).where(eq(otpCodes.email, email))
 
         const code = randomInt(100000, 999999).toString()
-        const codeHash = await argon2.hash(code)
+        const codeHash = this.hashOtp(code)
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
         await db.insert(otpCodes).values({ email, code_hash: codeHash, expires_at: expiresAt })
@@ -117,6 +123,7 @@ export class AuthService {
     }
 
     async verifyOtp(email: string, code: string) {
+        email = email.toLowerCase()
         const [user] = await db
             .select({ id: users.id, email: users.email })
             .from(users)
@@ -147,7 +154,7 @@ export class AuthService {
             throw new UnauthorizedException("Invalid or expired code")
         }
 
-        const valid = await argon2.verify(record.code_hash, code)
+        const valid = this.hashOtp(code) === record.code_hash
         if (!valid) {
             throw new UnauthorizedException("Invalid or expired code")
         }
@@ -211,6 +218,8 @@ export class AuthService {
             .select({
                 id: users.id,
                 email: users.email,
+                first_name: users.first_name,
+                last_name: users.last_name,
                 country: users.country,
                 profile_picture: users.profile_picture,
                 account_status: users.account_status,

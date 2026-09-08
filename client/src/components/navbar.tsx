@@ -1,18 +1,21 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from './ui/button'
+import React from "react"
+import { Link } from "react-router-dom"
+import { Button } from "./ui/button"
+import { ArrowRight01Icon } from "hugeicons-react"
 
 export const Navbar: React.FC = () => {
+  const isLoggedIn = !!localStorage.getItem("accessToken")
+
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4">
+    <header className="fixed top-12 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4">
       <div className="bg-white/70 backdrop-blur-xl border border-neutral-200/60 rounded-full px-6 h-14 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2 group">
             <img 
-              src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Clud&backgroundColor=ffffff" 
-              alt="Logo" 
-              className="w-8 h-8 rounded-md"
+              src="/favicon.svg" 
+              alt="Clud Logo" 
+              className="h-7 w-auto object-contain"
             />
             <span className="font-heading font-bold text-lg text-neutral-950">
               Clud
@@ -41,9 +44,10 @@ export const Navbar: React.FC = () => {
           <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-neutral-700 rounded-full">
             Contact sales
           </Button>
-          <Link to="/signup">
-            <Button variant="primary" size="sm" className="shadow-xs rounded-full px-5 cursor-pointer">
-              Get started
+          <Link to={isLoggedIn ? "/dashboard" : "/signup"}>
+            <Button variant="primary" size="sm" className=" rounded-full px-5 cursor-pointer flex items-center gap-1.5">
+              {isLoggedIn ? "Go to dashboard" : "Get started"}
+              <ArrowRight01Icon size={16} />
             </Button>
           </Link>
         </div>

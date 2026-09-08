@@ -9,7 +9,7 @@ import { Dashboard } from './pages/Dashboard'
 export const App: React.FC = () => {
   return (
     <>
-      <Toaster position="top-center" />
+      <Toaster position="top-right" richColors closeButton />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
         </Routes>
       </Router>
     </>
-  )
-}
+  );
+};
 
 export default App

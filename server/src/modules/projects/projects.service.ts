@@ -83,6 +83,7 @@ export class ProjectsService {
                 is_paused: projects.is_paused,
                 auth_type: projects.auth_type,
                 auth_username: projects.auth_username,
+                drift_detected: projects.drift_detected,
                 last_polled_at: projects.last_polled_at,
                 created_at: projects.created_at,
                 updated_at: projects.updated_at,
@@ -101,6 +102,7 @@ export class ProjectsService {
                 is_paused: projects.is_paused,
                 auth_type: projects.auth_type,
                 auth_username: projects.auth_username,
+                drift_detected: projects.drift_detected,
                 last_polled_at: projects.last_polled_at,
                 created_at: projects.created_at,
                 updated_at: projects.updated_at,
@@ -206,6 +208,7 @@ export class ProjectsService {
                 last_hash: newHash,
                 last_spec: this.encrypt(newSpecStr),
                 last_polled_at: new Date(),
+                drift_detected: result.breakingDifferencesFound,
                 updated_at: new Date(),
             })
             .where(and(eq(projects.id, id), eq(projects.user_id, userId)))

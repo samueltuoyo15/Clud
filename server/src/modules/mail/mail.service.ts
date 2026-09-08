@@ -65,16 +65,16 @@ export class MailService {
         <tr>
             <td align="center">
                 <table class="card-wrapper" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 460px; background-color: #ffffff; border: 1px solid #ebebeb; border-radius: 16px; overflow: hidden;">
-                    <!-- Dark Green Header -->
+                    <!-- Header with Clud Logo -->
                     <tr>
-                        <td class="header-cell" style="background-color: #0b1a0e; padding: 22px 28px;">
+                        <td class="header-cell" style="padding: 24px 28px;">
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <div style="width: 16px; height: 16px; border: 2px solid #ffffff; border-radius: 4px; box-sizing: border-box;"></div>
+                                        <img src="https://clud.dev/favicon.png" alt="Clud" width="28" height="20" style="display: block;" />
                                     </td>
                                     <td style="vertical-align: middle;">
-                                        <span style="font-family: 'Geist', sans-serif; font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: -0.4px;">clud</span>
+                                        <span style="font-family: 'Geist', sans-serif; font-size: 20px; font-weight: 700; color: #111111; letter-spacing: -0.4px;">Clud</span>
                                     </td>
                                 </tr>
                             </table>

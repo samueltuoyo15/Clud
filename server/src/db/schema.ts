@@ -45,6 +45,7 @@ export const projects = pgTable("projects", {
     auth_type: projectSpecAuthTypeEnum("auth_type").notNull().default("none"),
     auth_username: text("auth_username"),
     auth_password: text("auth_password"),
+    drift_detected: boolean("drift_detected").notNull().default(false),
     last_polled_at: timestamp("last_polled_at", { withTimezone: true }),
     created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
