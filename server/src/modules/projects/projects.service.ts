@@ -14,18 +14,15 @@ export class ProjectsService {
     private readonly logger = new Logger(ProjectsService.name)
     private readonly ENCRYPTION_KEY = process.env.ENCRYPTION_KEY!
 
-
-
-
     async createProject(dto: CreateProjectDTO, userId: string) {
-        const { 
+        const {
             name,
             spec_url,
             check_interval_minutes,
             auth_type,
             auth_username,
             auth_password,
-        } = dto
+          } = dto
 
         const auth: SpecAuth = {
             type: auth_type,
@@ -208,7 +205,7 @@ export class ProjectsService {
                 last_hash: newHash,
                 last_spec: this.encrypt(newSpecStr),
                 last_polled_at: new Date(),
-                drift_detected: result.breakingDifferencesFound,
+                drift_detected: diff?.breakingChangesFound ?? false,
                 updated_at: new Date(),
             })
             .where(and(eq(projects.id, id), eq(projects.user_id, userId)))
@@ -245,7 +242,7 @@ export class ProjectsService {
         ].join(".")
     }
 
-    private decrypt(value: string): string {   
+    private decrypt(value: string): string {
         const [ivBase64, authTagBase64, encryptedBase64] = value.split(".")
         if(!ivBase64 || !authTagBase64 || !encryptedBase64) {
             throw new Error("Invalid encrypted value")
