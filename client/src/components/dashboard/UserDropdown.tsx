@@ -27,7 +27,11 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
         className="flex items-center gap-2 rounded-md hover:bg-black/5 px-1.5 py-1 transition-colors cursor-pointer"
       >
         {profilePicture ? (
-          <img src={profilePicture} alt={displayName} className="w-6 h-6 rounded-md object-cover" />
+          <img
+            src={profilePicture}
+            alt={displayName}
+            className="w-6 h-6 rounded-md object-cover"
+          />
         ) : (
           <div className="w-6 h-6 rounded-md bg-neutral-800 text-white text-[10px] font-bold flex items-center justify-center">
             {initial}
@@ -42,7 +46,9 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
       {showUserMenu && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-neutral-200 shadow-lg p-1.5 z-50">
           <div className="px-3 py-2 border-b border-neutral-100 mb-1">
-            <p className="text-xs font-semibold text-neutral-900 truncate">{displayName}</p>
+            <p className="text-xs font-semibold text-neutral-900 truncate">
+              {displayName}
+            </p>
             <p className="text-[11px] text-neutral-500 truncate">{email}</p>
           </div>
           <button

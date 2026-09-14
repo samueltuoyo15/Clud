@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 
 interface AuthLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
@@ -20,9 +20,9 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             alt="Clud Teamwork"
             className="w-full max-w-lg h-auto max-h-[520px] object-contain drop-shadow-xs transition-transform duration-300 hover:scale-[1.01]"
             onError={(e) => {
-              const target = e.currentTarget;
+              const target = e.currentTarget
               if (target.src.endsWith(".svg")) {
-                target.src = "/images/auth-illustration.png";
+                target.src = "/images/auth-illustration.png"
               }
             }}
           />
@@ -31,7 +31,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
               Keep your team in sync
             </h2>
             <p className="mt-1.5 text-xs text-neutral-500 leading-relaxed">
-              Detect API drift automatically, track schema breaking changes, and protect your team from silent outages.
+              Detect API drift automatically, track schema breaking changes, and
+              protect your team from silent outages.
             </p>
           </div>
         </div>
@@ -42,21 +43,20 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         {/* Absolute Logo Top Left */}
         <div className="absolute top-8 left-0 right-0 px-8 sm:px-16 lg:px-24">
           <div className="max-w-md mx-auto">
-            <Link to="/" className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <img 
-                src="/favicon.svg" 
-                alt="Clud Logo" 
-                className="w-10 h-10"
-              />
-              <span className="font-heading font-bold text-lg text-neutral-900 hidden sm:block">Clud</span>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <img src="/favicon.svg" alt="Clud Logo" className="w-10 h-10" />
+              <span className="font-heading font-bold text-lg text-neutral-900 hidden sm:block">
+                Clud
+              </span>
             </Link>
           </div>
         </div>
 
-        <div className="max-w-md w-full mx-auto">
-          {children}
-        </div>
+        <div className="max-w-md w-full mx-auto">{children}</div>
       </div>
     </div>
-  );
-};
+  )
+}

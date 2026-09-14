@@ -25,7 +25,12 @@ export class PollerService {
     try {
       const now = new Date()
       const candidates = await db
-        .select({ id: projects.id, name: projects.name, check_interval_minutes: projects.check_interval_minutes, last_polled_at: projects.last_polled_at })
+        .select({
+          id: projects.id,
+          name: projects.name,
+          check_interval_minutes: projects.check_interval_minutes,
+          last_polled_at: projects.last_polled_at,
+        })
         .from(projects)
         .where(eq(projects.is_paused, false))
 
@@ -49,8 +54,13 @@ export class PollerService {
     try {
       const [project] = await db
         .select({
-          id: projects.id, name: projects.name, spec_url: projects.spec_url, last_hash: projects.last_hash,
-          last_spec: projects.last_spec, auth_type: projects.auth_type, auth_username: projects.auth_username,
+          id: projects.id,
+          name: projects.name,
+          spec_url: projects.spec_url,
+          last_hash: projects.last_hash,
+          last_spec: projects.last_spec,
+          auth_type: projects.auth_type,
+          auth_username: projects.auth_username,
           auth_password: projects.auth_password,
         })
         .from(projects)
@@ -60,7 +70,9 @@ export class PollerService {
       const auth: SpecAuth = {
         type: project.auth_type === 'basic' ? 'basic' : 'none',
         username: project.auth_username ?? undefined,
-        password: project.auth_password ? decrypt(project.auth_password) : undefined,
+        password: project.auth_password
+          ? decrypt(project.auth_password)
+          : undefined,
       }
 
       const spec = await fetchSpec(project.spec_url, auth)
@@ -68,7 +80,10 @@ export class PollerService {
 
       const newHash = hashSpec(spec)
       if (newHash === project.last_hash) {
-        await db.update(projects).set({ last_polled_at: now }).where(eq(projects.id, project.id))
+        await db
+          .update(projects)
+          .set({ last_polled_at: now })
+          .where(eq(projects.id, project.id))
         return
       }
 
@@ -80,10 +95,24 @@ export class PollerService {
       }
 
       this.logger.warn(`[SPEC CHANGED] "${project.name}" (${project.id})`)
-      await db.update(projects).set({ last_hash: newHash, last_spec: encrypt(newSpecStr), last_polled_at: now, updated_at: now }).where(eq(projects.id, project.id))
+      await db
+        .update(projects)
+        .set({
+          last_hash: newHash,
+          last_spec: encrypt(newSpecStr),
+          last_polled_at: now,
+          updated_at: now,
+        })
+        .where(eq(projects.id, project.id))
     } catch (err: any) {
-      this.logger.error(`Failed to poll project "${projectId}": ${err?.message || err}`)
-      await db.update(projects).set({ last_polled_at: now }).where(eq(projects.id, projectId)).catch(() => {})
+      this.logger.error(
+        `Failed to poll project "${projectId}": ${err?.message || err}`,
+      )
+      await db
+        .update(projects)
+        .set({ last_polled_at: now })
+        .where(eq(projects.id, projectId))
+        .catch(() => {})
     }
   }
 }

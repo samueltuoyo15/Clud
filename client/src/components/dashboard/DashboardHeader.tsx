@@ -1,5 +1,9 @@
 import React, { useState } from "react"
-import { Search01Icon, FilterHorizontalIcon, Notification01Icon } from "hugeicons-react"
+import {
+  Search01Icon,
+  FilterHorizontalIcon,
+  Notification01Icon,
+} from "hugeicons-react"
 import { UserDropdown } from "./UserDropdown"
 
 interface DashboardHeaderProps {
@@ -33,7 +37,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     <header className="h-[72px] px-8 border-b border-neutral-200/60 flex items-center justify-between shrink-0 bg-[#FAFAFA]">
       <div className="flex-1 flex items-center justify-between">
         <div className="relative">
-          <Search01Icon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <Search01Icon
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+          />
           <input
             type="text"
             placeholder="Search APIs..."
@@ -47,7 +54,15 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           <div className="flex items-center gap-1.5">
             <button
               title="Filter options"
-              onClick={() => setViewFilter(viewFilter === "all" ? "drift" : viewFilter === "drift" ? "sync" : "all")}
+              onClick={() =>
+                setViewFilter(
+                  viewFilter === "all"
+                    ? "drift"
+                    : viewFilter === "drift"
+                      ? "sync"
+                      : "all",
+                )
+              }
               className="w-8 h-8 rounded-md flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:bg-black/5 transition-colors cursor-pointer"
             >
               <FilterHorizontalIcon size={16} />
@@ -65,10 +80,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               {showNotifications && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl border border-neutral-200 shadow-lg p-3 z-50">
                   <div className="pb-2 border-b border-neutral-100 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-neutral-900">Notifications</p>
+                    <p className="text-xs font-semibold text-neutral-900">
+                      Notifications
+                    </p>
                   </div>
                   <div className="py-6 text-center">
-                    <p className="text-xs text-neutral-400">No new notifications.</p>
+                    <p className="text-xs text-neutral-400">
+                      No new notifications.
+                    </p>
                   </div>
                 </div>
               )}

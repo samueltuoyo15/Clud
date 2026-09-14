@@ -14,11 +14,16 @@ export async function generateAndStoreOtp(email: string): Promise<string> {
   const codeHash = hashOtp(code)
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
-  await db.insert(otpCodes).values({ email, code_hash: codeHash, expires_at: expiresAt })
+  await db
+    .insert(otpCodes)
+    .values({ email, code_hash: codeHash, expires_at: expiresAt })
   return code
 }
 
-export async function verifyAndConsumeOtp(email: string, code: string): Promise<boolean> {
+export async function verifyAndConsumeOtp(
+  email: string,
+  code: string,
+): Promise<boolean> {
   const [record] = await db
     .select({ id: otpCodes.id, code_hash: otpCodes.code_hash })
     .from(otpCodes)

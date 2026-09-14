@@ -1,10 +1,17 @@
 import React from "react"
-import { Home01Icon, FoldersIcon, PuzzleIcon, Settings01Icon } from "hugeicons-react"
+import {
+  Home01Icon,
+  FoldersIcon,
+  PuzzleIcon,
+  Settings01Icon,
+} from "hugeicons-react"
 import type { Project } from "../../api/projects"
 
 interface DashboardSidebarProps {
   activeNav: "dashboard" | "apis" | "integrations" | "settings"
-  setActiveNav: (nav: "dashboard" | "apis" | "integrations" | "settings") => void
+  setActiveNav: (
+    nav: "dashboard" | "apis" | "integrations" | "settings",
+  ) => void
   projects: Project[]
   selectedProjectId: string | null
   setSelectedProjectId: (id: string) => void
@@ -28,7 +35,11 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     <aside className="w-64 h-full bg-[#F4F3EF] border-r border-[#EBEBE8] py-6 px-4 flex flex-col justify-between shrink-0">
       <div>
         <div className="flex items-center gap-2.5 px-3 mb-8">
-          <img src="/favicon.svg" alt="Clud" className="h-5 w-5 object-contain" />
+          <img
+            src="/favicon.svg"
+            alt="Clud"
+            className="h-5 w-5 object-contain"
+          />
           <span className="font-heading font-bold text-sm tracking-wide text-neutral-900 uppercase">
             Clud
           </span>
@@ -48,7 +59,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     : "text-neutral-500 hover:text-neutral-900 hover:bg-black/5"
                 }`}
               >
-                <Icon size={16} className={isActive ? "text-neutral-800" : "text-neutral-400"} />
+                <Icon
+                  size={16}
+                  className={isActive ? "text-neutral-800" : "text-neutral-400"}
+                />
                 <span>{item.label}</span>
               </button>
             )
@@ -56,7 +70,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </nav>
 
         <div className="mt-8 px-1">
-          <p className="text-[11px] font-semibold text-neutral-400 mb-3 px-2">Pinned</p>
+          <p className="text-[11px] font-semibold text-neutral-400 mb-3 px-2">
+            Pinned
+          </p>
           {projects.length === 0 ? (
             <p className="text-xs text-neutral-400 px-2">No projects yet.</p>
           ) : (
@@ -84,8 +100,12 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
       <div className="px-2">
         <div className="p-3 flex flex-col items-start gap-1">
-          <span className="text-xs font-semibold text-neutral-800">Clud AI</span>
-          <span className="text-[10px] text-neutral-500">Auto-Polling Active</span>
+          <span className="text-xs font-semibold text-neutral-800">
+            Clud AI
+          </span>
+          <span className="text-[10px] text-neutral-500">
+            Auto-Polling Active
+          </span>
         </div>
       </div>
     </aside>

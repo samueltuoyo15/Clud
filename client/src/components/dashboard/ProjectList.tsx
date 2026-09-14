@@ -49,16 +49,24 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           ))}
         </div>
 
-        <Button variant="primary" size="sm" onClick={onOpenAddModal} className="flex items-center gap-1.5 rounded-lg">
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={onOpenAddModal}
+          className="flex items-center gap-1.5 rounded-lg"
+        >
           <span>+ Add API</span>
         </Button>
       </div>
-
       <div className="flex-1 overflow-y-auto pr-2 pb-8">
         {projects.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center">
-            <p className="text-sm font-medium text-neutral-900 mb-1">No Projects Found</p>
-            <p className="text-xs text-neutral-500 mb-4">You have no matching projects or APIs.</p>
+            <p className="text-sm font-medium text-neutral-900 mb-1">
+              No Projects Found
+            </p>
+            <p className="text-xs text-neutral-500 mb-4">
+              You have no matching projects or APIs.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -74,7 +82,8 @@ export const ProjectList: React.FC<ProjectListProps> = ({
             ))}
           </div>
         )}
-      </div> "a
+      </div>{" "}
+      "a
     </div>
   )
 }

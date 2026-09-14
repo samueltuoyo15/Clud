@@ -1,4 +1,8 @@
-export function getOtpEmailTemplate(code: string): { subject: string; text: string; html: string } {
+export function getOtpEmailTemplate(code: string): {
+  subject: string
+  text: string
+  html: string
+} {
   return {
     subject: `${code} is your Clud verification code`,
     text: `Let's get this done\n\nYou're just one step away from verifying your email. Use the code below to proceed:\n\n${code}\n\nThis code will expire in 10 minutes.\nIf you did not request this code, you can safely ignore this email.\n\nContact support@clud.dev`,

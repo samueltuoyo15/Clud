@@ -4,15 +4,25 @@ interface SignUpStep1Props {
   firstName: string
   lastName: string
   email: string
-  onChange: (fields: Partial<{ firstName: string; lastName: string; email: string }>) => void
+  onChange: (
+    fields: Partial<{ firstName: string; lastName: string; email: string }>,
+  ) => void
 }
 
-export const SignUpStep1: React.FC<SignUpStep1Props> = ({ firstName, lastName, email, onChange }) => {
+export const SignUpStep1: React.FC<SignUpStep1Props> = ({
+  firstName,
+  lastName,
+  email,
+  onChange,
+}) => {
   return (
     <>
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
-          <label htmlFor="firstName" className="block text-sm font-medium text-neutral-700 mb-1.5">
+          <label
+            htmlFor="firstName"
+            className="block text-sm font-medium text-neutral-700 mb-1.5"
+          >
             First name
           </label>
           <input
@@ -25,7 +35,10 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({ firstName, lastName, e
           />
         </div>
         <div className="flex-1">
-          <label htmlFor="lastName" className="block text-sm font-medium text-neutral-700 mb-1.5">
+          <label
+            htmlFor="lastName"
+            className="block text-sm font-medium text-neutral-700 mb-1.5"
+          >
             Last name
           </label>
           <input
@@ -39,7 +52,10 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({ firstName, lastName, e
         </div>
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1.5">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-neutral-700 mb-1.5"
+        >
           Work email
         </label>
         <input

@@ -24,16 +24,26 @@ const selectStyles = {
   }),
   option: (base: any, state: any) => ({
     ...base,
-    backgroundColor: state.isSelected ? "#006FEE" : state.isFocused ? "#f3f4f6" : "white",
+    backgroundColor: state.isSelected
+      ? "#006FEE"
+      : state.isFocused
+        ? "#f3f4f6"
+        : "white",
     color: state.isSelected ? "white" : "#111827",
     "&:active": { backgroundColor: "#006FEE", color: "white" },
   }),
 }
 
-export const SignUpStep3: React.FC<SignUpStep3Props> = ({ country, onChange }) => {
+export const SignUpStep3: React.FC<SignUpStep3Props> = ({
+  country,
+  onChange,
+}) => {
   return (
     <div>
-      <label htmlFor="country" className="block text-sm font-medium text-neutral-700 mb-1.5">
+      <label
+        htmlFor="country"
+        className="block text-sm font-medium text-neutral-700 mb-1.5"
+      >
         Country
       </label>
       <Select

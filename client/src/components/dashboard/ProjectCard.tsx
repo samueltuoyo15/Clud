@@ -31,11 +31,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1 text-[11px] font-medium text-neutral-500">
             <Calendar01Icon size={12} />
-            {new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+            {new Date(p.created_at).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+            })}
           </span>
           <span
             className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-              p.drift_detected ? "bg-rose-50 text-rose-600" : "bg-amber-50 text-amber-700"
+              p.drift_detected
+                ? "bg-rose-50 text-rose-600"
+                : "bg-amber-50 text-amber-700"
             }`}
           >
             • {p.drift_detected ? "High Priority" : "Medium"}

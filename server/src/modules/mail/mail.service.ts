@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common'
 import { getOtpEmailTemplate } from './templates/otp-email.template'
 
 @Injectable()
@@ -31,13 +35,19 @@ export class MailService {
 
       if (!response.ok) {
         const err = await response.text()
-        this.logger.error(`Sendlib dispatch failed [${response.status}]: ${err}`)
-        throw new InternalServerErrorException('Failed to send verification email')
+        this.logger.error(
+          `Sendlib dispatch failed [${response.status}]: ${err}`,
+        )
+        throw new InternalServerErrorException(
+          'Failed to send verification email',
+        )
       }
     } catch (error) {
       if (error instanceof InternalServerErrorException) throw error
       this.logger.error(`Sendlib request failed: ${(error as Error).message}`)
-      throw new InternalServerErrorException('Failed to send verification email')
+      throw new InternalServerErrorException(
+        'Failed to send verification email',
+      )
     }
   }
 }

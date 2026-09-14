@@ -5,10 +5,16 @@ interface SignInOtpStepProps {
   onChange: (otp: string) => void
 }
 
-export const SignInOtpStep: React.FC<SignInOtpStepProps> = ({ otp, onChange }) => {
+export const SignInOtpStep: React.FC<SignInOtpStepProps> = ({
+  otp,
+  onChange,
+}) => {
   return (
     <div>
-      <label htmlFor="otp" className="block text-sm font-medium text-neutral-700 mb-1.5">
+      <label
+        htmlFor="otp"
+        className="block text-sm font-medium text-neutral-700 mb-1.5"
+      >
         6-Digit Code
       </label>
       <input

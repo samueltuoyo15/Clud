@@ -1,7 +1,7 @@
-﻿import { Module } from "@nestjs/common"
-import { PollerService } from "./poller.service"
+﻿import { Module } from '@nestjs/common'
+import { PollerService } from './poller.service'
 
 @Module({
-    providers: [PollerService],
+  providers: [PollerService],
 })
 export class PollerModule {}

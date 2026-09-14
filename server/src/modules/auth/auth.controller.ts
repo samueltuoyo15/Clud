@@ -1,10 +1,27 @@
-import { Controller, Post, Body, Get, UseGuards, Req, Res, UnauthorizedException, HttpCode, HttpStatus } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Req,
+  Res,
+  UnauthorizedException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
-import { Response, Request } from 'express'
+import type { Response, Request } from 'express'
 import { AuthService } from './auth.service'
 import { AuthGuard } from './auth.guard'
 import { CurrentUser } from './current-user.decorator'
-import { SignupDto, LoginDto, ResendOtpDto, VerifyOtpDto, RefreshTokenDto } from './dto/auth.dto'
+import {
+  SignupDto,
+  LoginDto,
+  ResendOtpDto,
+  VerifyOtpDto,
+  RefreshTokenDto,
+} from './dto/auth.dto'
 import { setAuthCookies, clearAuthCookies } from './utils/auth-cookies'
 
 @Controller('auth')
@@ -34,7 +51,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('verify-otp')
-  async verifyOtp(@Body() dto: VerifyOtpDto, @Res({ passthrough: true }) res: Response) {
+  async verifyOtp(
+    @Body() dto: VerifyOtpDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const tokens = await this.authService.verifyOtp(dto.email, dto.code)
     setAuthCookies(res, tokens.accessToken, tokens.refreshToken)
     return { message: 'Logged in successfully', ...tokens }
@@ -43,13 +63,21 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('refresh')
-  async refresh(@Req() req: Request, @Body() dto: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
+  async refresh(
+    @Req() req: Request,
+    @Body() dto: RefreshTokenDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const token = req.cookies?.refreshToken || dto.refreshToken
     if (!token) throw new UnauthorizedException('Refresh token missing')
 
     const result = await this.authService.refreshToken(token)
     res.cookie('accessToken', result.accessToken, {
-      httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 1000,
     })
     return result
   }

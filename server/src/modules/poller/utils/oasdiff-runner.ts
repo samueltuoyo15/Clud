@@ -8,7 +8,11 @@ import { Logger } from '@nestjs/common'
 const execAsync = promisify(exec)
 const logger = new Logger('OasdiffRunner')
 
-export async function runOasdiff(projectId: string, previousSpecStr: string, newSpecStr: string): Promise<unknown | null> {
+export async function runOasdiff(
+  projectId: string,
+  previousSpecStr: string,
+  newSpecStr: string,
+): Promise<unknown | null> {
   const isWin = os.platform() === 'win32'
   const binaryName = isWin ? 'oasdiff-win.exe' : 'oasdiff-linux'
   const binaryPath = path.join(process.cwd(), 'bin', binaryName)
@@ -22,7 +26,9 @@ export async function runOasdiff(projectId: string, previousSpecStr: string, new
 
     let resultStr = ''
     try {
-      const { stdout } = await execAsync(`"${binaryPath}" diff "${oldFilePath}" "${newFilePath}" -f json`)
+      const { stdout } = await execAsync(
+        `"${binaryPath}" diff "${oldFilePath}" "${newFilePath}" -f json`,
+      )
       resultStr = stdout
     } catch (execErr: any) {
       if (execErr.stdout) {

@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { eq } from 'drizzle-orm'
 import db from '../../db'
@@ -24,7 +28,8 @@ export class AuthService {
       .where(eq(users.email, email))
 
     if (existing) {
-      if (existing.email_verified) throw new ConflictException('An account with this email already exists')
+      if (existing.email_verified)
+        throw new ConflictException('An account with this email already exists')
       await db
         .update(users)
         .set({
@@ -43,7 +48,8 @@ export class AuthService {
         country: country ? country.toUpperCase() : null,
         is_onboarded: Boolean(country),
         email_verified: false,
-        profile_picture: 'https://glint-dev.vercel.app/api/avatar?seed=jane.doe&png=true',
+        profile_picture:
+          'https://glint-dev.vercel.app/api/avatar?seed=jane.doe&png=true',
       })
     }
 
@@ -54,9 +60,15 @@ export class AuthService {
 
   async login(emailInput: string) {
     const email = emailInput.toLowerCase()
-    const [user] = await db.select({ id: users.id, email_verified: users.email_verified }).from(users).where(eq(users.email, email))
+    const [user] = await db
+      .select({ id: users.id, email_verified: users.email_verified })
+      .from(users)
+      .where(eq(users.email, email))
     if (!user) throw new UnauthorizedException('Invalid credentials')
-    if (!user.email_verified) throw new UnauthorizedException('Please verify your email before logging in')
+    if (!user.email_verified)
+      throw new UnauthorizedException(
+        'Please verify your email before logging in',
+      )
 
     const code = await generateAndStoreOtp(email)
     await this.mailService.sendOtp(email, code)
@@ -65,7 +77,10 @@ export class AuthService {
 
   async resendOtp(emailInput: string) {
     const email = emailInput.toLowerCase()
-    const [user] = await db.select({ id: users.id }).from(users).where(eq(users.email, email))
+    const [user] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, email))
     if (!user) throw new UnauthorizedException('Invalid credentials')
 
     const code = await generateAndStoreOtp(email)
@@ -75,40 +90,71 @@ export class AuthService {
 
   async verifyOtp(emailInput: string, code: string) {
     const email = emailInput.toLowerCase()
-    const [user] = await db.select({ id: users.id, email: users.email }).from(users).where(eq(users.email, email))
+    const [user] = await db
+      .select({ id: users.id, email: users.email })
+      .from(users)
+      .where(eq(users.email, email))
     if (!user) throw new UnauthorizedException('Invalid credentials')
 
     const valid = await verifyAndConsumeOtp(email, code)
     if (!valid) throw new UnauthorizedException('Invalid or expired code')
 
-    await db.update(users).set({ email_verified: true, updated_at: new Date() }).where(eq(users.id, user.id))
+    await db
+      .update(users)
+      .set({ email_verified: true, updated_at: new Date() })
+      .where(eq(users.id, user.id))
 
-    const accessToken = this.jwtService.sign({ sub: user.id, email: user.email, type: 'access' }, { expiresIn: '1h' })
-    const refreshToken = this.jwtService.sign({ sub: user.id, email: user.email, type: 'refresh' }, { expiresIn: '7d' })
+    const accessToken = this.jwtService.sign(
+      { sub: user.id, email: user.email, type: 'access' },
+      { expiresIn: '1h' },
+    )
+    const refreshToken = this.jwtService.sign(
+      { sub: user.id, email: user.email, type: 'refresh' },
+      { expiresIn: '7d' },
+    )
 
     return { accessToken, refreshToken }
   }
 
   async refreshToken(token: string) {
     let payload: { sub: string; email: string; type?: string }
-    try { payload = this.jwtService.verify(token) } catch { throw new UnauthorizedException('Invalid or expired refresh token') }
-    if (payload.type !== 'refresh') throw new UnauthorizedException('Invalid token type')
+    try {
+      payload = this.jwtService.verify(token)
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token')
+    }
+    if (payload.type !== 'refresh')
+      throw new UnauthorizedException('Invalid token type')
 
-    const [user] = await db.select({ id: users.id, email: users.email }).from(users).where(eq(users.id, payload.sub))
+    const [user] = await db
+      .select({ id: users.id, email: users.email })
+      .from(users)
+      .where(eq(users.id, payload.sub))
     if (!user) throw new UnauthorizedException('User not found')
 
-    const accessToken = this.jwtService.sign({ sub: user.id, email: user.email, type: 'access' }, { expiresIn: '1h' })
+    const accessToken = this.jwtService.sign(
+      { sub: user.id, email: user.email, type: 'access' },
+      { expiresIn: '1h' },
+    )
     return { accessToken }
   }
 
   async getMe(userId: string) {
     const [user] = await db
       .select({
-        id: users.id, email: users.email, first_name: users.first_name, last_name: users.last_name,
-        country: users.country, profile_picture: users.profile_picture, account_status: users.account_status,
-        is_onboarded: users.is_onboarded, email_verified: users.email_verified, created_at: users.created_at,
+        id: users.id,
+        email: users.email,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        country: users.country,
+        profile_picture: users.profile_picture,
+        account_status: users.account_status,
+        is_onboarded: users.is_onboarded,
+        email_verified: users.email_verified,
+        created_at: users.created_at,
       })
-      .from(users).where(eq(users.id, userId))
+      .from(users)
+      .where(eq(users.id, userId))
     if (!user) throw new UnauthorizedException('User not found')
     return user
   }

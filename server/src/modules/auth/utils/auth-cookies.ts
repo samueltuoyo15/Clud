@@ -1,6 +1,10 @@
 import { Response } from 'express'
 
-export function setAuthCookies(res: Response, accessToken: string, refreshToken: string): void {
+export function setAuthCookies(
+  res: Response,
+  accessToken: string,
+  refreshToken: string,
+): void {
   const isProduction = process.env.NODE_ENV === 'production'
 
   res.cookie('accessToken', accessToken, {
