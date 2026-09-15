@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "Sample Petstore server schema for real-time drift verification.",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "title": "Swagger Petstore",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
@@ -60,8 +60,15 @@
             "name": "additionalMetadata",
             "in": "formData",
             "description": "Additional data to pass to server",
-            "required": false,
+            "required": true,
             "type": "string"
+          },
+          {
+            "name": "compressionRatio",
+            "in": "formData",
+            "description": "Compression ratio level",
+            "required": false,
+            "type": "integer"
           },
           {
             "name": "testParam",
@@ -654,6 +661,40 @@
         "responses": {
           "default": {
             "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/auth/mfa/verify": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Verify multi-factor authentication code",
+        "operationId": "verifyMfa",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MFA verified"
+          }
+        }
+      }
+    },
+    "/system/health": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Check service health and uptime status",
+        "operationId": "getHealth",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Health status OK"
           }
         }
       }

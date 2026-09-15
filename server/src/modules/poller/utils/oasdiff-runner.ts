@@ -40,7 +40,7 @@ export function formatHumanReadableChangelog(raw: string): string {
     if (line.startsWith('### ')) {
       endpointCount++
       const ep = line.replace(/^###\s*/, '').trim()
-      result.push(`${endpointCount}. ${ep}`)
+      result.push(`${endpointCount > 1 ? '\n' : ''}${endpointCount}. ${ep}`)
       continue
     }
 
