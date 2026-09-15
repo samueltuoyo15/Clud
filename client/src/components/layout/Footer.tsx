@@ -1,8 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import { NewTwitterIcon, Linkedin01Icon } from "hugeicons-react"
+import { Select } from "../ui/Select"
+
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English (US)", icon: "🇺🇸" },
+  { value: "fr", label: "Français", icon: "🇫🇷" },
+  { value: "es", label: "Español", icon: "🇪🇸" },
+  { value: "de", label: "Deutsch", icon: "🇩🇪" }
+]
 
 export const Footer: React.FC = () => {
+  const [language, setLanguage] = useState("en")
+
   return (
     <footer className="mt-24 bg-transparent relative overflow-hidden">
       <div className="container max-w-6xl mx-auto px-6 py-16 pb-48">
@@ -21,14 +31,24 @@ export const Footer: React.FC = () => {
               Autonomous API monitoring. We watch the unseen boundaries of your APIs, catching drift the moment it happens, protecting your team from silent breakages.
             </p>
             
-            {/* Social Links */}
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-neutral-400 hover:text-neutral-900 transition-colors">
-                <NewTwitterIcon size={20} />
-              </a>
-              <a href="#" className="text-neutral-400 hover:text-neutral-900 transition-colors">
-                <Linkedin01Icon size={20} />
-              </a>
+            {/* Social Links & Language & Copyright */}
+            <div className="flex flex-col gap-6 mt-4">
+              <div className="flex items-center gap-4">
+                <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
+                  <NewTwitterIcon size={20} />
+                </a>
+                <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
+                  <Linkedin01Icon size={20} />
+                </a>
+                <div className="w-px h-4 bg-neutral-200"></div>
+                <Select 
+                  value={language} 
+                  onChange={setLanguage} 
+                  options={LANGUAGE_OPTIONS} 
+                  className="w-[140px]"
+                />
+              </div>
+              <p className="text-xs text-neutral-400">© {new Date().getFullYear()} Clud Inc. All rights reserved.</p>
             </div>
           </div>
 
@@ -82,9 +102,6 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-400 relative z-10">
-          <p>© {new Date().getFullYear()} Clud Inc. All rights reserved.</p>
-        </div>
       </div>
 
       {/* Massive Brand Text Background */}

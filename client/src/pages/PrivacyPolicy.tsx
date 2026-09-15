@@ -1,19 +1,17 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useEffect } from "react"
+import { Navbar } from "../components/navbar"
+import { Footer } from "../components/layout/Footer"
 
 export const PrivacyPolicy: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans text-neutral-900 selection:bg-primary/20">
-      <header className="h-[72px] px-8 border-b border-neutral-200/60 flex items-center justify-between shrink-0 bg-white">
-        <Link to="/" className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity">
-          <img src="/favicon.svg" alt="Clud" className="h-5 w-5 object-contain" />
-          <span className="font-heading font-bold text-sm tracking-wide text-neutral-900 uppercase">
-            Clud
-          </span>
-        </Link>
-      </header>
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
-      <main className="max-w-3xl mx-auto py-16 px-6">
+  return (
+    <div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-primary/20 flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-3xl w-full mx-auto py-16 px-6">
         <h1 className="text-3xl font-heading font-bold text-neutral-900 mb-8">Privacy Policy</h1>
         
         <div className="space-y-6 text-sm text-neutral-600 leading-relaxed">
@@ -45,6 +43,8 @@ export const PrivacyPolicy: React.FC = () => {
           </section>
         </div>
       </main>
+
+      <Footer />
     </div>
   )
 }
