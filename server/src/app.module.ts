@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import { ScheduleModule } from '@nestjs/schedule'
+import { BullModule } from '@nestjs/bullmq'
 import { RedisModule } from './modules/redis/redis.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { ProjectsModule } from './modules/projects/projects.module'
@@ -14,6 +15,29 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module'
   imports: [
     RedisModule,
     ScheduleModule.forRoot(),
+    BullModule.forRootAsync({
+      useFactory: () => {
+        const rawUrl = process.env.REDIS_URL || 'redis://localhost:6379'
+        try {
+          const parsed = new URL(rawUrl)
+          return {
+            connection: {
+              host: parsed.hostname || 'localhost',
+              port: Number(parsed.port) || 6379,
+              password: parsed.password || undefined,
+              username: parsed.username || undefined,
+            },
+          }
+        } catch {
+          return {
+            connection: {
+              host: 'localhost',
+              port: 6379,
+            },
+          }
+        }
+      },
+    }),
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
         storage: new ThrottlerStorageRedisService(

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common'
 import { getOtpEmailTemplate } from './templates/otp-email.template'
 import { getWelcomeEmailTemplate } from './templates/welcome-email.template'
+import { getDriftAlertEmailTemplate } from './templates/drift-alert-email.template'
 
 @Injectable()
 export class MailService {
@@ -80,5 +81,34 @@ export class MailService {
     } catch (error) {
       this.logger.error(`Sendlib welcome request failed: ${(error as Error).message}`)
     }
+  }
+
+  async sendDriftAlert(toEmails: string[], projectName: string, diffStr: string): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey || !toEmails.length) return
+
+    const { subject, html } = getDriftAlertEmailTemplate(projectName, diffStr)
+
+    // Send to each email
+    await Promise.allSettled(toEmails.map(async (to) => {
+      const body: Record<string, any> = { to, subject, html }
+      if (this.from?.trim()) body.from = this.from
+
+      try {
+        const response = await fetch(this.apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify(body),
+        })
+        if (!response.ok) {
+          this.logger.error(`Failed to send drift alert to ${to}: ${await response.text()}`)
+        }
+      } catch (err: any) {
+        this.logger.error(`Failed request for drift alert to ${to}: ${err.message}`)
+      }
+    }))
   }
 }

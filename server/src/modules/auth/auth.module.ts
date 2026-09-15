@@ -8,6 +8,7 @@ import { MailModule } from '../mail/mail.module'
 @Module({
   imports: [
     JwtModule.register({
+      global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),

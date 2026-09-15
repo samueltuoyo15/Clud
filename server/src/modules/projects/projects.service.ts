@@ -7,11 +7,13 @@ import { hashSpec } from './utils/hash-spec'
 import { computeSpecDiff } from './utils/diff-spec'
 import { encrypt, decrypt } from '../../utils/crypto'
 import db from '../../db'
-import { projects, NewProject, workspaceMembers } from '../../db/schema'
+import { projects, NewProject, workspaceMembers, workspaces, integrations } from '../../db/schema'
+import { MailService } from '../mail/mail.service'
 
 @Injectable()
 export class ProjectsService {
   private readonly logger = new Logger(ProjectsService.name)
+  constructor(private readonly mailService: MailService) {}
 
   async createProject(dto: CreateProjectDTO, userId: string) {
     const { name, spec_url, check_interval_minutes, auth_type, auth_username, auth_password } = dto
@@ -161,6 +163,33 @@ export class ProjectsService {
     const newSpecStr = JSON.stringify(spec)
     const prevSpecStr = project.last_spec ? decrypt(project.last_spec) : null
     const diff = prevSpecStr ? await computeSpecDiff(prevSpecStr, newSpecStr) : null
+
+    if (diff?.breakingChangesFound) {
+      let diffStr = JSON.stringify(diff.breakingChanges, null, 2)
+      if (diffStr.length > 2000) {
+        diffStr = diffStr.substring(0, 2000) + '\n... (truncated)'
+      }
+
+      const [ws] = await db.select({ alert_emails: workspaces.alert_emails }).from(workspaces).where(eq(workspaces.id, workspaceId))
+      const slacks = await db.select().from(integrations).where(and(eq(integrations.workspace_id, workspaceId), eq(integrations.provider, 'slack')))
+      
+      const alertEmails = (ws?.alert_emails as string[]) || []
+      if (alertEmails.length) {
+        this.mailService.sendDriftAlert(alertEmails, project.name, diffStr).catch(err => this.logger.error(`Mail alert failed: ${err.message}`))
+      }
+
+      for (const slack of slacks) {
+        const webhookUrl = (slack.metadata as any)?.webhook_url
+        if (webhookUrl) {
+          const text = `⚠️ *API Drift Detected: ${project.name}*\n\`\`\`${diffStr}\`\`\``
+          fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+          }).catch(err => this.logger.error(`Slack alert failed: ${err.message}`))
+        }
+      }
+    }
 
     await db
       .update(projects)

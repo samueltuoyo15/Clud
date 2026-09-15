@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
 import { WorkspacesController } from './workspaces.controller'
 import { WorkspacesService } from './workspaces.service'
-import { JwtModule } from '@nestjs/jwt'
+import { AuthModule } from '../auth/auth.module'
 
 @Module({
-  imports: [JwtModule],
+  imports: [AuthModule],
   controllers: [WorkspacesController],
   providers: [WorkspacesService],
   exports: [WorkspacesService],

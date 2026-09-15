@@ -235,6 +235,8 @@ export const Dashboard: React.FC = () => {
       <AddProjectModal
         isOpen={showAddModal}
         isCreating={isCreating}
+        integrationsCount={integrationsCount}
+        onGoToIntegrations={() => navigate("/dashboard/integrations")}
         newProject={newProject}
         setNewProject={setNewProject}
         onClose={() => setShowAddModal(false)}
