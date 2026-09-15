@@ -17,7 +17,7 @@ import { ProjectDetailPanel } from "../components/dashboard/ProjectDetailPanel"
 import { AddProjectModal } from "../components/dashboard/AddProjectModal"
 import { IntegrationsTab } from "../components/dashboard/IntegrationsTab"
 import { SettingsTab } from "../components/dashboard/SettingsTab"
-import { TeamsTab } from "../components/dashboard/TeamsTab"
+import { CommandPaletteModal } from "../components/dashboard/CommandPaletteModal"
 import { CreateWorkspaceModal } from "../components/dashboard/CreateWorkspaceModal"
 import { SignOutModal } from "../components/dashboard/SignOutModal"
 
@@ -36,8 +36,7 @@ export const Dashboard: React.FC = () => {
   const path = location.pathname.split("/").filter(Boolean).pop()
   let activeNav: "dashboard" | "integrations" | "settings" | "teams" = "dashboard"
   if (path === "integrations") activeNav = "integrations"
-  else if (path === "settings") activeNav = "settings"
-  else if (path === "teams") activeNav = "teams"
+  else if (path === "settings" || path === "teams") activeNav = "settings"
 
   const [user, setUser] = useState<UserProfile | null>(null)
   const [projects, setProjects] = useState<Project[]>([])
@@ -46,6 +45,8 @@ export const Dashboard: React.FC = () => {
   const [integrationsCount, setIntegrationsCount] = useState(0)
   
   const [isLoading, setIsLoading] = useState(true)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
   const [showCreateWorkspace, setShowCreateWorkspace] = useState(false)
   const [showSignOutModal, setShowSignOutModal] = useState(false)
@@ -53,14 +54,24 @@ export const Dashboard: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [checkingProjectId, setCheckingProjectId] = useState<string | null>(null)
-  const [newProject, setNewProject] = useState({
+  const [newProject, setNewProject] = useState<{
+    name: string
+    spec_url: string
+    check_interval_minutes: number
+    auth_type: "none" | "basic"
+    auth_username?: string
+    auth_password?: string
+  }>({
     name: "",
     spec_url: "",
     check_interval_minutes: 5,
+    auth_type: "none",
+    auth_username: "",
+    auth_password: "",
   })
 
   const loadDashboardData = async (workspaceIdToSet?: string) => {
-    setIsLoading(true)
+    if (!user) setIsLoading(true)
     try {
       const [me, projs, wsData, integData] = await Promise.all([
         getMeApi(),
@@ -99,6 +110,17 @@ export const Dashboard: React.FC = () => {
     loadDashboardData()
   }, [navigate])
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setIsCommandPaletteOpen((prev) => !prev)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
+
   const handleLogout = async () => {
     try {
       await logoutApi()
@@ -116,7 +138,14 @@ export const Dashboard: React.FC = () => {
       setProjects([created, ...projects])
       setSelectedProjectId(created.id)
       setShowAddModal(false)
-      setNewProject({ name: "", spec_url: "", check_interval_minutes: 5 })
+      setNewProject({
+        name: "",
+        spec_url: "",
+        check_interval_minutes: 5,
+        auth_type: "none",
+        auth_username: "",
+        auth_password: "",
+      })
       toast.success("Monitor created!")
     } catch (err: any) {
       toast.error(err.message || "Failed to create monitor")
@@ -154,7 +183,7 @@ export const Dashboard: React.FC = () => {
   const selectedProject =
     projects.find((p) => p.id === selectedProjectId) || projects[0] || null
 
-  if (isLoading) {
+  if (isLoading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex items-center gap-3">
@@ -167,6 +196,22 @@ export const Dashboard: React.FC = () => {
     )
   }
 
+  const handleUpdateWorkspace = async (name: string, logoUrl?: string) => {
+    if (!activeWorkspaceId) return
+    await fetchApi(`/workspaces/${activeWorkspaceId}`, {
+      method: "PATCH",
+      data: { name, logo_url: logoUrl },
+    })
+    setWorkspaces((prev) =>
+      prev.map((w) =>
+        w.id === activeWorkspaceId ? { ...w, name, logo_url: logoUrl } : w,
+      ),
+    )
+  }
+
+  const activeWorkspace =
+    workspaces.find((w) => w.id === activeWorkspaceId) || workspaces[0]
+
   return (
     <div className="min-h-screen h-screen flex bg-white font-sans text-neutral-900 overflow-hidden select-none">
       <DashboardSidebar
@@ -175,21 +220,24 @@ export const Dashboard: React.FC = () => {
         projects={projects}
         selectedProjectId={selectedProjectId}
         setSelectedProjectId={setSelectedProjectId}
+        workspaces={workspaces}
+        activeWorkspaceId={activeWorkspaceId}
+        onSwitchWorkspace={(id) => loadDashboardData(id)}
+        onCreateWorkspace={() => setShowCreateWorkspace(true)}
+        isCollapsed={isSidebarCollapsed}
       />
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-white">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FAFAFA]">
         <DashboardHeader
-          viewFilter={viewFilter}
-          setViewFilter={setViewFilter}
+          activeNav={activeNav}
           displayName={displayName}
           email={user?.email}
           initial={displayName.charAt(0).toUpperCase()}
           profilePicture={user?.profile_picture}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           onOpenSettings={() => navigate("/dashboard/settings")}
           onLogout={() => setShowSignOutModal(true)}
-          onCreateWorkspace={() => setShowCreateWorkspace(true)}
-          workspaces={workspaces}
-          activeWorkspaceId={activeWorkspaceId}
-          onSwitchWorkspace={(id) => loadDashboardData(id)}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         />
         
         {/* Missing Integration Banner */}
@@ -225,10 +273,17 @@ export const Dashboard: React.FC = () => {
           </div>
         ) : activeNav === "integrations" ? (
           <IntegrationsTab />
-        ) : activeNav === "teams" ? (
-          <TeamsTab activeWorkspaceId={activeWorkspaceId} />
         ) : (
-          <SettingsTab displayName={displayName} email={user?.email} profilePicture={user?.profile_picture} />
+          <SettingsTab
+            displayName={displayName}
+            email={user?.email}
+            profilePicture={user?.profile_picture}
+            activeWorkspace={activeWorkspace}
+            onUpdateWorkspace={handleUpdateWorkspace}
+            onProfileUpdated={() => loadDashboardData()}
+            projectsCount={projects.length}
+            integrationsCount={integrationsCount}
+          />
         )}
       </div>
       
@@ -241,6 +296,13 @@ export const Dashboard: React.FC = () => {
         setNewProject={setNewProject}
         onClose={() => setShowAddModal(false)}
         onSubmit={handleCreate}
+      />
+      <CommandPaletteModal
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigate={(p) => navigate(p)}
+        onOpenAddProject={() => setShowAddModal(true)}
+        projects={projects}
       />
       <CreateWorkspaceModal
         isOpen={showCreateWorkspace}

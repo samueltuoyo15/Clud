@@ -7,12 +7,22 @@ interface AddProjectModalProps {
   isCreating: boolean
   integrationsCount?: number
   onGoToIntegrations?: () => void
-  newProject: { name: string; spec_url: string; check_interval_minutes: number }
+  newProject: {
+    name: string
+    spec_url: string
+    check_interval_minutes: number
+    auth_type?: "none" | "basic"
+    auth_username?: string
+    auth_password?: string
+  }
   setNewProject: React.Dispatch<
     React.SetStateAction<{
       name: string
       spec_url: string
       check_interval_minutes: number
+      auth_type?: "none" | "basic"
+      auth_username?: string
+      auth_password?: string
     }>
   >
   onClose: () => void
@@ -35,7 +45,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl max-w-md w-full p-6 border border-neutral-200 shadow-xl">
+      <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-neutral-200">
         {!hasIntegrations ? (
           <div className="text-center py-6">
             <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-amber-50 text-amber-600">
@@ -84,7 +94,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   onChange={(e) =>
                     setNewProject({ ...newProject, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 focus:border-neutral-400 outline-none text-xs text-neutral-900"
+                  className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 focus:border-primary outline-none text-xs text-neutral-900"
                 />
               </div>
 
@@ -100,8 +110,69 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   onChange={(e) =>
                     setNewProject({ ...newProject, spec_url: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 focus:border-neutral-400 outline-none text-xs font-mono text-neutral-900"
+                  className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 focus:border-primary outline-none text-xs font-mono text-neutral-900"
                 />
+              </div>
+
+              {/* Protected / Basic Auth Toggle */}
+              <div className="pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={newProject.auth_type === "basic"}
+                    onChange={(e) =>
+                      setNewProject({
+                        ...newProject,
+                        auth_type: e.target.checked ? "basic" : "none",
+                      })
+                    }
+                    className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
+                  />
+                  <span className="text-xs font-medium text-neutral-700">
+                    Protected with HTTP Basic Auth
+                  </span>
+                </label>
+
+                {newProject.auth_type === "basic" && (
+                  <div className="mt-3 grid grid-cols-2 gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="admin"
+                        value={newProject.auth_username || ""}
+                        onChange={(e) =>
+                          setNewProject({
+                            ...newProject,
+                            auth_username: e.target.value,
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-neutral-200 bg-white text-xs outline-none focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={newProject.auth_password || ""}
+                        onChange={(e) =>
+                          setNewProject({
+                            ...newProject,
+                            auth_password: e.target.value,
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg border border-neutral-200 bg-white text-xs outline-none focus:border-primary"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100 mt-2">
@@ -110,7 +181,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   variant="light"
                   size="sm"
                   onClick={onClose}
-                  className="rounded-lg"
+                  className="rounded-lg px-4"
                 >
                   Cancel
                 </Button>
@@ -119,7 +190,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   variant="primary"
                   size="sm"
                   isLoading={isCreating}
-                  className="rounded-lg flex items-center gap-1.5"
+                  className="rounded-lg flex items-center gap-1.5 px-4"
                 >
                   <span>Connect Spec</span>
                   {!isCreating && <PlusSignIcon size={14} />}

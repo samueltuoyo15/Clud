@@ -111,4 +111,52 @@ export class MailService {
       }
     }))
   }
+
+  async sendWorkspaceInviteEmail(
+    to: string,
+    workspaceName: string,
+    inviterName: string,
+  ): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey) return
+
+    const html = `
+      <div style="font-family: sans-serif; max-width: 540px; margin: 0 auto; padding: 24px; color: #171717;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">You've been invited to ${workspaceName}</h2>
+        <p style="font-size: 14px; line-height: 1.6; color: #525252;">
+          ${inviterName} has added you as a team member to the <strong>${workspaceName}</strong> workspace on Clud.
+        </p>
+        <div style="margin: 24px 0;">
+          <a href="https://clud.samueltuoyo.com/signin" style="background-color: #401246; color: #ffffff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
+            Open Dashboard
+          </a>
+        </div>
+        <p style="font-size: 12px; color: #a3a3a3; margin-top: 32px;">
+          Clud &bull; Autonomous API Contract Drift Detection
+        </p>
+      </div>
+    `
+    const body: Record<string, any> = {
+      to,
+      subject: `You've been invited to ${workspaceName} on Clud`,
+      html,
+    }
+    if (this.from?.trim()) body.from = this.from
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+      })
+      if (!response.ok) {
+        this.logger.error(`Failed to send invite email: ${await response.text()}`)
+      }
+    } catch (err: any) {
+      this.logger.error(`Sendlib invite request failed: ${err.message}`)
+    }
+  }
 }

@@ -10,6 +10,7 @@ import { ProjectsModule } from './modules/projects/projects.module'
 import { PollerModule } from './modules/poller/poller.module'
 import { IntegrationsModule } from './modules/integrations/integrations.module'
 import { WorkspacesModule } from './modules/workspaces/workspaces.module'
+import { NotificationsModule } from './modules/notifications/notifications.module'
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module'
     PollerModule,
     IntegrationsModule,
     WorkspacesModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [

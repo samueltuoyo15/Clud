@@ -52,8 +52,9 @@ export class AuthService {
         challenge,
         is_onboarded: Boolean(country),
         email_verified: false,
-        profile_picture:
-          'https://glint-dev.vercel.app/api/avatar?seed=jane.doe&png=true',
+        // profile_picture:
+        //   'https://glint-dev.vercel.app/api/avatar?seed=jane.doe&png=true',
+        profile_picture: `https://api.dicebear.com/7.x/big-smile/svg?seed=${encodeURIComponent(email)}&backgroundColor=e9d5ff&accessories=faceMask`,
       })
     }
 
@@ -116,7 +117,8 @@ export class AuthService {
           .set({ email_verified: true, updated_at: new Date() })
           .where(eq(users.id, user.id))
 
-        const workspaceName = `${user.last_name || user.first_name || 'My'} Workspace`
+        const ownerName = user.last_name || user.first_name
+        const workspaceName = ownerName ? `${ownerName}'s Workspace` : 'My Workspace'
         const [workspace] = await tx
           .insert(workspaces)
           .values({ name: workspaceName })
@@ -188,5 +190,29 @@ export class AuthService {
       .where(eq(users.id, userId))
     if (!user) throw new UnauthorizedException('User not found')
     return user
+  }
+
+  async updateProfile(
+    userId: string,
+    data: { firstName?: string; lastName?: string; profilePicture?: string },
+  ) {
+    const updateData: Record<string, any> = { updated_at: new Date() }
+    if (data.firstName !== undefined) updateData.first_name = data.firstName
+    if (data.lastName !== undefined) updateData.last_name = data.lastName
+    if (data.profilePicture !== undefined)
+      updateData.profile_picture = data.profilePicture
+
+    const [updated] = await db
+      .update(users)
+      .set(updateData)
+      .where(eq(users.id, userId))
+      .returning({
+        id: users.id,
+        email: users.email,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        profile_picture: users.profile_picture,
+      })
+    return updated
   }
 }

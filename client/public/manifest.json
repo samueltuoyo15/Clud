@@ -1,0 +1,16 @@
+{
+  "short_name": "Clud",
+  "name": "Clud - Real-time API Change Detection",
+  "icons": [
+    {
+      "src": "/favicon-white.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/dashboard",
+  "background_color": "#ffffff",
+  "theme_color": "#401246",
+  "display": "standalone",
+  "orientation": "portrait"
+}

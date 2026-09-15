@@ -8,6 +8,7 @@ interface Member {
   email: string
   first_name: string | null
   last_name: string | null
+  profile_picture?: string | null
   role: string
   created_at: string
 }
@@ -112,9 +113,17 @@ export const TeamsTab: React.FC<TeamsTabProps> = ({ activeWorkspaceId }) => {
               <tr key={member.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0">
-                      {(member.first_name?.[0] || member.email[0]).toUpperCase()}
-                    </div>
+                    {member.profile_picture ? (
+                      <img
+                        src={member.profile_picture}
+                        alt={member.first_name || member.email}
+                        className="w-8 h-8 rounded-full object-cover shrink-0 border border-neutral-200"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0">
+                        {(member.first_name?.[0] || member.email[0]).toUpperCase()}
+                      </div>
+                    )}
                     <div>
                       <div className="font-medium text-neutral-900">
                         {member.first_name ? `${member.first_name} ${member.last_name || ''}` : member.email}

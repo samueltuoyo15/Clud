@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   Get,
+  Patch,
   UseGuards,
   Req,
   Res,
@@ -93,5 +94,19 @@ export class AuthController {
   @Get('me')
   getMe(@CurrentUser() user: { userId: string }) {
     return this.authService.getMe(user.userId)
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('profile')
+  updateProfile(
+    @CurrentUser() user: { userId: string },
+    @Body()
+    dto: {
+      firstName?: string
+      lastName?: string
+      profilePicture?: string
+    },
+  ) {
+    return this.authService.updateProfile(user.userId, dto)
   }
 }

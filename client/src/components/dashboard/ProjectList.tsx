@@ -61,13 +61,27 @@ export const ProjectList: React.FC<ProjectListProps> = ({
       </div>
       <div className="flex-1 overflow-y-auto pr-2 pb-8">
         {projects.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center">
-            <p className="text-sm font-medium text-neutral-900 mb-1">
-              No Projects Found
+          <div className="h-full min-h-[380px] flex flex-col items-center justify-center text-center p-8 bg-neutral-50/40 rounded-2xl border border-dashed border-neutral-200">
+            <img
+              src="/images/empty-apis.svg"
+              alt="No APIs monitored"
+              className="w-56 h-40 object-contain mb-4"
+            />
+            <h3 className="text-base font-semibold text-neutral-900 mb-1">
+              No Monitored APIs Yet
+            </h3>
+            <p className="text-xs text-neutral-500 max-w-sm mb-6 leading-relaxed">
+              Connect your OpenAPI (Swagger) spec URL to start automatically tracking schema diffs and drift across your services.
             </p>
-            <p className="text-xs text-neutral-500 mb-4">
-              You have no matching projects or APIs.
-            </p>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={onOpenAddModal}
+              className="rounded-lg px-5 flex items-center gap-2"
+            >
+              <span>Connect First Spec</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">

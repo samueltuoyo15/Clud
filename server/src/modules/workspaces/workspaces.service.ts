@@ -2,14 +2,18 @@ import { Injectable, BadRequestException } from '@nestjs/common'
 import { eq, and } from 'drizzle-orm'
 import db from '../../db'
 import { workspaces, workspaceMembers, users } from '../../db/schema'
+import { MailService } from '../mail/mail.service'
 
 @Injectable()
 export class WorkspacesService {
+  constructor(private readonly mailService: MailService) {}
+
   async getWorkspaces(userId: string) {
     const memberRecords = await db
       .select({
         id: workspaces.id,
         name: workspaces.name,
+        logo_url: workspaces.logo_url,
         role: workspaceMembers.role,
       })
       .from(workspaceMembers)
@@ -17,6 +21,40 @@ export class WorkspacesService {
       .where(eq(workspaceMembers.user_id, userId))
 
     return memberRecords
+  }
+
+  async updateWorkspace(
+    workspaceId: string,
+    name: string,
+    logoUrl: string | undefined,
+    userId: string,
+  ) {
+    // Check permission
+    const [membership] = await db
+      .select({ role: workspaceMembers.role })
+      .from(workspaceMembers)
+      .where(
+        and(
+          eq(workspaceMembers.workspace_id, workspaceId),
+          eq(workspaceMembers.user_id, userId),
+        ),
+      )
+
+    if (!membership || (membership.role !== 'owner' && membership.role !== 'admin')) {
+      throw new BadRequestException('Only workspace admins can update workspace settings')
+    }
+
+    const [updated] = await db
+      .update(workspaces)
+      .set({
+        name: name?.trim() || undefined,
+        logo_url: logoUrl !== undefined ? logoUrl : undefined,
+        updated_at: new Date(),
+      })
+      .where(eq(workspaces.id, workspaceId))
+      .returning({ id: workspaces.id, name: workspaces.name, logo_url: workspaces.logo_url })
+
+    return updated
   }
 
   async getWorkspaceMembers(workspaceId: string, userId: string) {
@@ -41,6 +79,7 @@ export class WorkspacesService {
         email: users.email,
         first_name: users.first_name,
         last_name: users.last_name,
+        profile_picture: users.profile_picture,
         role: workspaceMembers.role,
         created_at: workspaceMembers.created_at,
       })
@@ -100,6 +139,22 @@ export class WorkspacesService {
       user_id: targetUser.id,
       role: 'member',
     })
+
+    // Fetch workspace name and inviter name to send email
+    const [workspace] = await db
+      .select({ name: workspaces.name })
+      .from(workspaces)
+      .where(eq(workspaces.id, workspaceId))
+
+    const [inviterUser] = await db
+      .select({ first_name: users.first_name, email: users.email })
+      .from(users)
+      .where(eq(users.id, userId))
+
+    const inviterName = inviterUser?.first_name || inviterUser?.email || 'A teammate'
+    const wsName = workspace?.name || 'Workspace'
+
+    this.mailService.sendWorkspaceInviteEmail(email, wsName, inviterName).catch(() => {})
 
     return { success: true, message: 'Member added successfully' }
   }

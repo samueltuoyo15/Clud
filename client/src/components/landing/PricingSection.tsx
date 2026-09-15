@@ -64,7 +64,7 @@ export const PricingSection: React.FC = () => {
               For teams that need instant alerts and unlimited monitoring.
             </p>
             <div className="mb-8">
-              <span className="text-4xl font-heading font-black">$19</span>
+              <span className="text-4xl font-heading font-black">$10</span>
               <span className="text-primary-200 font-medium">/month</span>
             </div>
             
@@ -75,7 +75,7 @@ export const PricingSection: React.FC = () => {
               </li>
               <li className="flex items-start gap-3">
                 <CheckmarkBadge01Icon className="text-white shrink-0" size={20} />
-                <span className="text-sm">Instant Slack Alerts</span>
+                <span className="text-sm">Instant Slack &amp; Email Alerts</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckmarkBadge01Icon className="text-white shrink-0" size={20} />
@@ -87,11 +87,12 @@ export const PricingSection: React.FC = () => {
               </li>
             </ul>
 
-            <button
+            <Link
+              to="/dashboard/settings?tab=billing"
               className="block w-full py-3 px-6 text-center rounded-xl font-semibold bg-white text-primary hover:bg-neutral-50 transition-colors"
             >
               Upgrade to Pro
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { eq, and } from 'drizzle-orm'
 import db from '../../db'
-import { projects, workspaces, integrations } from '../../db/schema'
+import { projects, workspaces, integrations, notifications } from '../../db/schema'
 import { fetchSpec, SpecAuth } from '../projects/utils/fetch-spec'
 import { validateOpenApiSpec } from '../projects/utils/validate-openapi'
 import { hashSpec } from '../projects/utils/hash-spec'
@@ -121,6 +121,18 @@ export class PollerProcessor extends WorkerHost {
             )
           }
         }
+
+        // Insert in-app notification
+        await db
+          .insert(notifications)
+          .values({
+            workspace_id: project.workspace_id,
+            project_id: project.id,
+            title: `API Drift Detected: ${project.name}`,
+            message: `Changes detected in the OpenAPI specification for ${project.name}.`,
+            type: 'drift',
+          })
+          .catch(() => {})
       }
     }
 

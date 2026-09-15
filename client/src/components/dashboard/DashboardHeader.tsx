@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react"
-import {
-  FilterHorizontalIcon,
-  Notification01Icon,
-} from "hugeicons-react"
+import { Notification01Icon, Search01Icon } from "hugeicons-react"
 import { UserDropdown } from "./UserDropdown"
+import { fetchApi } from "../../lib/fetch"
+import { getShortcutKey } from "../../lib/platform"
 
 export interface Workspace {
   id: string
@@ -11,37 +10,60 @@ export interface Workspace {
   role: string
 }
 
+export interface InAppNotification {
+  id: string
+  title: string
+  message: string
+  type: string
+  read: boolean
+  created_at: string
+}
+
 interface DashboardHeaderProps {
-  viewFilter: "all" | "sync" | "drift"
-  setViewFilter: (filter: "all" | "sync" | "drift") => void
+  activeNav?: "dashboard" | "apis" | "integrations" | "settings" | "teams"
   displayName: string
   email?: string
   initial: string
   profilePicture?: string | null
+  isSidebarCollapsed?: boolean
+  onToggleCollapse?: () => void
   onOpenSettings: () => void
   onLogout: () => void
-  onCreateWorkspace: () => void
-  workspaces: Workspace[]
-  activeWorkspaceId: string | null
-  onSwitchWorkspace: (id: string) => void
+  onOpenCommandPalette: () => void
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
-  viewFilter,
-  setViewFilter,
+  activeNav = "dashboard",
   displayName,
   email,
   initial,
   profilePicture,
+  isSidebarCollapsed = false,
+  onToggleCollapse,
   onOpenSettings,
   onLogout,
-  onCreateWorkspace,
-  workspaces,
-  activeWorkspaceId,
-  onSwitchWorkspace,
+  onOpenCommandPalette,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false)
+  const [notificationsList, setNotificationsList] = useState<InAppNotification[]>([])
   const notifRef = useRef<HTMLDivElement>(null)
+
+  const loadNotifications = async () => {
+    try {
+      const data = await fetchApi("/notifications")
+      if (Array.isArray(data)) {
+        setNotificationsList(data)
+      }
+    } catch {
+      // Ignore background notification fetch errors
+    }
+  }
+
+  useEffect(() => {
+    loadNotifications()
+    const interval = setInterval(loadNotifications, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,102 +75,126 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId) || workspaces[0]
+  const markRead = async (id: string) => {
+    try {
+      await fetchApi(`/notifications/${id}/read`, { method: "PATCH" })
+      setNotificationsList((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+      )
+    } catch {
+      // Ignore
+    }
+  }
+
+  const unreadCount = notificationsList.filter((n) => !n.read).length
 
   return (
-    <header className="h-[72px] px-8 border-b border-neutral-200/60 flex items-center justify-between shrink-0 bg-white">
-      <div className="flex-1 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <div className="relative group">
-            <button className="flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:opacity-80 transition-opacity cursor-pointer">
-              <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                {activeWorkspace?.name.charAt(0).toUpperCase() || initial}
-              </div>
-              {activeWorkspace?.name || `${displayName}'s Workspace`}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-400"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-neutral-200 rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-1 ">
-              <div className="px-3 py-2 text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Your Workspaces</div>
-              {workspaces.map((ws) => (
-                <button 
-                  key={ws.id}
-                  onClick={() => onSwitchWorkspace(ws.id)}
-                  className={`w-full text-left px-3 py-2 text-xs font-medium rounded-lg flex items-center gap-2 ${activeWorkspaceId === ws.id ? 'bg-neutral-50 text-neutral-900' : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'}`}
-                >
-                  <div className="w-4 h-4 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-[8px]">
-                    {ws.name.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="flex-1 truncate">{ws.name}</span>
-                  {activeWorkspaceId === ws.id && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M20 6 9 17l-5-5"/></svg>
-                  )}
-                </button>
-              ))}
-              <div className="h-px bg-neutral-100 my-1 w-full" />
-              <button 
-                onClick={onCreateWorkspace}
-                className="w-full text-left px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 rounded-lg flex items-center gap-2"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                Create Workspace
-              </button>
-            </div>
+    <header className="h-16 px-8 flex items-center justify-between shrink-0 bg-transparent border-b border-transparent">
+      {/* Search Input Bar Trigger + Collapse Button */}
+      <div className="flex items-center gap-2.5 flex-1 max-w-lg">
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="w-8 h-8 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2"/>
+              <path d="M9 3v18"/>
+              <path d={isSidebarCollapsed ? "m11 9 3 3-3 3" : "m14 9-3 3 3 3"}/>
+            </svg>
+          </button>
+        )}
+
+        <button
+          onClick={onOpenCommandPalette}
+          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-400 text-xs transition-colors cursor-pointer group"
+        >
+          <div className="flex items-center gap-2">
+            <Search01Icon size={15} className="text-neutral-400 group-hover:text-neutral-600 transition-colors" />
+            <span className="text-neutral-500 font-normal">Search APIs, settings, pages...</span>
           </div>
-        </div>
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-100 group-hover:bg-neutral-200/70 rounded border border-neutral-200/60 transition-colors">
+            {getShortcutKey()}
+          </kbd>
+        </button>
+      </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <button
-              title="Filter options"
-              onClick={() =>
-                setViewFilter(
-                  viewFilter === "all"
-                    ? "drift"
-                    : viewFilter === "drift"
-                      ? "sync"
-                      : "all",
-                )
-              }
-              className="w-8 h-8 rounded-md flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:bg-black/5 transition-colors cursor-pointer"
-            >
-              <FilterHorizontalIcon size={16} />
-            </button>
+      <div className="flex items-center gap-3">
+        {/* Notifications Bell */}
+        <div className="relative" ref={notifRef}>
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            title="Notifications"
+            className="w-8 h-8 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer relative"
+          >
+            <Notification01Icon size={17} />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+            )}
+          </button>
 
-            <div className="relative" ref={notifRef}>
-              <button
-                onClick={() => setShowNotifications(!showNotifications)}
-                title="Notifications"
-                className="w-8 h-8 rounded-md flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:bg-black/5 transition-colors cursor-pointer relative"
-              >
-                <Notification01Icon size={16} />
-              </button>
-
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl border border-neutral-200 p-3 z-50">
-                  <div className="pb-2 border-b border-neutral-100 flex items-center justify-between">
-                    <p className="text-xs font-semibold text-neutral-900">
-                      Notifications
-                    </p>
-                  </div>
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl border border-neutral-200 p-3 z-50">
+              <div className="pb-2 border-b border-neutral-100 flex items-center justify-between">
+                <p className="text-xs font-semibold text-neutral-900">
+                  Notifications
+                </p>
+                {unreadCount > 0 && (
+                  <span className="text-[10px] bg-rose-50 text-rose-600 font-semibold px-1.5 py-0.5 rounded">
+                    {unreadCount} new
+                  </span>
+                )}
+              </div>
+              <div className="max-h-64 overflow-y-auto divide-y divide-neutral-50">
+                {notificationsList.length === 0 ? (
                   <div className="py-6 text-center">
                     <p className="text-xs text-neutral-400">
-                      No new notifications.
+                      No notifications yet.
                     </p>
                   </div>
-                </div>
-              )}
+                ) : (
+                  notificationsList.map((notif) => (
+                    <div
+                      key={notif.id}
+                      onClick={() => markRead(notif.id)}
+                      className={`p-2.5 text-left rounded-lg transition-colors cursor-pointer ${
+                        !notif.read ? "bg-amber-50/40" : "hover:bg-neutral-50"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <p className="text-xs font-semibold text-neutral-900 leading-snug">
+                          {notif.title}
+                        </p>
+                        {!notif.read && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 mt-1" />
+                        )}
+                      </div>
+                      <p className="text-[11px] text-neutral-500 line-clamp-2 leading-relaxed">
+                        {notif.message}
+                      </p>
+                      <span className="text-[10px] text-neutral-400 mt-1 block">
+                        {new Date(notif.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-
-          <UserDropdown
-            displayName={displayName}
-            email={email}
-            initial={initial}
-            profilePicture={profilePicture}
-            onOpenSettings={onOpenSettings}
-            onLogout={onLogout}
-          />
+          )}
         </div>
+
+        <UserDropdown
+          displayName={displayName}
+          email={email}
+          initial={initial}
+          profilePicture={profilePicture}
+          onOpenSettings={onOpenSettings}
+          onLogout={onLogout}
+        />
       </div>
     </header>
   )

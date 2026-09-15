@@ -19,6 +19,7 @@ export const workspaceRoleEnum = pgEnum('workspace_role', [
 export const workspaces = pgTable('workspaces', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
+  logo_url: text('logo_url'),
   alert_emails: jsonb('alert_emails').default('[]'),
   created_at: timestamp('created_at', { withTimezone: true })
     .notNull()

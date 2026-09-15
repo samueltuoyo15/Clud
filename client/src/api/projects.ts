@@ -22,10 +22,16 @@ export async function createProjectApi(data: {
   name: string
   spec_url: string
   check_interval_minutes?: number
+  auth_type?: "none" | "basic"
+  auth_username?: string
+  auth_password?: string
 }) {
   return fetchApi("/projects", {
     method: "POST",
-    data,
+    data: {
+      ...data,
+      auth_type: data.auth_type || "none",
+    },
   })
 }
 

@@ -9,9 +9,11 @@ import { Footer } from "../components/layout/Footer"
 export const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col">
-      <Navbar />
-      <main className="flex-1">
+      <div className="bg-[#FAFAFA] border-b border-neutral-200/60">
+        <Navbar />
         <Hero />
+      </div>
+      <main className="flex-1">
         <VisualIntegration />
         <TestimonialSection />
         <PricingSection />

@@ -7,7 +7,7 @@ import { hashSpec } from './utils/hash-spec'
 import { computeSpecDiff } from './utils/diff-spec'
 import { encrypt, decrypt } from '../../utils/crypto'
 import db from '../../db'
-import { projects, NewProject, workspaceMembers, workspaces, integrations } from '../../db/schema'
+import { projects, NewProject, workspaceMembers, workspaces, integrations, notifications } from '../../db/schema'
 import { MailService } from '../mail/mail.service'
 
 @Injectable()
@@ -189,6 +189,17 @@ export class ProjectsService {
           }).catch(err => this.logger.error(`Slack alert failed: ${err.message}`))
         }
       }
+
+      await db
+        .insert(notifications)
+        .values({
+          workspace_id: workspaceId,
+          project_id: project.id,
+          title: `API Drift Detected: ${project.name}`,
+          message: `Breaking changes were detected in the OpenAPI specification for ${project.name}.`,
+          type: 'drift',
+        })
+        .catch(() => {})
     }
 
     await db

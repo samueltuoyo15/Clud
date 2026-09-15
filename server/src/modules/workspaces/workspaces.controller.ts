@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common'
+import { Controller, Post, Get, Patch, Body, Param, UseGuards } from '@nestjs/common'
 import { WorkspacesService } from './workspaces.service'
 import { AuthGuard } from '../auth/auth.guard'
 import { CurrentUser } from '../auth/current-user.decorator'
@@ -11,6 +11,21 @@ export class WorkspacesController {
   @Get()
   async getWorkspaces(@CurrentUser() user: { userId: string }) {
     return this.workspacesService.getWorkspaces(user.userId)
+  }
+
+  @Patch(':id')
+  async updateWorkspace(
+    @Param('id') workspaceId: string,
+    @Body('name') name: string,
+    @Body('logo_url') logoUrl: string | undefined,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.workspacesService.updateWorkspace(
+      workspaceId,
+      name,
+      logoUrl,
+      user.userId,
+    )
   }
 
   @Get(':id/members')

@@ -14,24 +14,24 @@ export const Hero: React.FC = () => {
         <div className="flex items-center gap-3 bg-white border border-neutral-200 rounded-full py-1.5 px-2 pr-4 mb-6 w-fit">
           <div className="flex -space-x-2">
             <img
-              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Sam&backgroundColor=e9d5ff&accessories=faceMask"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
               alt="User 1"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Alex&backgroundColor=d8b4fe&accessories=faceMask"
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
               alt="User 2"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Taylor&backgroundColor=c084fc&accessories=faceMask"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
               alt="User 3"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Jordan&backgroundColor=a855f7&accessories=faceMask"
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80"
               alt="User 4"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
           </div>
           <span className="text-sm text-neutral-600 font-medium">
