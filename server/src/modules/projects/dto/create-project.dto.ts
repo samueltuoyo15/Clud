@@ -24,7 +24,7 @@ export class CreateProjectDTO {
   @IsOptional()
   @IsInt({ message: 'Check interval must be an integer' })
   @Min(1, { message: 'Check interval must be at least 1 minute' })
-  check_interval_minutes?: number = 5
+  check_interval_minutes?: number = 2
 
   @IsNotEmpty({ message: 'Auth type is required' })
   @IsString({ message: 'Auth type must be a string' })

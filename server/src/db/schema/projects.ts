@@ -21,7 +21,7 @@ export const projects = pgTable(
       .references(() => workspaces.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
     spec_url: text('spec_url').notNull(),
-    check_interval_minutes: integer('check_interval_minutes').default(5),
+    check_interval_minutes: integer('check_interval_minutes').default(2),
     is_paused: boolean('is_paused').notNull().default(false),
     last_hash: text('last_hash'),
     last_spec: text('last_spec'),

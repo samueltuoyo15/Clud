@@ -41,6 +41,7 @@ export const Dashboard: React.FC = () => {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [projects, setProjects] = useState<Project[]>([])
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
+  const [workspaceMembers, setWorkspaceMembers] = useState<any[]>([])
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(null)
   const [integrationsCount, setIntegrationsCount] = useState(0)
   
@@ -64,7 +65,7 @@ export const Dashboard: React.FC = () => {
   }>({
     name: "",
     spec_url: "",
-    check_interval_minutes: 5,
+    check_interval_minutes: 2,
     auth_type: "none",
     auth_username: "",
     auth_password: "",
@@ -75,7 +76,7 @@ export const Dashboard: React.FC = () => {
     try {
       const [me, projs, wsData, integData] = await Promise.all([
         getMeApi(),
-        getProjectsApi(), // Normally we'd pass workspaceId if backend supported it, keeping as is for MVP
+        getProjectsApi(),
         fetchApi("/workspaces"),
         fetchApi("/integrations")
       ])
@@ -85,6 +86,39 @@ export const Dashboard: React.FC = () => {
       
       const newActiveId = workspaceIdToSet || wsData[0]?.id || null
       setActiveWorkspaceId(newActiveId)
+      
+      if (newActiveId) {
+        try {
+          const mems = await fetchApi(`/workspaces/${newActiveId}/members`)
+          if (Array.isArray(mems) && mems.length > 0) {
+            setWorkspaceMembers(mems)
+          } else if (me) {
+            setWorkspaceMembers([
+              {
+                id: me.id,
+                email: me.email,
+                first_name: me.first_name,
+                last_name: me.last_name,
+                profile_picture: me.profile_picture,
+              },
+            ])
+          }
+        } catch {
+          if (me) {
+            setWorkspaceMembers([
+              {
+                id: me.id,
+                email: me.email,
+                first_name: me.first_name,
+                last_name: me.last_name,
+                profile_picture: me.profile_picture,
+              },
+            ])
+          } else {
+            setWorkspaceMembers([])
+          }
+        }
+      }
       
       if (projs.length > 0) setSelectedProjectId(projs[0].id)
         
@@ -141,7 +175,7 @@ export const Dashboard: React.FC = () => {
       setNewProject({
         name: "",
         spec_url: "",
-        check_interval_minutes: 5,
+        check_interval_minutes: 2,
         auth_type: "none",
         auth_username: "",
         auth_password: "",
@@ -259,6 +293,7 @@ export const Dashboard: React.FC = () => {
               projects={filteredProjects}
               selectedProjectId={selectedProjectId}
               checkingProjectId={checkingProjectId}
+              members={workspaceMembers}
               viewFilter={viewFilter}
               setViewFilter={setViewFilter}
               onSelectProject={setSelectedProjectId}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 import { Button } from "../ui/button"
+import { Checkbox } from "../ui/Checkbox"
 import { fetchApi } from "../../lib/fetch"
 import type { Workspace } from "./DashboardSidebar"
 
@@ -551,7 +552,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-xs text-neutral-500">Workspace users</span>
                 <div className="flex -space-x-2 overflow-hidden">
-                  {members.slice(0, 4).map((m) => (
+                  {members.slice(0, 5).map((m) => (
                     <img
                       key={m.id}
                       src={
@@ -562,9 +563,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       className="inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover bg-neutral-100"
                     />
                   ))}
-                  {members.length > 4 && (
+                  {members.length > 5 && (
                     <div className="inline-flex h-6 w-6 rounded-full ring-2 ring-white bg-neutral-200 items-center justify-center text-[9px] font-bold text-neutral-600">
-                      +{members.length - 4}
+                      +{members.length - 5}
                     </div>
                   )}
                 </div>
@@ -663,14 +664,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <thead>
                 <tr className="border-b border-neutral-100 bg-neutral-50/50 text-xs font-semibold text-neutral-500">
                   <th className="w-10 px-4 py-3.5 text-center">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={
                         members.length > 0 &&
                         selectedMemberIds.length === members.length
                       }
                       onChange={toggleSelectAll}
-                      className="rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
                     />
                   </th>
                   <th className="px-4 py-3.5 font-medium">User</th>
@@ -705,11 +704,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         }`}
                       >
                         <td className="w-10 px-4 py-3.5 text-center">
-                          <input
-                            type="checkbox"
+                          <Checkbox
                             checked={isSelected}
                             onChange={() => toggleSelectMember(member.id)}
-                            className="rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
                           />
                         </td>
                         <td className="px-4 py-3.5">

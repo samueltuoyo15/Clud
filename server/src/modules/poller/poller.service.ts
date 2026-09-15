@@ -32,13 +32,14 @@ export class PollerService {
           id: projects.id,
           name: projects.name,
           last_polled_at: projects.last_polled_at,
+          check_interval_minutes: projects.check_interval_minutes,
         })
         .from(projects)
         .where(eq(projects.is_paused, false))
 
-      const intervalMs = 5 * 60 * 1000 // 5 minutes
       const due = candidates.filter((p) => {
         if (!p.last_polled_at) return true
+        const intervalMs = (p.check_interval_minutes || 2) * 60 * 1000
         return now.getTime() - p.last_polled_at.getTime() >= intervalMs
       })
 

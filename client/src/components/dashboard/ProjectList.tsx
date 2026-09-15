@@ -1,12 +1,13 @@
 import React from "react"
 import type { Project } from "../../api/projects"
 import { Button } from "../ui/button"
-import { ProjectCard } from "./ProjectCard"
+import { ProjectCard, ProjectCardMember } from "./ProjectCard"
 
 interface ProjectListProps {
   projects: Project[]
   selectedProjectId: string | null
   checkingProjectId: string | null
+  members?: ProjectCardMember[]
   viewFilter: "all" | "sync" | "drift"
   setViewFilter: (filter: "all" | "sync" | "drift") => void
   onSelectProject: (id: string) => void
@@ -18,6 +19,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
   projects,
   selectedProjectId,
   checkingProjectId,
+  members = [],
   viewFilter,
   setViewFilter,
   onSelectProject,
@@ -91,6 +93,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
                 project={p}
                 isSelected={selectedProjectId === p.id}
                 isChecking={checkingProjectId === p.id}
+                members={members}
                 onSelect={() => onSelectProject(p.id)}
                 onCheck={() => onCheckProject(p.id, p.name)}
               />

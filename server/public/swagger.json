@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
-    "version": "1.0.7",
+    "description": "Updated Petstore server with recent schema drift. Real-time drift detection test.",
+    "version": "1.0.8",
     "title": "Swagger Petstore",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
@@ -60,8 +60,15 @@
             "name": "additionalMetadata",
             "in": "formData",
             "description": "Additional data to pass to server",
-            "required": false,
+            "required": true,
             "type": "string"
+          },
+          {
+            "name": "imageQuality",
+            "in": "formData",
+            "description": "Image compression quality level (1-100)",
+            "required": false,
+            "type": "integer"
           },
           {
             "name": "testParam",
@@ -202,46 +209,43 @@
         ]
       }
     },
-    "/pet/findByTags": {
+    "/pet/analytics": {
       "get": {
         "tags": ["pet"],
-        "summary": "Finds Pets by tags",
-        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTags",
-        "produces": ["application/json", "application/xml"],
+        "summary": "Retrieve pet adoption analytics and velocity stats",
+        "description": "Calculates real-time velocity of pet admissions and adoptions.",
+        "operationId": "getPetAnalytics",
+        "produces": ["application/json"],
         "parameters": [
           {
-            "name": "tags",
+            "name": "period",
             "in": "query",
-            "description": "Tags to filter by",
+            "description": "Time frame: day, week, month, year",
             "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
+            "type": "string",
+            "enum": ["day", "week", "month", "year"],
+            "default": "month"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
+            "description": "Analytics data summary"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
+        }
+      }
+    },
+    "/billing/invoices": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Fetch customer invoice history",
+        "description": "Returns generated receipts and checkout records.",
+        "operationId": "getInvoices",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "List of invoices"
           }
-        ],
-        "deprecated": true
+        }
       }
     },
     "/pet/{petId}": {
@@ -496,6 +500,13 @@
             "description": "The name that needs to be fetched. Use user1 for testing. ",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "description": "Tenant or organization identifier",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -692,6 +703,71 @@
           }
         }
       }
+    },
+    "/notifications/preferences": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Retrieve notification dispatch preferences",
+        "operationId": "getNotificationPreferences",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "User notification channel preferences"
+          }
+        }
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "Update user alert channels and digest frequency",
+        "operationId": "updateNotificationPreferences",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Notification preference settings payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email_enabled", "slack_enabled"],
+              "properties": {
+                "email_enabled": { "type": "boolean" },
+                "slack_enabled": { "type": "boolean" },
+                "digest_interval_minutes": { "type": "integer", "default": 2 }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Preferences successfully saved"
+          }
+        }
+      }
+    },
+    "/webhooks/deliveries": {
+      "get": {
+        "tags": ["store"],
+        "summary": "List historical webhook delivery payloads and retry logs",
+        "operationId": "listWebhookDeliveries",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum records to return",
+            "required": false,
+            "type": "integer",
+            "default": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical webhook delivery events"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -743,7 +819,7 @@
     },
     "Pet": {
       "type": "object",
-      "required": ["name", "photoUrls"],
+      "required": ["pet_title", "category"],
       "properties": {
         "id": {
           "type": "integer",
@@ -752,9 +828,13 @@
         "category": {
           "$ref": "#/definitions/Category"
         },
-        "name": {
+        "pet_title": {
           "type": "string",
           "example": "doggie"
+        },
+        "age_years": {
+          "type": "integer",
+          "example": 3
         },
         "photoUrls": {
           "type": "array",

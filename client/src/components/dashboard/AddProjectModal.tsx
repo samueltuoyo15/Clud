@@ -1,6 +1,7 @@
 import React from "react"
 import { PlusSignIcon, PuzzleIcon } from "hugeicons-react"
 import { Button } from "../ui/button"
+import { Checkbox } from "../ui/Checkbox"
 
 interface AddProjectModalProps {
   isOpen: boolean
@@ -116,22 +117,17 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 
               {/* Protected / Basic Auth Toggle */}
               <div className="pt-1">
-                <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={newProject.auth_type === "basic"}
-                    onChange={(e) =>
-                      setNewProject({
-                        ...newProject,
-                        auth_type: e.target.checked ? "basic" : "none",
-                      })
-                    }
-                    className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
-                  />
-                  <span className="text-xs font-medium text-neutral-700">
-                    Protected with HTTP Basic Auth
-                  </span>
-                </label>
+                <Checkbox
+                  checked={newProject.auth_type === "basic"}
+                  onChange={(checked) =>
+                    setNewProject({
+                      ...newProject,
+                      auth_type: checked ? "basic" : "none",
+                    })
+                  }
+                  label="Protected with HTTP Basic Auth"
+                  description="Supply credentials if this endpoint requires authentication"
+                />
 
                 {newProject.auth_type === "basic" && (
                   <div className="mt-3 grid grid-cols-2 gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
