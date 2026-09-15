@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Updated Petstore server with recent schema drift. Real-time drift detection test.",
-    "version": "1.0.8",
+    "description": "Sample Petstore server schema for real-time drift verification.",
+    "version": "1.0.9",
     "title": "Swagger Petstore",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
@@ -60,15 +60,8 @@
             "name": "additionalMetadata",
             "in": "formData",
             "description": "Additional data to pass to server",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "imageQuality",
-            "in": "formData",
-            "description": "Image compression quality level (1-100)",
             "required": false,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "testParam",
@@ -207,45 +200,6 @@
             "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
-      }
-    },
-    "/pet/analytics": {
-      "get": {
-        "tags": ["pet"],
-        "summary": "Retrieve pet adoption analytics and velocity stats",
-        "description": "Calculates real-time velocity of pet admissions and adoptions.",
-        "operationId": "getPetAnalytics",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Time frame: day, week, month, year",
-            "required": true,
-            "type": "string",
-            "enum": ["day", "week", "month", "year"],
-            "default": "month"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Analytics data summary"
-          }
-        }
-      }
-    },
-    "/billing/invoices": {
-      "get": {
-        "tags": ["store"],
-        "summary": "Fetch customer invoice history",
-        "description": "Returns generated receipts and checkout records.",
-        "operationId": "getInvoices",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "List of invoices"
-          }
-        }
       }
     },
     "/pet/{petId}": {
@@ -700,71 +654,6 @@
         "responses": {
           "default": {
             "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/notifications/preferences": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Retrieve notification dispatch preferences",
-        "operationId": "getNotificationPreferences",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "User notification channel preferences"
-          }
-        }
-      },
-      "put": {
-        "tags": ["user"],
-        "summary": "Update user alert channels and digest frequency",
-        "operationId": "updateNotificationPreferences",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Notification preference settings payload",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": ["email_enabled", "slack_enabled"],
-              "properties": {
-                "email_enabled": { "type": "boolean" },
-                "slack_enabled": { "type": "boolean" },
-                "digest_interval_minutes": { "type": "integer", "default": 2 }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Preferences successfully saved"
-          }
-        }
-      }
-    },
-    "/webhooks/deliveries": {
-      "get": {
-        "tags": ["store"],
-        "summary": "List historical webhook delivery payloads and retry logs",
-        "operationId": "listWebhookDeliveries",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Maximum records to return",
-            "required": false,
-            "type": "integer",
-            "default": 20
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Historical webhook delivery events"
           }
         }
       }

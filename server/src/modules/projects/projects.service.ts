@@ -5,6 +5,7 @@ import { fetchSpec, SpecAuth } from './utils/fetch-spec'
 import { validateOpenApiSpec } from './utils/validate-openapi'
 import { hashSpec } from './utils/hash-spec'
 import { computeSpecDiff } from './utils/diff-spec'
+import { runOasdiff } from '../poller/utils/oasdiff-runner'
 import { encrypt, decrypt } from '../../utils/crypto'
 import db from '../../db'
 import { projects, NewProject, workspaceMembers, workspaces, integrations, notifications } from '../../db/schema'
@@ -163,25 +164,25 @@ export class ProjectsService {
     const newSpecStr = JSON.stringify(spec)
     const prevSpecStr = project.last_spec ? decrypt(project.last_spec) : null
     const diff = prevSpecStr ? await computeSpecDiff(prevSpecStr, newSpecStr) : null
+    const oasdiffResult = prevSpecStr ? await runOasdiff(project.id, prevSpecStr, newSpecStr) : null
 
-    if (diff?.breakingChangesFound) {
-      let diffStr = JSON.stringify(diff.breakingChanges, null, 2)
-      if (diffStr.length > 2000) {
-        diffStr = diffStr.substring(0, 2000) + '\n... (truncated)'
-      }
+    if (diff?.breakingChangesFound || oasdiffResult?.hasChanges) {
+      const changelogText =
+        oasdiffResult?.changelog ||
+        'Breaking changes were detected in the OpenAPI specification.'
 
       const [ws] = await db.select({ alert_emails: workspaces.alert_emails }).from(workspaces).where(eq(workspaces.id, workspaceId))
       const slacks = await db.select().from(integrations).where(and(eq(integrations.workspace_id, workspaceId), eq(integrations.provider, 'slack')))
       
       const alertEmails = (ws?.alert_emails as string[]) || []
       if (alertEmails.length) {
-        this.mailService.sendDriftAlert(alertEmails, project.name, diffStr).catch(err => this.logger.error(`Mail alert failed: ${err.message}`))
+        this.mailService.sendDriftAlert(alertEmails, project.name, changelogText).catch(err => this.logger.error(`Mail alert failed: ${err.message}`))
       }
 
       for (const slack of slacks) {
         const webhookUrl = (slack.metadata as any)?.webhook_url
         if (webhookUrl) {
-          const text = `⚠️ *API Drift Detected: ${project.name}*\n\`\`\`${diffStr}\`\`\``
+          const text = `*API Drift Detected: ${project.name}*\n\n${changelogText}`
           fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -196,7 +197,7 @@ export class ProjectsService {
           workspace_id: workspaceId,
           project_id: project.id,
           title: `API Drift Detected: ${project.name}`,
-          message: `Breaking changes were detected in the OpenAPI specification for ${project.name}.`,
+          message: changelogText.substring(0, 500),
           type: 'drift',
         })
         .catch(() => {})
@@ -208,7 +209,7 @@ export class ProjectsService {
         last_hash: newHash,
         last_spec: encrypt(newSpecStr),
         last_polled_at: new Date(),
-        drift_detected: diff?.breakingChangesFound ?? false,
+        drift_detected: diff?.breakingChangesFound ?? oasdiffResult?.hasChanges ?? false,
         updated_at: new Date(),
       })
       .where(and(eq(projects.id, id), eq(projects.workspace_id, workspaceId)))

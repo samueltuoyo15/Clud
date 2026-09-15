@@ -75,14 +75,11 @@ export class PollerProcessor extends WorkerHost {
 
     if (prevSpecStr) {
       const diffResult = await runOasdiff(project.id, prevSpecStr, newSpecStr)
-      if (diffResult) {
+      if (diffResult?.hasChanges) {
         hasDrift = true
         this.logger.warn(`Diff detected for ${project.name}`)
 
-        let diffStr = JSON.stringify(diffResult, null, 2)
-        if (diffStr.length > 2000) {
-          diffStr = diffStr.substring(0, 2000) + '\n... (truncated)'
-        }
+        const changelogText = diffResult.changelog || 'Schema changes detected in OpenAPI specification.'
 
         const [ws] = await db
           .select({ alert_emails: workspaces.alert_emails })
@@ -102,7 +99,7 @@ export class PollerProcessor extends WorkerHost {
         const alertEmails = (ws?.alert_emails as string[]) || []
         if (alertEmails.length) {
           this.mailService
-            .sendDriftAlert(alertEmails, project.name, diffStr)
+            .sendDriftAlert(alertEmails, project.name, changelogText)
             .catch((err) =>
               this.logger.error(`Mail alert failed: ${err.message}`),
             )
@@ -111,7 +108,7 @@ export class PollerProcessor extends WorkerHost {
         for (const slack of slacks) {
           const webhookUrl = (slack.metadata as any)?.webhook_url
           if (webhookUrl) {
-            const text = `⚠️ *API Drift Detected: ${project.name}*\n\`\`\`${diffStr}\`\`\``
+            const text = `*API Drift Detected: ${project.name}*\n\n${changelogText}`
             fetch(webhookUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -129,7 +126,7 @@ export class PollerProcessor extends WorkerHost {
             workspace_id: project.workspace_id,
             project_id: project.id,
             title: `API Drift Detected: ${project.name}`,
-            message: `Changes detected in the OpenAPI specification for ${project.name}.`,
+            message: changelogText.substring(0, 500),
             type: 'drift',
           })
           .catch(() => {})
