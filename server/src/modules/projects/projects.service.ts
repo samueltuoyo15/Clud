@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { eq, and } from 'drizzle-orm'
 import { CreateProjectDTO } from './dto/create-project.dto'
 import { fetchSpec, SpecAuth } from './utils/fetch-spec'
@@ -7,33 +7,29 @@ import { hashSpec } from './utils/hash-spec'
 import { computeSpecDiff } from './utils/diff-spec'
 import { encrypt, decrypt } from '../../utils/crypto'
 import db from '../../db'
-import { projects, NewProject } from '../../db/schema'
+import { projects, NewProject, workspaceMembers } from '../../db/schema'
 
 @Injectable()
 export class ProjectsService {
   private readonly logger = new Logger(ProjectsService.name)
 
   async createProject(dto: CreateProjectDTO, userId: string) {
-    const {
-      name,
-      spec_url,
-      check_interval_minutes,
-      auth_type,
-      auth_username,
-      auth_password,
-    } = dto
-    const auth: SpecAuth = {
-      type: auth_type,
-      username: auth_username,
-      password: auth_password,
-    }
+    const { name, spec_url, check_interval_minutes, auth_type, auth_username, auth_password } = dto
+    const auth: SpecAuth = { type: auth_type, username: auth_username, password: auth_password }
+
+    const [member] = await db
+      .select({ workspace_id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+      .limit(1)
+    if (!member) throw new UnauthorizedException('User has no workspace')
 
     const spec = await fetchSpec(spec_url, auth)
     validateOpenApiSpec(spec)
     const hashed = hashSpec(spec)
 
     const newProj: NewProject = {
-      user_id: userId,
+      workspace_id: member.workspace_id,
       name,
       spec_url,
       check_interval_minutes,
@@ -63,6 +59,14 @@ export class ProjectsService {
   }
 
   async getProjects(userId: string) {
+    const userWorkspaces = await db
+      .select({ id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+
+    if (!userWorkspaces.length) return []
+    const workspaceId = userWorkspaces[0].id
+
     return await db
       .select({
         id: projects.id,
@@ -78,10 +82,18 @@ export class ProjectsService {
         updated_at: projects.updated_at,
       })
       .from(projects)
-      .where(eq(projects.user_id, userId))
+      .where(eq(projects.workspace_id, workspaceId))
   }
 
   async getProject(id: string, userId: string) {
+    const userWorkspaces = await db
+      .select({ id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+
+    if (!userWorkspaces.length) throw new NotFoundException('Project Not Found.')
+    const workspaceId = userWorkspaces[0].id
+
     const [project] = await db
       .select({
         id: projects.id,
@@ -97,13 +109,21 @@ export class ProjectsService {
         updated_at: projects.updated_at,
       })
       .from(projects)
-      .where(and(eq(projects.id, id), eq(projects.user_id, userId)))
+      .where(and(eq(projects.id, id), eq(projects.workspace_id, workspaceId)))
 
     if (!project) throw new NotFoundException('Project Not Found.')
     return project
   }
 
   async checkProject(id: string, userId: string) {
+    const userWorkspaces = await db
+      .select({ id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+
+    if (!userWorkspaces.length) throw new NotFoundException('Project Not Found.')
+    const workspaceId = userWorkspaces[0].id
+
     const [project] = await db
       .select({
         id: projects.id,
@@ -116,16 +136,14 @@ export class ProjectsService {
         auth_password: projects.auth_password,
       })
       .from(projects)
-      .where(and(eq(projects.id, id), eq(projects.user_id, userId)))
+      .where(and(eq(projects.id, id), eq(projects.workspace_id, workspaceId)))
 
     if (!project) throw new NotFoundException('Project Not Found.')
 
     const auth: SpecAuth = {
       type: project.auth_type === 'basic' ? 'basic' : 'none',
       username: project.auth_username ?? undefined,
-      password: project.auth_password
-        ? decrypt(project.auth_password)
-        : undefined,
+      password: project.auth_password ? decrypt(project.auth_password) : undefined,
     }
 
     const spec = await fetchSpec(project.spec_url, auth)
@@ -136,15 +154,13 @@ export class ProjectsService {
       await db
         .update(projects)
         .set({ last_polled_at: new Date() })
-        .where(and(eq(projects.id, id), eq(projects.user_id, userId)))
+        .where(and(eq(projects.id, id), eq(projects.workspace_id, workspaceId)))
       return { changed: false, diff: null }
     }
 
     const newSpecStr = JSON.stringify(spec)
     const prevSpecStr = project.last_spec ? decrypt(project.last_spec) : null
-    const diff = prevSpecStr
-      ? await computeSpecDiff(prevSpecStr, newSpecStr)
-      : null
+    const diff = prevSpecStr ? await computeSpecDiff(prevSpecStr, newSpecStr) : null
 
     await db
       .update(projects)
@@ -155,7 +171,7 @@ export class ProjectsService {
         drift_detected: diff?.breakingChangesFound ?? false,
         updated_at: new Date(),
       })
-      .where(and(eq(projects.id, id), eq(projects.user_id, userId)))
+      .where(and(eq(projects.id, id), eq(projects.workspace_id, workspaceId)))
 
     return { changed: true, diff }
   }

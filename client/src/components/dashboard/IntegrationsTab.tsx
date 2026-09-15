@@ -13,32 +13,36 @@ export const IntegrationsTab: React.FC = () => {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-xl border border-neutral-200 bg-white shadow-xs">
+        <div className="p-5 rounded-xl border border-neutral-200 bg-white shadow-xs flex flex-col justify-between">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-lg bg-neutral-50 flex items-center justify-center font-bold text-neutral-700 text-sm border border-neutral-200">
               #
             </div>
             <div>
               <h3 className="text-sm font-bold text-neutral-900">
-                Slack Webhook
+                Slack Workspace
               </h3>
               <p className="text-[11px] text-neutral-500">
-                Post diff alerts to your channel
+                Connect your workspace to post alerts
               </p>
             </div>
           </div>
-          <input
-            type="url"
-            placeholder="https://hooks.slack.com/services/..."
-            className="w-full px-3 py-1.5 rounded-md border border-neutral-200 text-xs font-mono mb-3 outline-none focus:border-neutral-400"
-          />
           <Button
             size="sm"
             variant="light"
             className="w-full rounded-md shadow-xs text-xs"
-            onClick={() => toast.success("Slack webhook saved!")}
+            onClick={() => {
+              const clientId = import.meta.env.VITE_SLACK_CLIENT_ID
+              if (!clientId) {
+                toast.error("Slack Client ID is missing in environment variables")
+                return
+              }
+              const redirectUri = `${window.location.origin}/dashboard/integrations/slack/callback`
+              const slackAuthUrl = `https://slack.com/oauth/v2/authorize?client_id=${clientId}&scope=incoming-webhook,chat:write&redirect_uri=${encodeURIComponent(redirectUri)}`
+              window.location.href = slackAuthUrl
+            }}
           >
-            Save Slack Channel
+            Connect Slack
           </Button>
         </div>
       </div>

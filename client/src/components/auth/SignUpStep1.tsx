@@ -31,7 +31,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
             required
             value={firstName}
             onChange={(e) => onChange({ firstName: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-[#006FEE]/10 focus:border-[#006FEE] outline-none transition-all text-neutral-900"
+            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"
           />
         </div>
         <div className="flex-1">
@@ -47,7 +47,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
             required
             value={lastName}
             onChange={(e) => onChange({ lastName: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-[#006FEE]/10 focus:border-[#006FEE] outline-none transition-all text-neutral-900"
+            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"
           />
         </div>
       </div>
@@ -65,7 +65,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
           placeholder="samuel@company.com"
           value={email}
           onChange={(e) => onChange({ email: e.target.value })}
-          className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-[#006FEE]/10 focus:border-[#006FEE] outline-none transition-all text-neutral-900"
+          className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"
         />
       </div>
     </>

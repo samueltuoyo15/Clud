@@ -17,20 +17,20 @@ const selectStyles = {
     ...base,
     padding: "2px",
     borderRadius: "0.75rem",
-    borderColor: state.isFocused ? "#006FEE" : "#e5e7eb",
-    boxShadow: state.isFocused ? "0 0 0 4px rgba(0, 111, 238, 0.1)" : "none",
-    "&:hover": { borderColor: state.isFocused ? "#006FEE" : "#e5e7eb" },
+    borderColor: state.isFocused ? "var(--color-primary)" : "#e5e7eb",
+    boxShadow: state.isFocused ? "0 0 0 4px rgba(97, 31, 105, 0.1)" : "none",
+    "&:hover": { borderColor: state.isFocused ? "var(--color-primary)" : "#e5e7eb" },
     transition: "all 0.2s ease",
   }),
   option: (base: any, state: any) => ({
     ...base,
     backgroundColor: state.isSelected
-      ? "#006FEE"
+      ? "var(--color-primary)"
       : state.isFocused
         ? "#f3f4f6"
         : "white",
     color: state.isSelected ? "white" : "#111827",
-    "&:active": { backgroundColor: "#006FEE", color: "white" },
+    "&:active": { backgroundColor: "var(--color-primary)", color: "white" },
   }),
 }
 

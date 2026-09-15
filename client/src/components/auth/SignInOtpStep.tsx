@@ -25,7 +25,7 @@ export const SignInOtpStep: React.FC<SignInOtpStepProps> = ({
         maxLength={6}
         value={otp}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-[#006FEE]/10 focus:border-[#006FEE] outline-none transition-all text-neutral-900 text-center tracking-[0.5em] font-mono text-xl"
+        className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900 text-center tracking-[0.5em] font-mono text-xl"
       />
     </div>
   )

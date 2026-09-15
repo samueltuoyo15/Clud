@@ -11,8 +11,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
       {/* Left Pane - Large Illustration */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-[#F9FAFC] border-r border-neutral-200/80 flex-col items-center justify-center p-12 overflow-hidden select-none">
         {/* Ambient subtle brand glows */}
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-[#3902FF]/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#006FEE]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 w-full max-w-xl flex flex-col items-center text-center">
           <img

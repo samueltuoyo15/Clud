@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
         </a>
         <Link
           to={isLoggedIn ? "/dashboard" : "/signup"}
-          className="inline-flex items-center gap-1.5 text-[15px] font-medium bg-[#3902FF] text-white hover:bg-[#3902FF]/90 px-5 py-2.5 rounded-full transition-colors cursor-pointer select-none"
+          className="inline-flex items-center gap-1.5 text-[15px] font-medium bg-primary text-white hover:bg-primary/90 px-5 py-2.5 rounded-full transition-colors cursor-pointer select-none"
         >
           <span>{isLoggedIn ? "Go to dashboard" : "Get started"}</span>
           <ArrowRight01Icon size={18} />

@@ -69,7 +69,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             e.stopPropagation()
             onCheck()
           }}
-          className="text-[11px] px-3 py-1 h-auto rounded-md !bg-[#3902FF]/5 !text-[#3902FF] !border-[#3902FF]/20 hover:!bg-[#3902FF]/10"
+          className="text-[11px] px-3 py-1 h-auto rounded-md !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary/10"
         >
           Poll Now
         </Button>

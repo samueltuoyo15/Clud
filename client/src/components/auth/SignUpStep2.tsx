@@ -13,18 +13,6 @@ export const challengeOptions = [
     description:
       "Breaking changes slipped into production without alerts or proper diffs.",
   },
-  {
-    id: "third-party",
-    title: "Tracking 3rd-party API dependencies is a headache",
-    description:
-      "Stripe, Twilio, or external partner APIs change and disrupt our integrations.",
-  },
-  {
-    id: "changelogs",
-    title: "I want automated changelogs and instant diff alerts",
-    description:
-      "Continuous OpenAPI monitoring with alerts delivered straight to our team.",
-  },
 ]
 
 interface SignUpStep2Props {
@@ -46,14 +34,14 @@ export const SignUpStep2: React.FC<SignUpStep2Props> = ({
             onClick={() => onSelect(opt.id)}
             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
               isSelected
-                ? "border-[#006FEE] bg-[#006FEE]/5 ring-1 ring-[#006FEE]"
+                ? "border-primary bg-primary/5 ring-1 ring-primary"
                 : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/50 bg-white"
             }`}
           >
             <div
               className={`w-4 h-4 rounded-full border mt-0.5 shrink-0 flex items-center justify-center transition-colors ${
                 isSelected
-                  ? "border-[#006FEE] bg-[#006FEE]"
+                  ? "border-primary bg-primary"
                   : "border-neutral-300 bg-white"
               }`}
             >

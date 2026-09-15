@@ -2,7 +2,6 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Button } from "./ui/button"
 import { ArrowRight01Icon } from "hugeicons-react"
-import { FloatingStickers } from "./landing/FloatingStickers"
 import { BentoGrid } from "./landing/BentoGrid"
 
 export const Hero: React.FC = () => {
@@ -10,30 +9,33 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="min-h-screen flex flex-col items-center text-center px-6 pt-20 sm:pt-24 pb-16 bg-transparent relative overflow-hidden">
-      <FloatingStickers />
-
       <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10">
         {/* Social Proof Badge */}
         <div className="flex items-center gap-3 bg-white border border-neutral-200 rounded-full py-1.5 px-2 pr-4 mb-6 w-fit">
           <div className="flex -space-x-2">
             <img
-              src="/images/student-1.webp"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Sam&backgroundColor=e9d5ff&accessories=faceMask"
               alt="User 1"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
             />
             <img
-              src="/images/student-2.webp"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Alex&backgroundColor=d8b4fe&accessories=faceMask"
               alt="User 2"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
             />
             <img
-              src="/images/student-3.webp"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Taylor&backgroundColor=c084fc&accessories=faceMask"
               alt="User 3"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
+            />
+            <img
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Jordan&backgroundColor=a855f7&accessories=faceMask"
+              alt="User 4"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-white"
             />
           </div>
           <span className="text-sm text-neutral-600 font-medium">
-            Built for teams that want to ship faster
+            Built for teams tired of silent API breakages
           </span>
         </div>
 

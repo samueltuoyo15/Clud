@@ -7,6 +7,7 @@ import { RedisModule } from './modules/redis/redis.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { ProjectsModule } from './modules/projects/projects.module'
 import { PollerModule } from './modules/poller/poller.module'
+import { IntegrationsModule } from './modules/integrations/integrations.module'
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PollerModule } from './modules/poller/poller.module'
     AuthModule,
     ProjectsModule,
     PollerModule,
+    IntegrationsModule,
   ],
   controllers: [],
   providers: [

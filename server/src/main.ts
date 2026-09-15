@@ -9,8 +9,14 @@ import cookieParser from 'cookie-parser'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
+  const allowedOriginsStr = process.env.ALLOWED_ORIGINS
+  if (!allowedOriginsStr) {
+    throw new Error('ALLOWED_ORIGINS environment variable is missing')
+  }
+  const allowedOrigins = allowedOriginsStr.split(',')
+
   app.enableCors({
-    origin: true,
+    origin: allowedOrigins,
     credentials: true,
   })
 

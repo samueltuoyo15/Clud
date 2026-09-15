@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt'
 import { eq } from 'drizzle-orm'
 import db from '../../db'
-import { users } from '../../db/schema'
+import { users, workspaces, workspaceMembers } from '../../db/schema'
 import { SignupDto } from './dto/auth.dto'
 import { MailService } from '../mail/mail.service'
 import { generateAndStoreOtp, verifyAndConsumeOtp } from './utils/otp.helper'
@@ -91,7 +91,13 @@ export class AuthService {
   async verifyOtp(emailInput: string, code: string) {
     const email = emailInput.toLowerCase()
     const [user] = await db
-      .select({ id: users.id, email: users.email })
+      .select({ 
+        id: users.id, 
+        email: users.email,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        email_verified: users.email_verified 
+      })
       .from(users)
       .where(eq(users.email, email))
     if (!user) throw new UnauthorizedException('Invalid credentials')
@@ -99,10 +105,26 @@ export class AuthService {
     const valid = await verifyAndConsumeOtp(email, code)
     if (!valid) throw new UnauthorizedException('Invalid or expired code')
 
-    await db
-      .update(users)
-      .set({ email_verified: true, updated_at: new Date() })
-      .where(eq(users.id, user.id))
+    if (!user.email_verified) {
+      await db.transaction(async (tx) => {
+        await tx
+          .update(users)
+          .set({ email_verified: true, updated_at: new Date() })
+          .where(eq(users.id, user.id))
+
+        const workspaceName = `${user.last_name || user.first_name || 'My'} Workspace`
+        const [workspace] = await tx
+          .insert(workspaces)
+          .values({ name: workspaceName })
+          .returning({ id: workspaces.id })
+
+        await tx.insert(workspaceMembers).values({
+          workspace_id: workspace.id,
+          user_id: user.id,
+          role: 'owner',
+        })
+      })
+    }
 
     const accessToken = this.jwtService.sign(
       { sub: user.id, email: user.email, type: 'access' },
