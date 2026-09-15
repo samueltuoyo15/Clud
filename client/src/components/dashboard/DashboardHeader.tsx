@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   FilterHorizontalIcon,
   Notification01Icon,
@@ -41,6 +41,17 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onSwitchWorkspace,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false)
+  const notifRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setShowNotifications(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId) || workspaces[0]
 
@@ -103,7 +114,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               <FilterHorizontalIcon size={16} />
             </button>
 
-            <div className="relative">
+            <div className="relative" ref={notifRef}>
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 title="Notifications"

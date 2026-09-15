@@ -28,7 +28,6 @@ export class PollerService {
         .select({
           id: projects.id,
           name: projects.name,
-          check_interval_minutes: projects.check_interval_minutes,
           last_polled_at: projects.last_polled_at,
         })
         .from(projects)
@@ -36,7 +35,7 @@ export class PollerService {
 
       const due = candidates.filter((p) => {
         if (!p.last_polled_at) return true
-        const intervalMs = (p.check_interval_minutes ?? 15) * 60 * 1000
+        const intervalMs = 5 * 60 * 1000 // 5 minutes (hardcoded at code level)
         return now.getTime() - p.last_polled_at.getTime() >= intervalMs
       })
 

@@ -14,7 +14,9 @@ export class IntegrationsService {
       .where(eq(workspaceMembers.user_id, userId))
       .limit(1)
 
-    if (!member) throw new BadRequestException('User has no workspace')
+    if (!member) {
+      return { slack: { connected: false }, emails: [] }
+    }
 
     const workspaceIntegrations = await db
       .select()

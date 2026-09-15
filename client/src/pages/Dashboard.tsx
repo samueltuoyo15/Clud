@@ -56,7 +56,7 @@ export const Dashboard: React.FC = () => {
   const [newProject, setNewProject] = useState({
     name: "",
     spec_url: "",
-    check_interval_minutes: 15,
+    check_interval_minutes: 5,
   })
 
   const loadDashboardData = async (workspaceIdToSet?: string) => {
@@ -82,10 +82,14 @@ export const Dashboard: React.FC = () => {
       if (integData.emails?.length > 0) count++
       setIntegrationsCount(count)
       
-    } catch {
-      localStorage.removeItem("accessToken")
-      toast.error("Session expired. Please sign in.")
-      navigate("/signin")
+    } catch (err: any) {
+      if (err.status === 401 || err.message === "Unauthorized") {
+        localStorage.removeItem("accessToken")
+        toast.error("Session expired. Please sign in.")
+        navigate("/signin")
+      } else {
+        toast.error(err.message || "Failed to load dashboard data.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -112,7 +116,7 @@ export const Dashboard: React.FC = () => {
       setProjects([created, ...projects])
       setSelectedProjectId(created.id)
       setShowAddModal(false)
-      setNewProject({ name: "", spec_url: "", check_interval_minutes: 15 })
+      setNewProject({ name: "", spec_url: "", check_interval_minutes: 5 })
       toast.success("Monitor created!")
     } catch (err: any) {
       toast.error(err.message || "Failed to create monitor")

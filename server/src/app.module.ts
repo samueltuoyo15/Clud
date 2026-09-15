@@ -28,6 +28,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module'
     ProjectsModule,
     PollerModule,
     IntegrationsModule,
+    WorkspacesModule,
   ],
   controllers: [],
   providers: [

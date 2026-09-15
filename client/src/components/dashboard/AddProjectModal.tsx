@@ -69,27 +69,6 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
             />
           </div>
 
-          <div>
-            <label className="block text-[11px] font-semibold text-neutral-700 mb-1">
-              Check Interval
-            </label>
-            <select
-              value={newProject.check_interval_minutes}
-              onChange={(e) =>
-                setNewProject({
-                  ...newProject,
-                  check_interval_minutes: parseInt(e.target.value, 10),
-                })
-              }
-              className="w-full px-3 py-2 rounded-lg border border-neutral-200 focus:border-neutral-400 outline-none text-xs bg-white text-neutral-900"
-            >
-              <option value={5}>Every 5 minutes</option>
-              <option value={15}>Every 15 minutes</option>
-              <option value={60}>Every 1 hour</option>
-              <option value={1440}>Once a day</option>
-            </select>
-          </div>
-
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100 mt-2">
             <Button
               type="button"

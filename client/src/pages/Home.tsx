@@ -3,6 +3,7 @@ import { Navbar } from "../components/navbar"
 import { Hero } from "../components/hero"
 import { VisualIntegration } from "../components/landing/VisualIntegration"
 import { TestimonialSection } from "../components/landing/TestimonialSection"
+import { PricingSection } from "../components/landing/PricingSection"
 import { Footer } from "../components/layout/Footer"
 
 export const Home: React.FC = () => {
@@ -13,6 +14,7 @@ export const Home: React.FC = () => {
         <Hero />
         <VisualIntegration />
         <TestimonialSection />
+        <PricingSection />
       </main>
       <Footer />
     </div>

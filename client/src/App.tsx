@@ -22,8 +22,8 @@ export const App: React.FC = () => {
           <Route path="/refunds" element={<RefundPolicy />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/dashboard/integrations/slack/callback" element={<SlackCallback />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
         </Routes>
       </Router>
     </>

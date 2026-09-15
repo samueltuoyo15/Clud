@@ -72,7 +72,10 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
             Workspace Settings
           </button>
           <button
-            onClick={onLogout}
+            onClick={() => {
+              setShowUserMenu(false)
+              onLogout()
+            }}
             className="w-full text-left px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
           >
             Sign Out

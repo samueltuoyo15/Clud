@@ -31,29 +31,28 @@ export const Footer: React.FC = () => {
               Autonomous API monitoring. We watch the unseen boundaries of your APIs, catching drift the moment it happens, protecting your team from silent breakages.
             </p>
             
-            {/* Social Links & Language & Copyright */}
             <div className="flex flex-col gap-6 mt-4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
-                  <NewTwitterIcon size={20} />
+                  <NewTwitterIcon size={24} />
                 </a>
                 <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
-                  <Linkedin01Icon size={20} />
+                  <Linkedin01Icon size={24} />
                 </a>
-                <div className="w-px h-4 bg-neutral-200"></div>
+                <div className="w-px h-5 bg-neutral-200"></div>
                 <Select 
                   value={language} 
                   onChange={setLanguage} 
                   options={LANGUAGE_OPTIONS} 
-                  className="w-[140px]"
+                  className="w-[180px]"
                 />
               </div>
-              <p className="text-xs text-neutral-400">© {new Date().getFullYear()} Clud Inc. All rights reserved.</p>
+              <p className="text-sm text-neutral-400 mt-2">© {new Date().getFullYear()} Clud Inc. All rights reserved.</p>
             </div>
           </div>
 
           {/* Links Columns */}
-          <div className="md:col-span-8 lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8 relative z-10">
+          <div className="md:col-span-8 lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8 relative z-20">
             <div>
               <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
                 Product
@@ -105,7 +104,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Massive Brand Text Background */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex justify-center overflow-hidden select-none translate-y-[24%]">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex justify-center overflow-hidden select-none translate-y-[35%] opacity-70">
         <span className="font-heading font-black text-[35vw] leading-none whitespace-nowrap text-neutral-200 tracking-tighter">
           CLUD
         </span>
