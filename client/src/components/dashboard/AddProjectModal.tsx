@@ -1,5 +1,5 @@
 import React from "react"
-import { Cancel01Icon, PlusSignIcon } from "hugeicons-react"
+import { PlusSignIcon } from "hugeicons-react"
 import { Button } from "../ui/button"
 
 interface AddProjectModalProps {
@@ -29,17 +29,11 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-neutral-200">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 border border-neutral-200">
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-sm font-bold text-neutral-900">
             Connect New Spec
           </h3>
-          <button
-            onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-700 transition-colors"
-          >
-            <Cancel01Icon size={18} />
-          </button>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
@@ -102,7 +96,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
               variant="light"
               size="sm"
               onClick={onClose}
-              className="rounded-lg shadow-xs"
+              className="rounded-lg"
             >
               Cancel
             </Button>
@@ -111,7 +105,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
               variant="primary"
               size="sm"
               isLoading={isCreating}
-              className="rounded-lg shadow-xs flex items-center gap-1.5"
+              className="rounded-lg flex items-center gap-1.5"
             >
               <span>Connect Spec</span>
               {!isCreating && <PlusSignIcon size={14} />}

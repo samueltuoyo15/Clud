@@ -6,18 +6,13 @@ import {
   Activity01Icon,
 } from "hugeicons-react"
 import type { Project } from "../../api/projects"
-import { Button } from "../ui/button"
 
 interface ProjectDetailPanelProps {
   project: Project | null
-  isAuditing: boolean
-  onAuditAll: () => void
 }
 
 export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
   project,
-  isAuditing,
-  onAuditAll,
 }) => {
   return (
     <div className="w-80 shrink-0 bg-white border-l border-neutral-200 p-6 flex flex-col justify-between overflow-y-auto">
@@ -117,18 +112,6 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
             </p>
           </div>
         )}
-      </div>
-
-      <div className="pt-6 border-t border-neutral-100 mt-6">
-        <Button
-          variant="primary"
-          size="md"
-          isLoading={isAuditing}
-          onClick={onAuditAll}
-          className="w-full text-xs font-semibold rounded-lg"
-        >
-          Run Full Audit
-        </Button>
       </div>
     </div>
   )

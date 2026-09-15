@@ -7,44 +7,46 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="w-full max-w-6xl mx-auto px-6 lg:px-8 py-6 flex items-center justify-between relative z-50">
-      {/* Brand */}
-      <div className="flex items-center">
-        <a href="/" className="flex items-center gap-2 group">
-          <img
-            src="/favicon.svg"
-            alt="Clud Logo"
-            className="h-7 w-auto object-contain"
-          />
-          <span className="font-heading font-semibold text-xl text-neutral-950">
-            Clud
-          </span>
-        </a>
-      </div>
+      <div className="flex items-center gap-8 lg:gap-12">
+        {/* Brand */}
+        <div className="flex items-center">
+          <a href="/" className="flex items-center gap-2 group">
+            <img
+              src="/favicon.svg"
+              alt="Clud Logo"
+              className="h-7 w-auto object-contain"
+            />
+            <span className="font-heading font-semibold text-xl text-neutral-950">
+              Clud
+            </span>
+          </a>
+        </div>
 
-      {/* Nav Links (Centered absolute) */}
-      <nav className="hidden md:flex items-center gap-8 text-[15px] text-neutral-600 font-medium absolute left-1/2 -translate-x-1/2">
-        <a
-          href="#features"
-          className="hover:text-neutral-950 transition-colors"
-        >
-          Features
-        </a>
-        <a
-          href="#how-it-works"
-          className="hover:text-neutral-950 transition-colors"
-        >
-          How it works
-        </a>
-        <a
-          href="#changelog"
-          className="hover:text-neutral-950 transition-colors"
-        >
-          Changelog
-        </a>
-        <a href="#pricing" className="hover:text-neutral-950 transition-colors">
-          Pricing
-        </a>
-      </nav>
+        {/* Nav Links */}
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[15px] text-neutral-600 font-medium">
+          <a
+            href="#features"
+            className="hover:text-neutral-950 transition-colors"
+          >
+            Features
+          </a>
+          <a
+            href="#how-it-works"
+            className="hover:text-neutral-950 transition-colors"
+          >
+            How it works
+          </a>
+          <a
+            href="#changelog"
+            className="hover:text-neutral-950 transition-colors"
+          >
+            Changelog
+          </a>
+          <a href="#pricing" className="hover:text-neutral-950 transition-colors">
+            Pricing
+          </a>
+        </nav>
+      </div>
 
       {/* Right CTA */}
       <div className="flex items-center gap-3">

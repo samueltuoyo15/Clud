@@ -1,11 +1,77 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common'
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import db from '../../db'
-import { integrations, workspaceMembers } from '../../db/schema'
+import { integrations, workspaceMembers, workspaces } from '../../db/schema'
 
 @Injectable()
 export class IntegrationsService {
   private logger = new Logger(IntegrationsService.name)
+
+  async getIntegrations(userId: string) {
+    const [member] = await db
+      .select({ workspace_id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+      .limit(1)
+
+    if (!member) throw new BadRequestException('User has no workspace')
+
+    const workspaceIntegrations = await db
+      .select()
+      .from(integrations)
+      .where(eq(integrations.workspace_id, member.workspace_id))
+
+    const [workspaceData] = await db
+      .select({ alert_emails: workspaces.alert_emails })
+      .from(workspaces)
+      .where(eq(workspaces.id, member.workspace_id))
+      .limit(1)
+
+    const slack = workspaceIntegrations.find((i) => i.provider === 'slack')
+
+    return {
+      slack: slack ? { connected: true, metadata: slack.metadata } : { connected: false },
+      emails: workspaceData?.alert_emails || [],
+    }
+  }
+
+  async saveEmails(emails: string[], userId: string) {
+    const [member] = await db
+      .select({ workspace_id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+      .limit(1)
+
+    if (!member) throw new BadRequestException('User has no workspace')
+
+    await db
+      .update(workspaces)
+      .set({ alert_emails: emails, updated_at: new Date() })
+      .where(eq(workspaces.id, member.workspace_id))
+
+    return { success: true }
+  }
+
+  async disconnectSlack(userId: string) {
+    const [member] = await db
+      .select({ workspace_id: workspaceMembers.workspace_id })
+      .from(workspaceMembers)
+      .where(eq(workspaceMembers.user_id, userId))
+      .limit(1)
+
+    if (!member) throw new BadRequestException('User has no workspace')
+
+    await db
+      .delete(integrations)
+      .where(
+        and(
+          eq(integrations.workspace_id, member.workspace_id),
+          eq(integrations.provider, 'slack')
+        )
+      )
+
+    return { success: true }
+  }
 
   async connectSlack(code: string, redirectUri: string, userId: string) {
     if (!code) throw new BadRequestException('Code is required')
@@ -42,6 +108,15 @@ export class IntegrationsService {
         this.logger.error(`Slack OAuth Error: ${JSON.stringify(data)}`)
         throw new BadRequestException(`Slack error: ${data.error}`)
       }
+
+      await db
+        .delete(integrations)
+        .where(
+          and(
+            eq(integrations.workspace_id, member.workspace_id),
+            eq(integrations.provider, 'slack')
+          )
+        )
 
       await db.insert(integrations).values({
         workspace_id: member.workspace_id,

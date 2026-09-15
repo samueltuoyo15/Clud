@@ -7,7 +7,7 @@ import { AuthLayout } from "../components/auth/AuthLayout"
 import { SignUpStep1 } from "../components/auth/SignUpStep1"
 import { SignUpStep2 } from "../components/auth/SignUpStep2"
 import { SignUpStep3 } from "../components/auth/SignUpStep3"
-import { SignUpStep4 } from "../components/auth/SignUpStep4"
+import { OtpInput } from "../components/ui/OtpInput"
 import { SignUpStepRole } from "../components/auth/SignUpStepRole"
 import { signupApi, verifyOtpApi, resendOtpApi } from "../api/auth"
 
@@ -162,8 +162,8 @@ export const SignUp: React.FC = () => {
           />
         )}
         {step === 5 && (
-          <SignUpStep4
-            otp={formData.otp}
+          <OtpInput
+            value={formData.otp}
             onChange={(otp) => setFormData({ ...formData, otp })}
             onAutoSubmit={(pastedOtp) => handleNext(undefined, pastedOtp)}
             onResend={handleResend}

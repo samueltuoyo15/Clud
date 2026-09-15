@@ -15,12 +15,12 @@ export const SlackCallback: React.FC = () => {
 
     if (error) {
       toast.error(`Slack connection failed: ${error}`)
-      navigate("/dashboard")
+      navigate("/dashboard/integrations")
       return
     }
 
     if (!code) {
-      navigate("/dashboard")
+      navigate("/dashboard/integrations")
       return
     }
 
@@ -40,11 +40,11 @@ export const SlackCallback: React.FC = () => {
         })
         
         toast.success("Slack connected successfully!")
-        navigate("/dashboard")
+        navigate("/dashboard/integrations")
       } catch (err: any) {
         toast.error(err.message || "Failed to connect Slack")
         setStatus("Failed to connect")
-        setTimeout(() => navigate("/dashboard"), 2000)
+        setTimeout(() => navigate("/dashboard/integrations"), 2000)
       }
     }
 
@@ -53,7 +53,7 @@ export const SlackCallback: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F9FAFC] font-sans">
-      <div className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-xs flex flex-col items-center">
+      <div className="bg-white p-8 rounded-2xl border border-neutral-200 flex flex-col items-center">
         <svg
           className="animate-spin mb-4 h-8 w-8 text-primary shrink-0"
           xmlns="http://www.w3.org/2000/svg"

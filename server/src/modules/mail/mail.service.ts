@@ -4,6 +4,7 @@ import {
   Logger,
 } from '@nestjs/common'
 import { getOtpEmailTemplate } from './templates/otp-email.template'
+import { getWelcomeEmailTemplate } from './templates/welcome-email.template'
 
 @Injectable()
 export class MailService {
@@ -48,6 +49,36 @@ export class MailService {
       throw new InternalServerErrorException(
         'Failed to send verification email',
       )
+    }
+  }
+
+  async sendWelcomeEmail(to: string, firstName: string): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey) return
+
+    const html = getWelcomeEmailTemplate(firstName)
+    const body: Record<string, any> = {
+      to,
+      subject: 'Welcome to Clud',
+      html,
+    }
+    if (this.from?.trim()) body.from = this.from
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        this.logger.error(`Sendlib dispatch failed for welcome email: ${await response.text()}`)
+      }
+    } catch (error) {
+      this.logger.error(`Sendlib welcome request failed: ${(error as Error).message}`)
     }
   }
 }

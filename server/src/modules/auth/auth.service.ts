@@ -128,6 +128,11 @@ export class AuthService {
           role: 'owner',
         })
       })
+
+      // Send the welcome email in the background
+      this.mailService.sendWelcomeEmail(user.email, user.first_name || 'there').catch((err) => {
+        console.error('Failed to send welcome email', err)
+      })
     }
 
     const accessToken = this.jwtService.sign(

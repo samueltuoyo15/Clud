@@ -3,11 +3,13 @@ import React from "react"
 interface SettingsTabProps {
   displayName: string
   email?: string
+  profilePicture?: string | null
 }
 
 export const SettingsTab: React.FC<SettingsTabProps> = ({
   displayName,
   email,
+  profilePicture,
 }) => {
   return (
     <div className="p-8 max-w-2xl overflow-y-auto">
@@ -19,12 +21,16 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       </p>
 
       <div className="space-y-4">
-        <div className="bg-white p-6 rounded-2xl border border-neutral-200 shadow-xs">
+        <div className="bg-white p-6 rounded-2xl border border-neutral-200">
           
           <div className="flex items-center gap-6 mb-8">
             <div className="relative group cursor-pointer">
               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary font-heading font-bold text-3xl border border-primary/20 overflow-hidden">
-                {displayName.charAt(0).toUpperCase()}
+                {profilePicture ? (
+                  <img src={profilePicture} alt={displayName} className="w-full h-full object-cover" />
+                ) : (
+                  displayName.charAt(0).toUpperCase()
+                )}
               </div>
               <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

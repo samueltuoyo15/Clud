@@ -1,29 +1,34 @@
 import React, { useRef } from "react"
 
-interface SignUpStep4Props {
-  otp: string
+interface OtpInputProps {
+  value: string
   onChange: (otp: string) => void
   onAutoSubmit?: (otp: string) => void
   onResend?: () => void
   isLoadingResend?: boolean
 }
 
-export const SignUpStep4: React.FC<SignUpStep4Props> = ({ otp, onChange, onAutoSubmit, onResend, isLoadingResend }) => {
+export const OtpInput: React.FC<OtpInputProps> = ({
+  value,
+  onChange,
+  onAutoSubmit,
+  onResend,
+  isLoadingResend,
+}) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
-  const handleChange = (index: number, value: string) => {
-    // Only allow numbers
-    if (value && !/^\d+$/.test(value)) return
+  const handleChange = (index: number, val: string) => {
+    if (val && !/^\d+$/.test(val)) return
 
-    const newOtp = otp.split("")
-    newOtp[index] = value.slice(-1)
+    const newOtp = (value || "").split("")
+    newOtp[index] = val.slice(-1)
     const combined = newOtp.join("").slice(0, 6)
     onChange(combined)
 
-    if (value && index < 5) {
+    if (val && index < 5) {
       inputRefs.current[index + 1]?.focus()
     }
-    
+
     if (combined.length === 6 && onAutoSubmit) {
       onAutoSubmit(combined)
     }
@@ -34,10 +39,10 @@ export const SignUpStep4: React.FC<SignUpStep4Props> = ({ otp, onChange, onAutoS
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Backspace") {
-      if (!otp[index] && index > 0) {
+      if (!value[index] && index > 0) {
         inputRefs.current[index - 1]?.focus()
       } else {
-        const newOtp = otp.split("")
+        const newOtp = (value || "").split("")
         newOtp[index] = ""
         onChange(newOtp.join(""))
       }
@@ -71,7 +76,7 @@ export const SignUpStep4: React.FC<SignUpStep4Props> = ({ otp, onChange, onAutoS
             type="text"
             inputMode="numeric"
             maxLength={1}
-            value={otp[index] || ""}
+            value={value[index] || ""}
             onChange={(e) => handleChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
@@ -79,7 +84,7 @@ export const SignUpStep4: React.FC<SignUpStep4Props> = ({ otp, onChange, onAutoS
           />
         ))}
       </div>
-      
+
       {onResend && (
         <div className="mt-6 text-left">
           <p className="text-sm text-neutral-600">

@@ -19,9 +19,20 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
   onLogout,
 }) => {
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const menuRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   return (
-    <div className="relative border-l border-neutral-200 pl-4">
+    <div className="relative border-l border-neutral-200 pl-4" ref={menuRef}>
       <button
         onClick={() => setShowUserMenu(!showUserMenu)}
         className="flex items-center gap-2 rounded-md hover:bg-black/5 px-1.5 py-1 transition-colors cursor-pointer"
@@ -44,7 +55,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
       </button>
 
       {showUserMenu && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-neutral-200 shadow-lg p-1.5 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-neutral-200  p-1.5 z-50">
           <div className="px-3 py-2 border-b border-neutral-100 mb-1">
             <p className="text-xs font-semibold text-neutral-900 truncate">
               {displayName}

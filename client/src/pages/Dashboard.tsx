@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { toast } from "sonner"
 import { getMeApi, logoutApi } from "../api/auth"
 import {
@@ -8,13 +8,18 @@ import {
   checkProjectApi,
 } from "../api/projects"
 import type { Project } from "../api/projects"
+import { fetchApi } from "../lib/fetch"
 import { DashboardSidebar } from "../components/dashboard/DashboardSidebar"
 import { DashboardHeader } from "../components/dashboard/DashboardHeader"
+import type { Workspace } from "../components/dashboard/DashboardHeader"
 import { ProjectList } from "../components/dashboard/ProjectList"
 import { ProjectDetailPanel } from "../components/dashboard/ProjectDetailPanel"
 import { AddProjectModal } from "../components/dashboard/AddProjectModal"
 import { IntegrationsTab } from "../components/dashboard/IntegrationsTab"
 import { SettingsTab } from "../components/dashboard/SettingsTab"
+import { TeamsTab } from "../components/dashboard/TeamsTab"
+import { CreateWorkspaceModal } from "../components/dashboard/CreateWorkspaceModal"
+import { SignOutModal } from "../components/dashboard/SignOutModal"
 
 interface UserProfile {
   id: string
@@ -25,45 +30,69 @@ interface UserProfile {
 }
 
 export const Dashboard: React.FC = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+  const path = location.pathname.split("/").filter(Boolean).pop()
+  let activeNav: "dashboard" | "integrations" | "settings" | "teams" = "dashboard"
+  if (path === "integrations") activeNav = "integrations"
+  else if (path === "settings") activeNav = "settings"
+  else if (path === "teams") activeNav = "teams"
+
   const [user, setUser] = useState<UserProfile | null>(null)
   const [projects, setProjects] = useState<Project[]>([])
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([])
+  const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(null)
+  const [integrationsCount, setIntegrationsCount] = useState(0)
+  
   const [isLoading, setIsLoading] = useState(true)
-  const [activeNav, setActiveNav] = useState<
-    "dashboard" | "apis" | "integrations" | "settings" | "teams"
-  >("dashboard")
-  const [searchQuery, setSearchQuery] = useState("")
   const [showAddModal, setShowAddModal] = useState(false)
+  const [showCreateWorkspace, setShowCreateWorkspace] = useState(false)
+  const [showSignOutModal, setShowSignOutModal] = useState(false)
   const [viewFilter, setViewFilter] = useState<"all" | "sync" | "drift">("all")
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    null,
-  )
-  const [isAuditing, setIsAuditing] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [isCreating, setIsCreating] = useState(false)
-  const [checkingProjectId, setCheckingProjectId] = useState<string | null>(
-    null,
-  )
+  const [checkingProjectId, setCheckingProjectId] = useState<string | null>(null)
   const [newProject, setNewProject] = useState({
     name: "",
     spec_url: "",
     check_interval_minutes: 15,
   })
-  const navigate = useNavigate()
+
+  const loadDashboardData = async (workspaceIdToSet?: string) => {
+    setIsLoading(true)
+    try {
+      const [me, projs, wsData, integData] = await Promise.all([
+        getMeApi(),
+        getProjectsApi(), // Normally we'd pass workspaceId if backend supported it, keeping as is for MVP
+        fetchApi("/workspaces"),
+        fetchApi("/integrations")
+      ])
+      setUser(me)
+      setProjects(projs)
+      setWorkspaces(wsData)
+      
+      const newActiveId = workspaceIdToSet || wsData[0]?.id || null
+      setActiveWorkspaceId(newActiveId)
+      
+      if (projs.length > 0) setSelectedProjectId(projs[0].id)
+        
+      let count = 0
+      if (integData.slack?.connected) count++
+      if (integData.emails?.length > 0) count++
+      setIntegrationsCount(count)
+      
+    } catch {
+      localStorage.removeItem("accessToken")
+      toast.error("Session expired. Please sign in.")
+      navigate("/signin")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [me, projs] = await Promise.all([getMeApi(), getProjectsApi()])
-        setUser(me)
-        setProjects(projs)
-        if (projs.length > 0) setSelectedProjectId(projs[0].id)
-      } catch {
-        toast.error("Session expired. Please sign in.")
-        navigate("/signin")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchData()
+    loadDashboardData()
   }, [navigate])
 
   const handleLogout = async () => {
@@ -107,42 +136,23 @@ export const Dashboard: React.FC = () => {
     }
   }
 
-  const handleAuditAll = async () => {
-    if (projects.length === 0) return
-    setIsAuditing(true)
-    try {
-      for (const p of projects) await checkProjectApi(p.id)
-      toast.success("Full schema audit completed!")
-      setProjects(await getProjectsApi())
-    } catch (err: any) {
-      toast.error(err.message || "Failed to complete audit")
-    } finally {
-      setIsAuditing(false)
-    }
-  }
-
   const displayName = user?.first_name
     ? `${user.first_name} ${user.last_name || ""}`.trim()
     : user?.email.split("@")[0] || "User"
+  
   const filteredProjects = projects.filter((p) => {
-    const match =
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.spec_url.toLowerCase().includes(searchQuery.toLowerCase())
-    return (
-      match &&
-      (viewFilter === "all"
-        ? true
-        : viewFilter === "sync"
-          ? !p.drift_detected
-          : !!p.drift_detected)
-    )
+    return viewFilter === "all"
+      ? true
+      : viewFilter === "sync"
+        ? !p.drift_detected
+        : !!p.drift_detected
   })
   const selectedProject =
     projects.find((p) => p.id === selectedProjectId) || projects[0] || null
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F9F9F8]">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex items-center gap-3">
           <div className="animate-spin h-5 w-5 border-2 border-neutral-400 border-t-transparent rounded-full" />
           <span className="text-sm font-medium text-neutral-500">
@@ -154,28 +164,44 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen h-screen flex bg-[#FAFAFA] font-sans text-neutral-900 overflow-hidden select-none">
+    <div className="min-h-screen h-screen flex bg-white font-sans text-neutral-900 overflow-hidden select-none">
       <DashboardSidebar
         activeNav={activeNav}
-        setActiveNav={setActiveNav}
+        setActiveNav={(nav) => navigate(`/dashboard${nav === "dashboard" ? "" : `/${nav}`}`)}
         projects={projects}
         selectedProjectId={selectedProjectId}
         setSelectedProjectId={setSelectedProjectId}
       />
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FAFAFA]">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-white">
         <DashboardHeader
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
           viewFilter={viewFilter}
           setViewFilter={setViewFilter}
           displayName={displayName}
           email={user?.email}
           initial={displayName.charAt(0).toUpperCase()}
           profilePicture={user?.profile_picture}
-          onOpenSettings={() => setActiveNav("settings")}
-          onLogout={handleLogout}
+          onOpenSettings={() => navigate("/dashboard/settings")}
+          onLogout={() => setShowSignOutModal(true)}
+          onCreateWorkspace={() => setShowCreateWorkspace(true)}
+          workspaces={workspaces}
+          activeWorkspaceId={activeWorkspaceId}
+          onSwitchWorkspace={(id) => loadDashboardData(id)}
         />
-        {activeNav === "dashboard" || activeNav === "apis" ? (
+        
+        {/* Missing Integration Banner */}
+        {integrationsCount === 0 && projects.length > 0 && (
+          <div className="bg-amber-50 border-b border-amber-100 px-8 py-3 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              <span className="text-sm text-amber-800 font-medium">You haven't configured any alert destinations. You will not be notified of API drift.</span>
+            </div>
+            <button onClick={() => navigate('/dashboard/integrations')} className="text-sm font-semibold text-amber-900 hover:opacity-80">
+              Configure Now &rarr;
+            </button>
+          </div>
+        )}
+
+        {activeNav === "dashboard" ? (
           <div className="flex-1 flex overflow-hidden">
             <ProjectList
               projects={filteredProjects}
@@ -187,26 +213,21 @@ export const Dashboard: React.FC = () => {
               onCheckProject={handleCheck}
               onOpenAddModal={() => setShowAddModal(true)}
             />
-            <ProjectDetailPanel
-              project={selectedProject}
-              isAuditing={isAuditing}
-              onAuditAll={handleAuditAll}
-            />
+            {selectedProject && (
+              <ProjectDetailPanel
+                project={selectedProject}
+              />
+            )}
           </div>
         ) : activeNav === "integrations" ? (
           <IntegrationsTab />
         ) : activeNav === "teams" ? (
-          <div className="p-8 max-w-4xl overflow-y-auto">
-            <h2 className="text-lg font-bold text-neutral-900 mb-1">Teams & Collaboration</h2>
-            <p className="text-xs text-neutral-500 mb-8">Invite members to your workspace.</p>
-            <div className="flex items-center justify-center p-12 border border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
-              <p className="text-sm text-neutral-400">Team management coming soon.</p>
-            </div>
-          </div>
+          <TeamsTab activeWorkspaceId={activeWorkspaceId} />
         ) : (
-          <SettingsTab displayName={displayName} email={user?.email} />
+          <SettingsTab displayName={displayName} email={user?.email} profilePicture={user?.profile_picture} />
         )}
       </div>
+      
       <AddProjectModal
         isOpen={showAddModal}
         isCreating={isCreating}
@@ -214,6 +235,19 @@ export const Dashboard: React.FC = () => {
         setNewProject={setNewProject}
         onClose={() => setShowAddModal(false)}
         onSubmit={handleCreate}
+      />
+      <CreateWorkspaceModal
+        isOpen={showCreateWorkspace}
+        onClose={() => setShowCreateWorkspace(false)}
+        onCreated={() => loadDashboardData()}
+      />
+      <SignOutModal
+        isOpen={showSignOutModal}
+        onClose={() => setShowSignOutModal(false)}
+        onConfirm={() => {
+          setShowSignOutModal(false)
+          handleLogout()
+        }}
       />
     </div>
   )

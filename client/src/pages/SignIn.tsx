@@ -4,7 +4,7 @@ import { ArrowRight01Icon, ArrowLeft01Icon } from "hugeicons-react"
 import { toast } from "sonner"
 import { Button } from "../components/ui/button"
 import { AuthLayout } from "../components/auth/AuthLayout"
-import { SignInOtpStep } from "../components/auth/SignInOtpStep"
+import { OtpInput } from "../components/ui/OtpInput"
 import { loginApi, verifyOtpApi } from "../api/auth"
 
 export const SignIn: React.FC = () => {
@@ -93,9 +93,25 @@ export const SignIn: React.FC = () => {
             />
           </div>
         ) : (
-          <SignInOtpStep
-            otp={formData.otp}
+          <OtpInput
+            value={formData.otp}
             onChange={(otp) => setFormData({ ...formData, otp })}
+            onAutoSubmit={async (pastedOtp) => {
+              setFormData((prev) => ({ ...prev, otp: pastedOtp }))
+              setIsLoading(true)
+              try {
+                const data = await verifyOtpApi(formData.email, pastedOtp)
+                if (data && data.accessToken) {
+                  localStorage.setItem("accessToken", data.accessToken)
+                }
+                toast.success("Welcome back to Clud!")
+                navigate("/dashboard")
+              } catch (err: any) {
+                toast.error(err.message || "Something went wrong")
+              } finally {
+                setIsLoading(false)
+              }
+            }}
           />
         )}
 

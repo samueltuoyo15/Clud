@@ -18,7 +18,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
           <img
             src="/images/auth-illustration.svg"
             alt="Clud Teamwork"
-            className="w-full max-w-lg h-auto max-h-[520px] object-contain drop-shadow-xs transition-transform duration-300 hover:scale-[1.01]"
+            className="w-full max-w-lg h-auto max-h-[520px] object-contain drop- transition-transform duration-300 hover:scale-[1.01]"
             onError={(e) => {
               const target = e.currentTarget
               if (target.src.endsWith(".svg")) {
