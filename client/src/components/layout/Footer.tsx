@@ -104,8 +104,8 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Massive Brand Text Background */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex justify-center overflow-hidden select-none translate-y-[35%] opacity-70">
-        <span className="font-heading font-black text-[35vw] leading-none whitespace-nowrap text-neutral-200 tracking-tighter">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex justify-center overflow-hidden select-none translate-y-[30%]">
+        <span className="font-heading font-black text-[35vw] leading-none whitespace-nowrap text-neutral-300/70 tracking-tighter">
           CLUD
         </span>
       </div>

@@ -192,7 +192,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   isLoading={isCreating}
                   className="rounded-lg flex items-center gap-1.5 px-4"
                 >
-                  <span>Connect Spec</span>
+                  <span>Connect</span>
                   {!isCreating && <PlusSignIcon size={14} />}
                 </Button>
               </div>

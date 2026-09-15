@@ -96,7 +96,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           <button
             onClick={onToggleCollapse}
             title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="w-8 h-8 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+            className="w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200/70 border border-neutral-200/70 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -108,13 +108,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-400 text-xs transition-colors cursor-pointer group"
+          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200/60 border border-neutral-200/70 text-neutral-400 text-xs transition-colors cursor-pointer group"
         >
           <div className="flex items-center gap-2">
             <Search01Icon size={15} className="text-neutral-400 group-hover:text-neutral-600 transition-colors" />
             <span className="text-neutral-500 font-normal">Search APIs, settings, pages...</span>
           </div>
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-100 group-hover:bg-neutral-200/70 rounded border border-neutral-200/60 transition-colors">
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200/60 group-hover:bg-neutral-200 rounded border border-neutral-300/50 transition-colors">
             {getShortcutKey()}
           </kbd>
         </button>
@@ -126,7 +126,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             title="Notifications"
-            className="w-8 h-8 rounded-xl bg-white hover:bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer relative"
+            className="w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200/70 border border-neutral-200/70 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer relative"
           >
             <Notification01Icon size={17} />
             {unreadCount > 0 && (

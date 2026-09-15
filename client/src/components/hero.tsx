@@ -14,24 +14,24 @@ export const Hero: React.FC = () => {
         <div className="flex items-center gap-3 bg-white border border-neutral-200 rounded-full py-1.5 px-2 pr-4 mb-6 w-fit">
           <div className="flex -space-x-2">
             <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+              src="https://i.pravatar.cc/150?u=a"
               alt="User 1"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+              src="https://i.pravatar.cc/150?u=b"
               alt="User 2"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+              src="https://i.pravatar.cc/150?u=c"
               alt="User 3"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80"
+              src="https://i.pravatar.cc/150?u=d"
               alt="User 4"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
           </div>
           <span className="text-sm text-neutral-600 font-medium">
