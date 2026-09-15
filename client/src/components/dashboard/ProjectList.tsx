@@ -53,9 +53,10 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           variant="primary"
           size="sm"
           onClick={onOpenAddModal}
-          className="flex items-center gap-1.5 rounded-lg"
+          className="flex items-center justify-center gap-2 rounded-lg"
         >
-          <span>+ Add API</span>
+          Add API
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         </Button>
       </div>
       <div className="flex-1 overflow-y-auto pr-2 pb-8">
@@ -82,8 +83,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
             ))}
           </div>
         )}
-      </div>{" "}
-      "a
+      </div>
     </div>
   )
 }

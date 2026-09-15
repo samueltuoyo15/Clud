@@ -29,7 +29,7 @@ export const Dashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [activeNav, setActiveNav] = useState<
-    "dashboard" | "apis" | "integrations" | "settings"
+    "dashboard" | "apis" | "integrations" | "settings" | "teams"
   >("dashboard")
   const [searchQuery, setSearchQuery] = useState("")
   const [showAddModal, setShowAddModal] = useState(false)
@@ -195,6 +195,14 @@ export const Dashboard: React.FC = () => {
           </div>
         ) : activeNav === "integrations" ? (
           <IntegrationsTab />
+        ) : activeNav === "teams" ? (
+          <div className="p-8 max-w-4xl overflow-y-auto">
+            <h2 className="text-lg font-bold text-neutral-900 mb-1">Teams & Collaboration</h2>
+            <p className="text-xs text-neutral-500 mb-8">Invite members to your workspace.</p>
+            <div className="flex items-center justify-center p-12 border border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
+              <p className="text-sm text-neutral-400">Team management coming soon.</p>
+            </div>
+          </div>
         ) : (
           <SettingsTab displayName={displayName} email={user?.email} />
         )}

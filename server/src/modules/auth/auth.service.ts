@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   async signup(dto: SignupDto) {
-    const { country, firstName, lastName } = dto
+    const { country, firstName, lastName, role, challenge } = dto
     const email = dto.email.toLowerCase()
 
     const [existing] = await db
@@ -36,6 +36,8 @@ export class AuthService {
           country: country ? country.toUpperCase() : null,
           first_name: firstName,
           last_name: lastName,
+          role,
+          challenge,
           is_onboarded: Boolean(country),
           updated_at: new Date(),
         })
@@ -46,6 +48,8 @@ export class AuthService {
         first_name: firstName,
         last_name: lastName,
         country: country ? country.toUpperCase() : null,
+        role,
+        challenge,
         is_onboarded: Boolean(country),
         email_verified: false,
         profile_picture:
@@ -91,12 +95,12 @@ export class AuthService {
   async verifyOtp(emailInput: string, code: string) {
     const email = emailInput.toLowerCase()
     const [user] = await db
-      .select({ 
-        id: users.id, 
+      .select({
+        id: users.id,
         email: users.email,
         first_name: users.first_name,
         last_name: users.last_name,
-        email_verified: users.email_verified 
+        email_verified: users.email_verified
       })
       .from(users)
       .where(eq(users.email, email))

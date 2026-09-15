@@ -24,6 +24,8 @@ export const users = pgTable(
     first_name: text('first_name'),
     last_name: text('last_name'),
     country: varchar('country', { length: 255 }),
+    role: varchar('role', { length: 255 }),
+    challenge: text('challenge'),
     profile_picture: text('profile_picture'),
     account_status: userAccountStatusEnum('account_status')
       .notNull()

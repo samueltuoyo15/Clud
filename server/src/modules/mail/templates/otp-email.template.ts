@@ -34,14 +34,14 @@ export function getOtpEmailTemplate(code: string): {
             <td align="center">
                 <table class="card-wrapper" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 460px; background-color: #ffffff; border: 1px solid #ebebeb; border-radius: 16px; overflow: hidden;">
                     <tr>
-                        <td class="header-cell" style="padding: 24px 28px;">
+                        <td class="header-cell" style="padding: 24px 28px; background-color: #611F69; border-top-left-radius: 16px; border-top-right-radius: 16px;">
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="vertical-align: middle; padding-right: 10px;">
-                                        <img src="https://clud.dev/favicon.png" alt="Clud" width="28" height="20" style="display: block;" />
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NiIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDU2IDQwIiBmaWxsPSJub25lIiBpZD0iTG9nbyI+IDxnIGlkPSJsb2dvZ3JhbSI+IDxwYXRoIGQ9Ik00MyAwQzUwLjE3OTcgNi40NDI3N2UtMDcgNTYgNS44MjAzIDU2IDEzQzU2IDIwLjE3OTcgNTAuMTc5NyAyNiA0MyAyNkgzNC40ODQ0TDQ4LjQ4NDQgNDBIMzEuNTE1NkwxNS43NTc4IDI0LjI0MjJDMTQuNjcyIDIzLjE1NjQgMTQgMjEuNjU2OSAxNCAyMEMxNCAxNi42ODYzIDE2LjY4NjMgMTQgMjAgMTRINDNDNDMuNTUyMyAxNCA0NCAxMy41NTIz NDQgMTNDNDQgMTIuNDQ3NyA0My41NTIzIDEyIDQzIDEySDIwQzE1LjU4MTcgMTIgMTIgMTUuNTgxNyAxMiAyMEMxMiAyMi4zOTAxIDEzLjA0ODIgMjQuNTM0NyAxNC43MSAyNkgxNC42ODc1TDI4LjY4NzUgNDBIMjBDOC45NTQzMSA0MCAwIDMxLjA0NTcgMCAyMEMwIDguOTU0MzEgOC45NTQzIDAgMjAgMEg0M1oiIGZpbGw9IiNGRkZGRkYiLz4gPHBhdGggZD0iTTU2IDI4VjQwSDUxLjMxMjVMMzkuMzEyNSAyOEg1NloiIGZpbGw9IiNGRkZGRkYiLz4gPC9nPiA8L3N2Zz4=" alt="Clud" width="28" height="20" style="display: block;" />
                                     </td>
                                     <td style="vertical-align: middle;">
-                                        <span style="font-family: 'Geist', sans-serif; font-size: 20px; font-weight: 700; color: #111111; letter-spacing: -0.4px;">Clud</span>
+                                        <span style="font-family: 'Geist', sans-serif; font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: -0.4px;">Clud</span>
                                     </td>
                                 </tr>
                             </table>

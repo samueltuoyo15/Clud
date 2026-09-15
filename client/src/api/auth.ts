@@ -7,15 +7,24 @@ export async function loginApi(email: string) {
   })
 }
 
+export async function resendOtpApi(email: string) {
+  return fetchApi("/auth/resend-otp", {
+    method: "POST",
+    data: { email },
+  })
+}
+
 export async function signupApi(
   email: string,
   firstName: string,
   lastName: string,
   country: string,
+  role?: string,
+  challenge?: string
 ) {
   return fetchApi("/auth/signup", {
     method: "POST",
-    data: { email, firstName, lastName, country },
+    data: { email, firstName, lastName, country, role, challenge },
   })
 }
 

@@ -36,18 +36,43 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   return (
     <header className="h-[72px] px-8 border-b border-neutral-200/60 flex items-center justify-between shrink-0 bg-[#FAFAFA]">
       <div className="flex-1 flex items-center justify-between">
-        <div className="relative">
-          <Search01Icon
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-          />
-          <input
-            type="text"
-            placeholder="Search APIs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-48 sm:w-56 pl-9 pr-3 py-1.5 rounded-lg border border-neutral-200/80 bg-white hover:border-neutral-300 text-xs text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-neutral-400 transition-colors"
-          />
+        <div className="flex items-center gap-6">
+          <div className="relative group">
+            <button className="flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:opacity-80 transition-opacity cursor-pointer">
+              <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                {displayName.charAt(0).toUpperCase()}
+              </div>
+              {displayName}'s Workspace
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-400"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div className="absolute left-0 top-full mt-1 w-48 bg-white border border-neutral-200 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-1">
+              <button className="w-full text-left px-3 py-2 text-xs font-medium text-neutral-900 hover:bg-neutral-50 rounded-lg flex items-center gap-2">
+                <div className="w-4 h-4 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-[8px]">
+                  {displayName.charAt(0).toUpperCase()}
+                </div>
+                {displayName}'s Workspace
+              </button>
+              <div className="h-px bg-neutral-100 my-1 w-full" />
+              <button className="w-full text-left px-3 py-2 text-xs text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 rounded-lg flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Create Workspace
+              </button>
+            </div>
+          </div>
+
+          <div className="relative">
+            <Search01Icon
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+            />
+            <input
+              type="text"
+              placeholder="Search APIs..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-48 sm:w-56 pl-9 pr-3 py-1.5 rounded-lg border border-neutral-200/80 bg-white hover:border-neutral-300 text-xs text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-neutral-400 transition-colors"
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-4">

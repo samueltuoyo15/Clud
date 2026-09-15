@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/neon-http'
-import { neon } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
 import 'dotenv/config'
 
 const DATABASE_URL = process.env.DATABASE_URL
@@ -7,6 +7,7 @@ if (!DATABASE_URL) {
   throw new Error('DATABASE URL is missing')
 }
 
-const db = drizzle({ client: neon(DATABASE_URL) })
+const queryClient = postgres(DATABASE_URL)
+const db = drizzle({ client: queryClient })
 
 export default db

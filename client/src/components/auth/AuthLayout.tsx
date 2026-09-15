@@ -30,10 +30,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             <h2 className="text-xl font-heading font-bold text-neutral-900 tracking-tight">
               Keep your team in sync
             </h2>
-            <p className="mt-1.5 text-xs text-neutral-500 leading-relaxed">
-              Detect API drift automatically, track schema breaking changes, and
-              protect your team from silent outages.
-            </p>
+
           </div>
         </div>
       </div>

@@ -1,16 +1,18 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import {
   Home01Icon,
   FoldersIcon,
   PuzzleIcon,
   Settings01Icon,
+  UserMultiple02Icon,
 } from "hugeicons-react"
 import type { Project } from "../../api/projects"
 
 interface DashboardSidebarProps {
-  activeNav: "dashboard" | "apis" | "integrations" | "settings"
+  activeNav: "dashboard" | "apis" | "integrations" | "settings" | "teams"
   setActiveNav: (
-    nav: "dashboard" | "apis" | "integrations" | "settings",
+    nav: "dashboard" | "apis" | "integrations" | "settings" | "teams",
   ) => void
   projects: Project[]
   selectedProjectId: string | null
@@ -28,13 +30,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     { id: "dashboard", label: "Dashboard", icon: Home01Icon },
     { id: "apis", label: "Projects", icon: FoldersIcon },
     { id: "integrations", label: "Integrations", icon: PuzzleIcon },
+    { id: "teams", label: "Teams", icon: UserMultiple02Icon },
     { id: "settings", label: "Settings", icon: Settings01Icon },
   ] as const
 
   return (
     <aside className="w-64 h-full bg-[#F4F3EF] border-r border-[#EBEBE8] py-6 px-4 flex flex-col justify-between shrink-0">
       <div>
-        <div className="flex items-center gap-2.5 px-3 mb-8">
+        <Link to="/" className="flex items-center gap-2.5 px-3 mb-8 cursor-pointer hover:opacity-80 transition-opacity">
           <img
             src="/favicon.svg"
             alt="Clud"
@@ -43,7 +46,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           <span className="font-heading font-bold text-sm tracking-wide text-neutral-900 uppercase">
             Clud
           </span>
-        </div>
+        </Link>
 
         <nav className="space-y-1">
           {navItems.map((item) => {
@@ -55,7 +58,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 onClick={() => setActiveNav(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   isActive
-                    ? "bg-white text-neutral-900 border border-neutral-200/50"
+                    ? "bg-white text-neutral-900 border border-neutral-200/50 shadow-sm"
                     : "text-neutral-500 hover:text-neutral-900 hover:bg-black/5"
                 }`}
               >

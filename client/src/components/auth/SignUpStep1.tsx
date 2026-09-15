@@ -29,6 +29,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
             type="text"
             id="firstName"
             required
+            placeholder="John"
             value={firstName}
             onChange={(e) => onChange({ firstName: e.target.value })}
             className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"
@@ -45,6 +46,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
             type="text"
             id="lastName"
             required
+            placeholder="Doe"
             value={lastName}
             onChange={(e) => onChange({ lastName: e.target.value })}
             className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"
@@ -62,7 +64,7 @@ export const SignUpStep1: React.FC<SignUpStep1Props> = ({
           type="email"
           id="email"
           required
-          placeholder="samuel@company.com"
+          placeholder="johndoe@company.com"
           value={email}
           onChange={(e) => onChange({ email: e.target.value })}
           className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900"

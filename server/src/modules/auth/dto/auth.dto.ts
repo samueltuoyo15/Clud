@@ -23,6 +23,14 @@ export class SignupDto {
   @IsOptional()
   @IsISO31661Alpha2({ message: 'Please provide a valid 2-letter country code' })
   country?: string
+
+  @IsOptional()
+  @IsString()
+  role?: string
+
+  @IsOptional()
+  @IsString()
+  challenge?: string
 }
 
 export class LoginDto {
