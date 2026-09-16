@@ -1,0 +1,23 @@
+# Clud
+
+> Clud is an automated API drift detection and contract monitoring platform that tracks OpenAPI and Swagger specifications in real time and sends instant alerts via Slack and Email when breaking schema changes occur.
+
+**Website:** https://clud.samueltuoyo.com
+
+## About Clud
+Clud monitors public and private API documentation (OpenAPI 3.x and Swagger 2.x specifications) on scheduled polling intervals. When schema changes, deprecated endpoints, parameter mutations, or breaking type changes are detected, Clud generates detailed changelogs and delivers notifications directly to your team's Slack channels and engineering mailboxes.
+
+## Core Pages
+- [Home](https://clud.samueltuoyo.com/)
+- [Sign Up](https://clud.samueltuoyo.com/signup)
+- [Sign In](https://clud.samueltuoyo.com/signin)
+- [Terms of Service](https://clud.samueltuoyo.com/terms)
+- [Privacy Policy](https://clud.samueltuoyo.com/privacy)
+- [Refund Policy](https://clud.samueltuoyo.com/refunds)
+
+## Key Features
+- **Automated Polling:** Continuously tracks remote API specifications every few minutes.
+- **Breaking Change Detection:** Parses schema diffs including parameter changes, removals, type mutations, and response payload changes using high-precision OAS diff engines.
+- **Slack Integrations:** Native Slack app notifications with formatted change diffs, affected HTTP methods, and parameter breakdowns.
+- **Email Notifications:** Clean, left-aligned change digests sent directly to subscribed team members.
+- **Team Workspaces:** Multi-member workspaces allowing entire engineering teams to collaborate and monitor critical microservices together.

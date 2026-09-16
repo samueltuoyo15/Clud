@@ -31,9 +31,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`bg-white rounded-xl p-5 transition-all cursor-pointer border ${
+      className={`bg-white rounded-2xl p-6 transition-all cursor-pointer border ${
         isSelected
-          ? "border-neutral-900 ring-1 ring-neutral-900/10"
+          ? "border-neutral-300 bg-white"
           : "border-neutral-200 hover:border-neutral-300"
       }`}
     >
@@ -98,14 +98,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       </h4>
 
       {/* OpenAPI Spec URL Box */}
-      <div className="px-3 py-1.5 bg-neutral-50 rounded-lg border border-neutral-200/70 font-mono text-[11px] text-neutral-600 mb-4 truncate">
+      <div className="px-3.5 py-2 bg-neutral-50 rounded-xl border border-neutral-200/80 font-mono text-xs text-neutral-600 mb-5 truncate">
         {p.spec_url}
       </div>
 
       {/* Footer Info & Action */}
-      <div className="flex items-center justify-between pt-1 border-t border-neutral-100">
-        <span className="text-[11px] font-medium text-neutral-500 flex items-center gap-1.5">
-          <Clock01Icon size={12} /> Interval: {p.check_interval_minutes}m
+      <div className="flex items-center justify-between pt-3.5 border-t border-neutral-100">
+        <span className="text-xs font-medium text-neutral-500 flex items-center gap-1.5">
+          <Clock01Icon size={13} /> Interval: {p.check_interval_minutes}m
         </span>
 
         <Button
@@ -116,9 +116,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             e.stopPropagation()
             onCheck()
           }}
-          className="text-[11px] px-3 py-1 h-7 rounded-lg !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary/10 flex items-center gap-1.5"
+          className="text-xs px-3.5 py-1.5 h-8 rounded-lg !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary/10 flex items-center gap-1.5"
         >
-          {!isChecking && <RefreshIcon size={12} />}
+          {!isChecking && <RefreshIcon size={13} />}
           <span>Poll Now</span>
         </Button>
       </div>

@@ -24,7 +24,7 @@ export const RefundPolicy: React.FC = () => {
 
           <section>
             <h2 className="text-lg font-bold text-neutral-900 mb-3">2. How to Request a Refund</h2>
-            <p>To request a refund, please contact us at billing@clud.dev from the email address associated with your account. We will process your request within 24-48 hours.</p>
+            <p>To request a refund, please contact us at billing@clud.samueltuoyo.com from the email address associated with your account. We will process your request within 24-48 hours.</p>
           </section>
 
           <section>

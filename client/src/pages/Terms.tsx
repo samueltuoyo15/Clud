@@ -19,7 +19,7 @@ export const Terms: React.FC = () => {
           
           <section>
             <h2 className="text-lg font-bold text-neutral-900 mb-3">1. Terms</h2>
-            <p>By accessing the website at clud.dev, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+            <p>By accessing the website at clud.samueltuoyo.com, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
           </section>
 
           <section>

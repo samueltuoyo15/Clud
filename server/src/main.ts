@@ -6,15 +6,21 @@ import { NestExpressApplication } from '@nestjs/platform-express'
 import { join } from 'path'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
+import { registerOgMiddleware } from './seo/og-middleware'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
+  app.getHttpAdapter().get('/', (_req: any, res: any) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() })
+  })
+
+  registerOgMiddleware(app)
+
   const allowedOriginsStr = process.env.ALLOWED_ORIGINS
-  if (!allowedOriginsStr) {
-    throw new Error('ALLOWED_ORIGINS environment variable is missing')
-  }
-  const allowedOrigins = allowedOriginsStr.split(',')
+  const allowedOrigins = allowedOriginsStr
+    ? allowedOriginsStr.split(',').map((o) => o.trim()).filter(Boolean)
+    : ['http://localhost:5173', 'https://clud.samueltuoyo.com']
 
   app.enableCors({
     origin: allowedOrigins,
@@ -39,3 +45,4 @@ async function bootstrap() {
   console.log(`Clud server running on http://localhost:${port}`)
 }
 bootstrap()
+

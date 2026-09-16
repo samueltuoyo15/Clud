@@ -70,13 +70,14 @@ export const Hero: React.FC = () => {
           </Button>
         </div>
 
-        {/* Hero Screenshot Placeholder */}
+        {/* Hero Screenshot */}
         <div className="w-full max-w-4xl mx-auto mb-20 relative">
-          <div className="absolute inset-0 bg-blue-50/50 rounded-5xl blur-3xl -z-10 scale-95" />
-          <div className="w-full aspect-video bg-white/40 backdrop-blur border border-white/60 rounded-3xl overflow-hidden flex items-center justify-center">
-            <span className="text-neutral-400 font-medium">
-              Dashboard Screenshot
-            </span>
+          <div className="w-full bg-white border border-neutral-200 rounded-2xl overflow-hidden">
+            <img
+              src="/images/SlackScreenshot.png"
+              alt="Clud automated Slack notification and API drift detection"
+              className="w-full h-auto object-cover block"
+            />
           </div>
         </div>
 

@@ -1,0 +1,60 @@
+{
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/login",
+      "destination": "/signin",
+      "permanent": true
+    },
+    {
+      "source": "/refund",
+      "destination": "/refunds",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/og",
+      "destination": "/api/og"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
+      "source": "/llms.txt",
+      "destination": "/llms.txt"
+    },
+    {
+      "source": "/icons/:path*",
+      "destination": "/icons/:path*"
+    },
+    {
+      "source": "/images/:path*",
+      "destination": "/images/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|Facebot|Twitterbot|Xbot|Slackbot|WhatsApp|LinkedInBot|Discordbot|TelegramBot|SkypeUriPreview|Google-Structured-Data-Testing-Tool|Googlebot|Googlebot-Image|Googlebot-Video|Googlebot-News|Google-InspectionTool|AdsBot-Google|bingbot|Pinterest|redditbot|GPTBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|Perplexity-User|ClaudeBot|Claude-User|Claude-Web|anthropic-ai|CCBot|Amazonbot|Applebot|Bytespider|Meta-ExternalAgent|cohere-ai|YouBot|PetalBot|DuckAssistBot|Diffbot|ImagesiftBot).*"
+        }
+      ],
+      "destination": "/api/og?slug=:slug"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

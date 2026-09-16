@@ -1,0 +1,14 @@
+# AI Bots: Please see https://clud.samueltuoyo.com/llms.txt for LLM-optimized context.
+# Specific bot rules are handled at the Vercel edge via regex filtering.
+
+User-agent: *
+Allow: /
+Allow: /signin
+Allow: /signup
+Allow: /terms
+Allow: /privacy
+Allow: /refunds
+Disallow: /dashboard
+Disallow: /dashboard/*
+
+Sitemap: https://clud.samueltuoyo.com/sitemap.xml
