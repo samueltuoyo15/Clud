@@ -48,6 +48,7 @@ export const Dashboard: React.FC = () => {
   
   const [isLoading, setIsLoading] = useState(true)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
   const [showCreateWorkspace, setShowCreateWorkspace] = useState(false)
@@ -271,8 +272,10 @@ export const Dashboard: React.FC = () => {
         onSwitchWorkspace={(id) => loadDashboardData(id)}
         onCreateWorkspace={() => setShowCreateWorkspace(true)}
         isCollapsed={isSidebarCollapsed}
+        isMobileOpen={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FAFAFA]">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FAFAFA] min-w-0">
         <DashboardHeader
           displayName={displayName}
           email={user?.email}
@@ -280,6 +283,7 @@ export const Dashboard: React.FC = () => {
           profilePicture={user?.profile_picture}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           onOpenSettings={() => navigate("/dashboard/settings")}
           onLogout={() => setShowSignOutModal(true)}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
@@ -287,12 +291,12 @@ export const Dashboard: React.FC = () => {
         
         {/* Missing Integration Banner */}
         {integrationsCount === 0 && projects.length > 0 && (
-          <div className="bg-amber-50 border-b border-amber-100 px-8 py-3 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-              <span className="text-sm text-amber-800 font-medium">You haven't configured any alert destinations. You will not be notified of API drift.</span>
+          <div className="bg-amber-50 border-b border-amber-100 px-4 sm:px-8 py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shrink-0">
+            <div className="flex items-center gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600 shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              <span className="text-xs sm:text-sm text-amber-800 font-medium">You haven't configured any alert destinations. You will not be notified of API drift.</span>
             </div>
-            <button onClick={() => navigate('/dashboard/integrations')} className="text-sm font-semibold text-amber-900 hover:opacity-80">
+            <button onClick={() => navigate('/dashboard/integrations')} className="text-xs sm:text-sm font-semibold text-amber-900 hover:opacity-80 shrink-0 cursor-pointer">
               Configure Now &rarr;
             </button>
           </div>

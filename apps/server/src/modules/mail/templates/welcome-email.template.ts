@@ -14,7 +14,16 @@ export const getWelcomeEmailTemplate = (firstName: string): string => {
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 580px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #E5E5E5; border-radius: 16px; overflow: hidden; text-align: left; border-collapse: separate;">
           <tr>
             <td style="background-color: #611F69; padding: 22px 28px; text-align: left;">
-              <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">Clud</span>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                  <td style="vertical-align: middle; padding-right: 10px;">
+                    <img src="https://clud.samueltuoyo.com/clud-logo-white-512x512.png" width="28" height="28" alt="Clud" style="display: block; width: 28px; height: 28px; border: 0; outline: none; text-decoration: none;" />
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; line-height: 1;">Clud</span>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr>

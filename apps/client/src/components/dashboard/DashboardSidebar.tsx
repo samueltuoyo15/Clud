@@ -29,6 +29,8 @@ interface DashboardSidebarProps {
   onSwitchWorkspace: (id: string) => void
   onCreateWorkspace: () => void
   isCollapsed?: boolean
+  isMobileOpen?: boolean
+  onCloseMobile?: () => void
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -42,6 +44,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   onSwitchWorkspace,
   onCreateWorkspace,
   isCollapsed = false,
+  isMobileOpen = false,
+  onCloseMobile,
 }) => {
   const [showWorkspaceMenu, setShowWorkspaceMenu] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -66,31 +70,55 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     workspaces.find((w) => w.id === activeWorkspaceId) || workspaces[0]
 
   return (
-    <aside
-      className={`h-full bg-[#FAFAFA] border-r border-neutral-200/80 flex flex-col justify-between shrink-0 select-none transition-all duration-300 ease-in-out ${
-        isCollapsed
-          ? "w-0 overflow-hidden p-0 border-r-0 opacity-0 pointer-events-none"
-          : "w-64 px-4 py-6 opacity-100"
-      }`}
-    >
-      <div>
-        {/* Brand Header */}
-        <div className="flex items-center mb-6 px-2">
-          <Link
-            to="/"
-            className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity"
-            title="Clud"
-          >
-            <img
-              src="/favicon.svg"
-              alt="Clud Logo"
-              className="h-6 w-auto object-contain"
-            />
-            <span className="font-heading font-bold text-sm tracking-wide text-neutral-900 uppercase">
-              Clud
-            </span>
-          </Link>
-        </div>
+    <>
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity"
+          onClick={onCloseMobile}
+        />
+      )}
+      <aside
+        className={`h-full bg-[#FAFAFA] border-r border-neutral-200/80 flex flex-col justify-between shrink-0 select-none transition-all duration-300 ease-in-out z-50 fixed inset-y-0 left-0 md:static ${
+          isMobileOpen
+            ? "translate-x-0 w-64 px-4 py-6 shadow-2xl"
+            : "-translate-x-full md:translate-x-0"
+        } ${
+          isCollapsed
+            ? "md:w-0 md:overflow-hidden md:p-0 md:border-r-0 md:opacity-0 md:pointer-events-none"
+            : "md:w-64 md:px-4 md:py-6 md:opacity-100"
+        }`}
+      >
+        <div>
+          {/* Brand Header */}
+          <div className="flex items-center justify-between mb-6 px-2">
+            <Link
+              to="/"
+              onClick={onCloseMobile}
+              className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity"
+              title="Clud"
+            >
+              <img
+                src="/favicon.svg"
+                alt="Clud Logo"
+                className="h-6 w-auto object-contain"
+              />
+              <span className="font-heading font-bold text-sm tracking-wide text-neutral-900 uppercase">
+                Clud
+              </span>
+            </Link>
+            {onCloseMobile && (
+              <button
+                onClick={onCloseMobile}
+                className="md:hidden text-neutral-400 hover:text-neutral-900 p-1 rounded-lg transition-colors cursor-pointer"
+                title="Close menu"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
 
         {/* Workspace Switcher in Sidebar */}
         <div className="relative mb-6" ref={menuRef}>
@@ -212,7 +240,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveNav(item.id)}
+                onClick={() => {
+                  setActiveNav(item.id)
+                  onCloseMobile?.()
+                }}
                 title={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 py-2 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   isActive
@@ -245,6 +276,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                   onClick={() => {
                     setSelectedProjectId(p.id)
                     setActiveNav("dashboard")
+                    onCloseMobile?.()
                   }}
                   className={`w-full flex items-center gap-2 text-xs py-1.5 px-2 rounded-md transition-colors cursor-pointer text-left truncate ${
                     selectedProjectId === p.id && activeNav === "dashboard"
@@ -260,5 +292,6 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </div>
       </div>
     </aside>
+    </>
   )
 }

@@ -33,16 +33,16 @@ export const ProjectList: React.FC<ProjectListProps> = ({
   ] as const
 
   return (
-    <div className="flex-1 flex flex-col p-8 overflow-hidden">
-      <div className="flex items-center justify-between mb-6 shrink-0">
-        <div className="flex items-center gap-1 bg-white border border-neutral-200/80 p-0.5 rounded-lg">
+    <div className="flex-1 flex flex-col p-4 sm:p-8 overflow-hidden min-w-0">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 shrink-0">
+        <div className="flex items-center gap-1 bg-white border border-neutral-200/80 p-0.5 rounded-lg overflow-x-auto max-w-full">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setViewFilter(tab.id)}
-              className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer whitespace-nowrap ${
                 viewFilter === tab.id
-                  ? "bg-neutral-100 text-neutral-900"
+                  ? "bg-neutral-100 text-neutral-900 font-semibold"
                   : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"
               }`}
             >
@@ -57,7 +57,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           onClick={onOpenAddModal}
           className="flex items-center justify-center gap-2 rounded-lg"
         >
-          Add API
+          <span>Add API</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         </Button>
       </div>

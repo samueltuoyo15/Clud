@@ -15,7 +15,7 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
   project,
 }) => {
   return (
-    <div className="w-80 shrink-0 bg-white border-l border-neutral-200 p-6 flex flex-col justify-between overflow-y-auto">
+    <div className="hidden lg:flex w-80 shrink-0 bg-white border-l border-neutral-200 p-6 flex-col justify-between overflow-y-auto">
       <div>
         {project ? (
           <>

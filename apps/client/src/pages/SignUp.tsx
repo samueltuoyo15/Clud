@@ -124,14 +124,15 @@ export const SignUp: React.FC = () => {
         description="Create your Clud account to start monitoring OpenAPI and Swagger endpoints for real-time drift detection."
         path="/signup"
       />
-      <div className="mb-8 relative">
+      <div className="mb-8">
         {step > 1 && (
           <button
             type="button"
             onClick={() => setStep(step - 1)}
-            className="absolute -left-10 top-1 text-neutral-400 hover:text-neutral-900 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer mb-3"
           >
-            <ArrowLeft01Icon size={24} />
+            <ArrowLeft01Icon size={16} />
+            <span>Back</span>
           </button>
         )}
         <h1 className="text-3xl font-heading font-semibold text-neutral-900 mb-2">

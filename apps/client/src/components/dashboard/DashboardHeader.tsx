@@ -29,6 +29,7 @@ interface DashboardHeaderProps {
   profilePicture?: string | null
   isSidebarCollapsed?: boolean
   onToggleCollapse?: () => void
+  onToggleMobileSidebar?: () => void
   onOpenSettings: () => void
   onLogout: () => void
   onOpenCommandPalette: () => void
@@ -41,6 +42,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profilePicture,
   isSidebarCollapsed = false,
   onToggleCollapse,
+  onToggleMobileSidebar,
   onOpenSettings,
   onLogout,
   onOpenCommandPalette,
@@ -90,14 +92,28 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   const unreadCount = notificationsList.filter((n) => !n.read).length
 
   return (
-    <header className="h-16 px-8 flex items-center justify-between shrink-0 bg-transparent border-b border-transparent">
-      {/* Search Input Bar Trigger + Collapse Button */}
-      <div className="flex items-center gap-2.5 flex-1 max-w-lg">
+    <header className="h-16 px-4 sm:px-8 flex items-center justify-between shrink-0 bg-transparent border-b border-neutral-200/60 md:border-transparent">
+      {/* Search Input Bar Trigger + Collapse / Mobile Menu Button */}
+      <div className="flex items-center gap-2 flex-1 max-w-lg">
+        {onToggleMobileSidebar && (
+          <button
+            onClick={onToggleMobileSidebar}
+            title="Open menu"
+            className="md:hidden w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200/70 border border-neutral-200/70 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12" />
+              <line x1="4" x2="20" y1="6" y2="6" />
+              <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+          </button>
+        )}
+
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
             title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200/70 border border-neutral-200/70 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
+            className="hidden md:flex w-8 h-8 rounded-xl bg-neutral-100 hover:bg-neutral-200/70 border border-neutral-200/70 items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -109,13 +125,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200/60 border border-neutral-200/70 text-neutral-400 text-xs transition-colors cursor-pointer group"
+          className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200/60 border border-neutral-200/70 text-neutral-400 text-xs transition-colors cursor-pointer group"
         >
-          <div className="flex items-center gap-2">
-            <Search01Icon size={15} className="text-neutral-400 group-hover:text-neutral-600 transition-colors" />
-            <span className="text-neutral-500 font-normal">Search APIs, settings, pages...</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <Search01Icon size={15} className="text-neutral-400 group-hover:text-neutral-600 transition-colors shrink-0" />
+            <span className="text-neutral-500 font-normal truncate">Search APIs, settings...</span>
           </div>
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200/60 group-hover:bg-neutral-200 rounded border border-neutral-300/50 transition-colors">
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200/60 group-hover:bg-neutral-200 rounded border border-neutral-300/50 transition-colors shrink-0">
             {getShortcutKey()}
           </kbd>
         </button>

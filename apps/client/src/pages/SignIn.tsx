@@ -77,14 +77,15 @@ export const SignIn: React.FC = () => {
         description="Sign in to your Clud workspace to monitor OpenAPI contracts and manage API drift alerts."
         path="/signin"
       />
-      <div className="mb-8 relative">
+      <div className="mb-8">
         {step === 2 && (
           <button
             type="button"
             onClick={() => { setStep(1); setOtp(""); isSubmittingRef.current = false }}
-            className="absolute -left-10 top-1 text-neutral-400 hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer mb-3"
           >
-            <ArrowLeft01Icon size={24} />
+            <ArrowLeft01Icon size={16} />
+            <span>Back</span>
           </button>
         )}
         <h1 className="text-3xl font-heading font-semibold text-neutral-900 mb-2">
