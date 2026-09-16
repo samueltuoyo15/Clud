@@ -78,10 +78,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         />
       )}
       <aside
-        className={`h-full bg-[#FAFAFA] border-r border-neutral-200/80 flex flex-col justify-between shrink-0 select-none transition-all duration-300 ease-in-out z-50 fixed inset-y-0 left-0 md:static ${
-          isMobileOpen
-            ? "translate-x-0 w-64 px-4 py-6 shadow-2xl"
-            : "-translate-x-full md:translate-x-0"
+        className={`fixed inset-y-0 left-0 z-50 h-full w-64 px-4 py-6 bg-[#FAFAFA] border-r border-neutral-200/80 flex flex-col justify-between select-none shadow-2xl md:shadow-none transition-transform duration-300 ease-in-out md:static ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } ${
           isCollapsed
             ? "md:w-0 md:overflow-hidden md:p-0 md:border-r-0 md:opacity-0 md:pointer-events-none"

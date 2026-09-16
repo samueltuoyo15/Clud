@@ -50,6 +50,12 @@ export class PaymentsController {
     return this.paymentsService.getWorkspaceBilling(workspaceId)
   }
 
+  @UseGuards(AuthGuard)
+  @Post('cancel/:workspaceId')
+  async cancelSubscription(@Param('workspaceId') workspaceId: string) {
+    return this.paymentsService.cancelSubscription(workspaceId)
+  }
+
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
   async handleWebhook(

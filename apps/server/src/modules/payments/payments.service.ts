@@ -102,4 +102,48 @@ export class PaymentsService {
       subscription: activeSub || null,
     }
   }
+
+  async cancelSubscription(workspaceId: string) {
+    const [workspace] = await db
+      .select()
+      .from(workspaces)
+      .where(eq(workspaces.id, workspaceId))
+
+    if (!workspace) {
+      throw new NotFoundException('Workspace not found')
+    }
+
+    const [activeSub] = await db
+      .select()
+      .from(subscriptions)
+      .where(eq(subscriptions.workspace_id, workspaceId))
+      .orderBy(desc(subscriptions.created_at))
+      .limit(1)
+
+    if (activeSub && activeSub.dodo_subscription_id) {
+      try {
+        await this.client.subscriptions.update(activeSub.dodo_subscription_id, {
+          status: 'cancelled',
+        })
+      } catch (err: any) {
+        this.logger.warn(`Failed to cancel in Dodo Payments: ${err.message}`)
+      }
+
+      await db
+        .update(subscriptions)
+        .set({ status: 'cancelled', updated_at: new Date() })
+        .where(eq(subscriptions.id, activeSub.id))
+    }
+
+    await db
+      .update(workspaces)
+      .set({
+        plan: 'hobby',
+        subscription_status: 'cancelled',
+        updated_at: new Date(),
+      })
+      .where(eq(workspaces.id, workspaceId))
+
+    return { success: true, message: 'Subscription cancelled successfully' }
+  }
 }

@@ -92,7 +92,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   const unreadCount = notificationsList.filter((n) => !n.read).length
 
   return (
-    <header className="h-16 px-4 sm:px-8 flex items-center justify-between shrink-0 bg-transparent border-b border-neutral-200/60 md:border-transparent">
+    <header className="h-16 px-4 sm:px-8 flex items-center justify-between shrink-0 bg-transparent border-b border-neutral-200/60 md:border-transparent gap-3 sm:gap-6">
       {/* Search Input Bar Trigger + Collapse / Mobile Menu Button */}
       <div className="flex items-center gap-2 flex-1 max-w-lg min-w-0">
         {onToggleMobileSidebar && (
@@ -126,19 +126,20 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200/60 border border-neutral-200/70 text-neutral-400 text-xs transition-colors cursor-pointer group"
+          className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200/60 border border-neutral-200/70 text-neutral-400 text-xs transition-colors cursor-pointer group min-w-0"
         >
           <div className="flex items-center gap-2 min-w-0">
             <Search01Icon size={15} className="text-neutral-400 group-hover:text-neutral-600 transition-colors shrink-0" />
-            <span className="text-neutral-500 font-normal truncate">Search APIs, settings...</span>
+            <span className="text-neutral-500 font-normal truncate hidden xs:inline">Search APIs, settings...</span>
+            <span className="text-neutral-500 font-normal truncate xs:hidden">Search...</span>
           </div>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200/60 group-hover:bg-neutral-200 rounded border border-neutral-300/50 transition-colors shrink-0">
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200/60 group-hover:bg-neutral-200 rounded border border-neutral-300/50 transition-colors shrink-0 ml-1">
             {getShortcutKey()}
           </kbd>
         </button>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Notifications Bell */}
         <div className="relative" ref={notifRef}>
           <button

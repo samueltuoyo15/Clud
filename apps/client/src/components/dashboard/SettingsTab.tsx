@@ -163,6 +163,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     subscription?: any
   } | null>(null)
   const [isStartingCheckout, setIsStartingCheckout] = useState(false)
+  const [isCancelling, setIsCancelling] = useState(false)
 
   const loadBilling = async () => {
     if (!activeWorkspace?.id) return
@@ -208,6 +209,22 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     } catch (err: any) {
       toast.error(err.message || "Failed to start checkout. Please try again.")
       setIsStartingCheckout(false)
+    }
+  }
+
+  const handleCancelSubscription = async () => {
+    if (!activeWorkspace?.id) return
+    if (!window.confirm("Are you sure you want to cancel your Pro subscription?")) return
+    setIsCancelling(true)
+    try {
+      await fetchApi(`/payments/cancel/${activeWorkspace.id}`, { method: "POST" })
+      toast.success("Subscription cancelled successfully.")
+      loadBilling()
+      if (onProfileUpdated) onProfileUpdated()
+    } catch (err: any) {
+      toast.error(err.message || "Failed to cancel subscription")
+    } finally {
+      setIsCancelling(false)
     }
   }
 
@@ -285,17 +302,17 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   }
 
   const subTabs = [
-    { id: "general", label: "General" },
-    { id: "account", label: "Account Profile" },
-    { id: "members", label: "Members" },
-    { id: "billing", label: "Plan & Billing" },
+    { id: "general", label: "General", mobileLabel: "General" },
+    { id: "account", label: "Account Profile", mobileLabel: "Profile" },
+    { id: "members", label: "Members", mobileLabel: "Members" },
+    { id: "billing", label: "Plan & Billing", mobileLabel: "Billing" },
   ] as const
 
   const admins = members.filter((m) => m.role === "owner" || m.role === "admin")
   const contributors = members.filter((m) => m.role === "member")
 
   return (
-    <div className="p-8 max-w-4xl mx-auto overflow-y-auto w-full">
+    <div className="p-4 sm:p-8 max-w-4xl mx-auto overflow-y-auto w-full">
       <div className="mb-6">
         <h2 className="text-xl font-heading font-semibold text-neutral-900 mb-1">
           Settings
@@ -306,18 +323,19 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       </div>
 
       {/* Sub-tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-neutral-200 mb-8">
+      <div className="flex items-center gap-1 sm:gap-2 border-b border-neutral-200 mb-8 overflow-x-auto">
         {subTabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleSubTabChange(tab.id)}
-            className={`pb-3 px-3 text-xs font-semibold transition-all relative cursor-pointer ${
+            className={`pb-3 px-2.5 sm:px-3 text-xs font-semibold transition-all relative cursor-pointer whitespace-nowrap ${
               activeSubTab === tab.id
                 ? "text-neutral-900"
                 : "text-neutral-500 hover:text-neutral-800"
             }`}
           >
-            {tab.label}
+            <span className="sm:hidden">{tab.mobileLabel}</span>
+            <span className="hidden sm:inline">{tab.label}</span>
             {activeSubTab === tab.id && (
               <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-neutral-900 rounded-full" />
             )}
@@ -798,8 +816,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       {/* TAB 4: BILLING */}
       {activeSubTab === "billing" && (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-neutral-200 p-8">
-            <div className="flex items-start justify-between mb-6">
+          <div className="bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
               <div>
                 <span className="text-xs font-semibold text-primary uppercase tracking-wider mb-1 block">
                   Current Plan
@@ -813,13 +831,20 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     : "Essential contract drift tracking for small teams."}
                 </p>
               </div>
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${
-                billingData?.plan === "pro"
-                  ? "bg-primary/10 text-primary border-primary/20"
-                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
-              }`}>
-                {billingData?.plan === "pro" ? "Pro Active" : "Active"}
-              </span>
+              {billingData?.plan === "pro" ? (
+                <button
+                  type="button"
+                  onClick={handleCancelSubscription}
+                  disabled={isCancelling}
+                  className="self-start px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50 shrink-0"
+                >
+                  {isCancelling ? "Cancelling..." : "Cancel Subscription"}
+                </button>
+              ) : (
+                <span className="self-start text-xs font-semibold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200 shrink-0">
+                  Active
+                </span>
+              )}
             </div>
 
             <div className="border-t border-neutral-100 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-neutral-600 mb-8">
