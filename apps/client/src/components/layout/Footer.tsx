@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-4 lg:col-span-5 flex flex-col items-start relative z-10">
             <Link to="/" className="flex items-center gap-2.5 mb-4 group">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-                <img src="/favicon-white.svg" alt="Clud" className="h-4 w-4 object-contain" />
+                <img src="/favicon-white.svg" alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4 object-contain" />
               </div>
               <span className="font-heading font-bold text-lg text-neutral-900 group-hover:text-primary transition-colors">
                 Clud
@@ -33,10 +33,10 @@ export const Footer: React.FC = () => {
             
             <div className="flex flex-col gap-6 mt-4">
               <div className="flex items-center gap-6">
-                <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#" aria-label="Clud on X" className="text-neutral-400 hover:text-primary transition-colors">
                   <NewTwitterIcon size={24} />
                 </a>
-                <a href="#" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#" aria-label="Clud on LinkedIn" className="text-neutral-400 hover:text-primary transition-colors">
                   <Linkedin01Icon size={24} />
                 </a>
                 <div className="w-px h-5 bg-neutral-200"></div>
@@ -54,44 +54,44 @@ export const Footer: React.FC = () => {
           {/* Links Columns */}
           <div className="md:col-span-8 lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8 relative z-20">
             <div>
-              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
                 Product
-              </h4>
+              </h3>
               <ul className="space-y-3">
-                <li><a href="#features" className="text-sm text-neutral-500 hover:text-primary transition-colors">Features</a></li>
-                <li><a href="#pricing" className="text-sm text-neutral-500 hover:text-primary transition-colors">Pricing</a></li>
-                <li><a href="#how-it-works" className="text-sm text-neutral-500 hover:text-primary transition-colors">How it works</a></li>
+                <li><a href="/#features" className="text-sm text-neutral-500 hover:text-primary transition-colors">Features</a></li>
+                <li><a href="/#pricing" className="text-sm text-neutral-500 hover:text-primary transition-colors">Pricing</a></li>
+                <li><a href="/#how-it-works" className="text-sm text-neutral-500 hover:text-primary transition-colors">How it works</a></li>
                 <li><Link to="/signin" className="text-sm text-neutral-500 hover:text-primary transition-colors">Sign in</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
                 Company
-              </h4>
+              </h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">About Us</a></li>
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">Blog</a></li>
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">Careers</a></li>
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">Contact</a></li>
+                <li><Link to="/about" className="text-sm text-neutral-500 hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link to="/changelog" className="text-sm text-neutral-500 hover:text-primary transition-colors">Changelog</Link></li>
+                <li><Link to="/careers" className="text-sm text-neutral-500 hover:text-primary transition-colors">Careers</Link></li>
+                <li><Link to="/contact" className="text-sm text-neutral-500 hover:text-primary transition-colors">Contact</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
                 Support
-              </h4>
+              </h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">System Status</a></li>
-                <li><a href="#" className="text-sm text-neutral-500 hover:text-primary transition-colors">Discord Community</a></li>
+                <li><Link to="/contact" className="text-sm text-neutral-500 hover:text-primary transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" className="text-sm text-neutral-500 hover:text-primary transition-colors">Contact Support</Link></li>
+                <li><a href="mailto:support@samueltuoyo.com" className="text-sm text-neutral-500 hover:text-primary transition-colors">Email Support</a></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-4">
                 Legal
-              </h4>
+              </h3>
               <ul className="space-y-3">
                 <li><Link to="/terms" className="text-sm text-neutral-500 hover:text-primary transition-colors">Terms of Service</Link></li>
                 <li><Link to="/privacy" className="text-sm text-neutral-500 hover:text-primary transition-colors">Privacy Policy</Link></li>

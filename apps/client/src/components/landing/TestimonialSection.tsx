@@ -6,20 +6,20 @@ const TESTIMONIALS = [
     quote: "Clud has completely changed how our frontend and backend teams communicate. We catch breaking changes instantly before they hit production.",
     name: "Sarah Jenkins",
     handle: "@sarahjenkins",
-    avatar: "https://i.pravatar.cc/150?img=47"
+    avatar: "https://i.pravatar.cc/150?img=47",
   },
   {
     quote: "I used to spend hours debugging silent failures. Now Clud just pings our Slack channel the second an API spec drifts. Unbelievably good.",
     name: "Marcus Chen",
     handle: "@marcuschen_dev",
-    avatar: "https://i.pravatar.cc/150?img=11"
+    avatar: "https://i.pravatar.cc/150?img=11",
   },
   {
     quote: "The easiest setup I have ever experienced. Dropped our OpenAPI spec URL in and it immediately started protecting our mobile team from unexpected breaks.",
     name: "Elena Rodriguez",
     handle: "@elena_codes",
-    avatar: "https://i.pravatar.cc/150?img=32"
-  }
+    avatar: "https://i.pravatar.cc/150?img=32",
+  },
 ]
 
 export const TestimonialSection: React.FC = () => {
@@ -54,20 +54,27 @@ export const TestimonialSection: React.FC = () => {
             backgroundSize: "32px 32px"
           }}
         >
-          <h3 className="text-3xl md:text-4xl font-heading font-semibold text-neutral-900 leading-tight max-w-3xl">
+          <blockquote className="text-3xl md:text-4xl font-heading font-semibold text-neutral-900 leading-tight max-w-3xl">
             "{current.quote}"
-          </h3>
+          </blockquote>
 
           <div className="flex items-center justify-between mt-12">
             <div className="flex items-center gap-4">
-              <img src={current.avatar} alt={current.name} className="w-12 h-12 rounded-full object-cover" />
+              <img
+                src={current.avatar}
+                alt={current.name}
+                width={48}
+                height={48}
+                loading="lazy"
+                className="w-12 h-12 rounded-full object-cover"
+              />
               <div>
                 <div className="font-semibold text-neutral-900">{current.name}</div>
                 <div className="text-sm text-neutral-500">{current.handle}</div>
               </div>
             </div>
             
-            <div className="text-neutral-900">
+            <div className="text-neutral-900" aria-hidden="true">
               <NewTwitterIcon size={24} />
             </div>
           </div>
@@ -75,12 +82,14 @@ export const TestimonialSection: React.FC = () => {
           <div className="absolute bottom-10 left-10 flex items-center gap-4">
             <button 
               onClick={handlePrev}
+              aria-label="Previous testimonial"
               className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors"
             >
               <ArrowLeft01Icon size={20} />
             </button>
             <button 
               onClick={handleNext}
+              aria-label="Next testimonial"
               className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors"
             >
               <ArrowRight01Icon size={20} />
@@ -101,3 +110,4 @@ export const TestimonialSection: React.FC = () => {
     </section>
   )
 }
+

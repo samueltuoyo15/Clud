@@ -119,7 +119,7 @@ export const VisualIntegration: React.FC = () => {
           {/* Top Node: Clud Monitor Engine */}
           <div className="absolute top-[35px] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-neutral-200 shadow-xs">
-              <img src="/favicon.svg" alt="Clud" className="w-5 h-5 object-contain" />
+              <img src="/favicon.svg" alt="" aria-hidden="true" width={20} height={20} className="w-5 h-5 object-contain" />
               <span className="text-xs font-bold text-neutral-900 font-heading">
                 OpenAPI Spec Monitor
               </span>
@@ -142,10 +142,13 @@ export const VisualIntegration: React.FC = () => {
           {/* Role 1: Frontend */}
           <div className="absolute top-[295px] left-[16%] -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="flex flex-col items-center">
-              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden">
+              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
                   src="https://i.pravatar.cc/150?u=a"
-                  alt="Frontend"
+                  alt="Frontend Engineer"
+                  width={48}
+                  height={48}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
@@ -158,10 +161,13 @@ export const VisualIntegration: React.FC = () => {
           {/* Role 2: Backend */}
           <div className="absolute top-[295px] left-[39%] -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="flex flex-col items-center">
-              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden">
+              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
                   src="https://i.pravatar.cc/150?u=b"
-                  alt="Backend"
+                  alt="Backend Engineer"
+                  width={48}
+                  height={48}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
@@ -174,10 +180,13 @@ export const VisualIntegration: React.FC = () => {
           {/* Role 3: Mobile */}
           <div className="absolute top-[295px] left-[61%] -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="flex flex-col items-center">
-              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden">
+              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
                   src="https://i.pravatar.cc/150?u=c"
-                  alt="Mobile"
+                  alt="Mobile Engineer"
+                  width={48}
+                  height={48}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
@@ -190,10 +199,13 @@ export const VisualIntegration: React.FC = () => {
           {/* Role 4: Product Manager */}
           <div className="absolute top-[295px] left-[84%] -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="flex flex-col items-center">
-              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden">
+              <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
                   src="https://i.pravatar.cc/150?u=d"
                   alt="Product Manager"
+                  width={48}
+                  height={48}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>

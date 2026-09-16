@@ -16,21 +16,33 @@ export const Hero: React.FC = () => {
             <img
               src="https://i.pravatar.cc/150?u=a"
               alt="User 1"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
               src="https://i.pravatar.cc/150?u=b"
               alt="User 2"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
               src="https://i.pravatar.cc/150?u=c"
               alt="User 3"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
             <img
               src="https://i.pravatar.cc/150?u=d"
               alt="User 4"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
             />
           </div>
@@ -60,22 +72,32 @@ export const Hero: React.FC = () => {
               <ArrowRight01Icon size={18} />
             </Button>
           </Link>
-          <Button
-            variant="light"
-            size="lg"
-            className="w-full sm:w-auto gap-2 text-neutral-900 font-medium rounded-full px-6"
+          <a
+            href="#how-it-works"
+            className="w-full sm:w-auto"
           >
-            See how it works
-            <ArrowRight01Icon size={18} className="text-neutral-500" />
-          </Button>
+            <Button
+              variant="light"
+              size="lg"
+              className="w-full sm:w-auto gap-2 text-neutral-900 font-medium rounded-full px-6"
+            >
+              See how it works
+              <ArrowRight01Icon size={18} className="text-neutral-500" />
+            </Button>
+          </a>
         </div>
 
-        {/* Hero Screenshot */}
+        {/* Hero Screenshot - LCP element */}
         <div className="w-full max-w-4xl mx-auto mb-20 relative">
           <div className="w-full bg-white border border-neutral-200 rounded-2xl overflow-hidden">
             <img
-              src="/images/SlackScreenshot.png"
+              src="/images/SlackScreenshot.webp"
               alt="Clud automated Slack notification and API drift detection"
+              width={1200}
+              height={675}
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
               className="w-full h-auto object-cover block"
             />
           </div>
@@ -87,3 +109,4 @@ export const Hero: React.FC = () => {
     </section>
   )
 }
+

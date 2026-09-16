@@ -159,4 +159,62 @@ export class MailService {
       this.logger.error(`Sendlib invite request failed: ${err.message}`)
     }
   }
+
+  async sendContactMessage(
+    senderEmail: string,
+    senderName: string,
+    company: string,
+    message: string,
+  ): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey) {
+      this.logger.error('SENDLIB_API_KEY is missing in environment variables')
+      throw new InternalServerErrorException('Email service is not configured')
+    }
+
+    const html = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; padding: 24px; color: #171717; text-align: left;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Contact / Sales Inquiry</h2>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
+          <strong>Name:</strong> ${senderName}<br>
+          <strong>Email:</strong> ${senderEmail}<br>
+          <strong>Company:</strong> ${company || 'N/A'}
+        </p>
+        <div style="margin: 20px 0; padding: 16px; background-color: #f3f4f6; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
+          ${message.replace(/\n/g, '<br>')}
+        </div>
+        <p style="font-size: 12px; color: #6b7280; margin-top: 32px; text-align: left;">
+          Sent from Clud Contact Sales Form
+        </p>
+      </div>
+    `
+
+    const body: Record<string, any> = {
+      to: 'support@samueltuoyo.com',
+      subject: `[Clud Inquiry] New message from ${senderName} (${company || senderEmail})`,
+      html,
+    }
+    if (this.from?.trim()) body.from = this.from
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        const err = await response.text()
+        this.logger.error(`Sendlib contact inquiry failed [${response.status}]: ${err}`)
+        throw new InternalServerErrorException('Failed to deliver inquiry email')
+      }
+    } catch (error) {
+      if (error instanceof InternalServerErrorException) throw error
+      this.logger.error(`Sendlib contact inquiry error: ${(error as Error).message}`)
+      throw new InternalServerErrorException('Failed to deliver inquiry email')
+    }
+  }
 }

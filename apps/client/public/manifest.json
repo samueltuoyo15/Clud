@@ -1,16 +1,51 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/dashboard",
   "short_name": "Clud",
   "name": "Clud - Real-time API Change Detection",
-  "icons": [
-    {
-      "src": "/favicon-white.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
-    }
-  ],
+  "description": "Real-time OpenAPI and Swagger drift detection and breaking change alerting platform.",
   "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#401246",
-  "display": "standalone",
-  "orientation": "portrait"
+  "categories": ["developer", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/clud-logo-white-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/clud-logo-white-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon-white.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/SlackScreenshot.webp",
+      "sizes": "1200x675",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Clud Dashboard Desktop View"
+    },
+    {
+      "src": "/images/SlackScreenshot.webp",
+      "sizes": "1200x675",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Clud Mobile Alert Overview"
+    }
+  ]
 }

@@ -85,3 +85,46 @@ self.addEventListener('fetch', (event) => {
       }),
   )
 })
+
+// Push event: display notification when incoming push alert is received
+self.addEventListener('push', (event) => {
+  let data = { title: 'Clud Alert', body: 'An API specification change was detected.', url: '/dashboard' }
+  try {
+    if (event.data) {
+      data = { ...data, ...event.data.json() }
+    }
+  } catch (_e) {
+    if (event.data) {
+      data.body = event.data.text()
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: '/clud-logo-purple-512x512.png',
+    badge: '/favicon.svg',
+    data: { url: data.url || '/dashboard' },
+    vibrate: [100, 50, 100],
+  }
+
+  event.waitUntil(self.registration.showNotification(data.title, options))
+})
+
+// Notification click: focus or open dashboard
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/dashboard'
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes('/dashboard') && 'focus' in client) {
+          return client.focus()
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl)
+      }
+    }),
+  )
+})

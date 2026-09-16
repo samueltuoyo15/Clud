@@ -11,6 +11,7 @@ import { PollerModule } from './modules/poller/poller.module'
 import { IntegrationsModule } from './modules/integrations/integrations.module'
 import { WorkspacesModule } from './modules/workspaces/workspaces.module'
 import { NotificationsModule } from './modules/notifications/notifications.module'
+import { ContactModule } from './modules/contact/contact.module'
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     IntegrationsModule,
     WorkspacesModule,
     NotificationsModule,
+    ContactModule,
   ],
   controllers: [],
   providers: [
