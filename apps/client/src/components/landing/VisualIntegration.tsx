@@ -164,12 +164,12 @@ export const VisualIntegration: React.FC = () => {
             <div className="flex flex-col items-center">
               <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
-                  src="https://api.dicebear.com/7.x/big-smile/svg?seed=Frontend&backgroundColor=e9d5ff"
+                  src="https://i.pravatar.cc/150?u=a"
                   alt="Frontend Engineer"
                   width={48}
                   height={48}
                   loading="lazy"
-                  className="w-full h-full object-cover rounded-xl bg-neutral-100"
+                  className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
               <span className="mt-1.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-md px-2 py-0.5 text-[10px] font-bold">
@@ -183,12 +183,12 @@ export const VisualIntegration: React.FC = () => {
             <div className="flex flex-col items-center">
               <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
-                  src="https://api.dicebear.com/7.x/big-smile/svg?seed=Backend&backgroundColor=d8b4fe"
+                  src="https://i.pravatar.cc/150?u=b"
                   alt="Backend Engineer"
                   width={48}
                   height={48}
                   loading="lazy"
-                  className="w-full h-full object-cover rounded-xl bg-neutral-100"
+                  className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
               <span className="mt-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-md px-2 py-0.5 text-[10px] font-bold">
@@ -202,12 +202,12 @@ export const VisualIntegration: React.FC = () => {
             <div className="flex flex-col items-center">
               <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
-                  src="https://api.dicebear.com/7.x/big-smile/svg?seed=Mobile&backgroundColor=c084fc"
+                  src="https://i.pravatar.cc/150?u=c"
                   alt="Mobile Engineer"
                   width={48}
                   height={48}
                   loading="lazy"
-                  className="w-full h-full object-cover rounded-xl bg-neutral-100"
+                  className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
               <span className="mt-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md px-2 py-0.5 text-[10px] font-bold">
@@ -221,12 +221,12 @@ export const VisualIntegration: React.FC = () => {
             <div className="flex flex-col items-center">
               <div className="w-13 h-13 rounded-2xl bg-white p-0.5 border-2 border-white overflow-hidden shadow-xs">
                 <img
-                  src="https://api.dicebear.com/7.x/big-smile/svg?seed=Product&backgroundColor=a855f7"
+                  src="https://i.pravatar.cc/150?u=d"
                   alt="Product Manager"
                   width={48}
                   height={48}
                   loading="lazy"
-                  className="w-full h-full object-cover rounded-xl bg-neutral-100"
+                  className="w-full h-full object-cover rounded-xl bg-neutral-100 grayscale"
                 />
               </div>
               <span className="mt-1.5 bg-purple-50 text-purple-700 border border-purple-200 rounded-md px-2 py-0.5 text-[10px] font-bold">
