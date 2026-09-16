@@ -20,6 +20,7 @@ import { SettingsTab } from "../components/dashboard/SettingsTab"
 import { CommandPaletteModal } from "../components/dashboard/CommandPaletteModal"
 import { CreateWorkspaceModal } from "../components/dashboard/CreateWorkspaceModal"
 import { SignOutModal } from "../components/dashboard/SignOutModal"
+import { SEO } from "../components/shared/Seo"
 
 interface UserProfile {
   id: string
@@ -248,6 +249,17 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen h-screen flex bg-white font-sans text-neutral-900 overflow-hidden select-none">
+      <SEO
+        title={
+          activeNav === "integrations"
+            ? "Integrations | Clud"
+            : activeNav === "settings"
+              ? "Workspace Settings | Clud"
+              : "Dashboard | Clud"
+        }
+        description="Monitor your OpenAPI contracts, track API drift in real time, and manage workspace settings."
+        path={`/dashboard${activeNav === "dashboard" ? "" : `/${activeNav}`}`}
+      />
       <DashboardSidebar
         activeNav={activeNav}
         setActiveNav={(nav) => navigate(`/dashboard${nav === "dashboard" ? "" : `/${nav}`}`)}

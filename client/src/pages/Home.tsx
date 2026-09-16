@@ -1,4 +1,5 @@
 import React from "react"
+import { SEO } from "../components/shared/Seo"
 import { Navbar } from "../components/navbar"
 import { Hero } from "../components/hero"
 import { VisualIntegration } from "../components/landing/VisualIntegration"
@@ -9,6 +10,11 @@ import { Footer } from "../components/layout/Footer"
 export const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col">
+      <SEO
+        title="Clud | Real-time API Change Detection for Teams"
+        description="Clud monitors your OpenAPI and Swagger specifications and sends instant Slack and Email alerts when breaking API changes occur."
+        path="/"
+      />
       <div className="bg-[#FAFAFA] border-b border-neutral-200/60">
         <Navbar />
         <Hero />

@@ -5,6 +5,7 @@ import { toast } from "sonner"
 import { Button } from "../components/ui/button"
 import { AuthLayout } from "../components/auth/AuthLayout"
 import { OtpInput } from "../components/ui/OtpInput"
+import { SEO } from "../components/shared/Seo"
 import { loginApi, verifyOtpApi, resendOtpApi } from "../api/auth"
 
 export const SignIn: React.FC = () => {
@@ -71,6 +72,11 @@ export const SignIn: React.FC = () => {
 
   return (
     <AuthLayout>
+      <SEO
+        title="Sign In | Clud"
+        description="Sign in to your Clud workspace to monitor OpenAPI contracts and manage API drift alerts."
+        path="/signin"
+      />
       <div className="mb-8 relative">
         {step === 2 && (
           <button

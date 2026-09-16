@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import { SEO } from "../components/shared/Seo"
 import { Navbar } from "../components/navbar"
 import { Footer } from "../components/layout/Footer"
 
@@ -9,6 +10,11 @@ export const PrivacyPolicy: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-primary/20 flex flex-col">
+      <SEO
+        title="Privacy Policy | Clud"
+        description="Read the Clud privacy policy to understand how your personal data and API configurations are protected."
+        path="/privacy"
+      />
       <Navbar />
 
       <main className="flex-1 max-w-3xl w-full mx-auto py-16 px-6">

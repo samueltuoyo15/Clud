@@ -42,6 +42,18 @@ const STATIC_PAGES_META: Record<
     title: 'Refund Policy | Clud',
     description: 'Learn about the Clud refund policy and subscription billing terms.',
   },
+  dashboard: {
+    title: 'Workspace Dashboard | Clud',
+    description: 'Monitor your OpenAPI endpoints, track schema drift, and manage team workspaces.',
+  },
+  'dashboard/integrations': {
+    title: 'Integrations and Alert Channels | Clud',
+    description: 'Connect Slack and Email notification channels to receive real-time API drift alerts.',
+  },
+  'dashboard/settings': {
+    title: 'Workspace Settings | Clud',
+    description: 'Manage workspace members, notifications, and profile settings in Clud.',
+  },
 };
 
 function escapeHtml(value: string): string {

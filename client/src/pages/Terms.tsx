@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import { SEO } from "../components/shared/Seo"
 import { Navbar } from "../components/navbar"
 import { Footer } from "../components/layout/Footer"
 
@@ -9,6 +10,11 @@ export const Terms: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900 selection:bg-primary/20 flex flex-col">
+      <SEO
+        title="Terms of Service | Clud"
+        description="Read the Clud terms of service for API contract monitoring, usage guidelines, and team workspaces."
+        path="/terms"
+      />
       <Navbar />
 
       <main className="flex-1 max-w-3xl w-full mx-auto py-16 px-6">

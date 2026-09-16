@@ -9,6 +9,7 @@ import { SignUpStep2 } from "../components/auth/SignUpStep2"
 import { SignUpStep3 } from "../components/auth/SignUpStep3"
 import { OtpInput } from "../components/ui/OtpInput"
 import { SignUpStepRole } from "../components/auth/SignUpStepRole"
+import { SEO } from "../components/shared/Seo"
 import { signupApi, verifyOtpApi, resendOtpApi } from "../api/auth"
 
 const titles = [
@@ -118,6 +119,11 @@ export const SignUp: React.FC = () => {
 
   return (
     <AuthLayout>
+      <SEO
+        title="Get Started | Clud"
+        description="Create your Clud account to start monitoring OpenAPI and Swagger endpoints for real-time drift detection."
+        path="/signup"
+      />
       <div className="mb-8 relative">
         {step > 1 && (
           <button
