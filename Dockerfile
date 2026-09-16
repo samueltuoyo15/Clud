@@ -1,12 +1,16 @@
-FROM node:20-alpine
+FROM node:20-slim
 RUN npm install -g pnpm
 
 ENV CI=true
 
 WORKDIR /usr/src/app
 
-# Install native build tools for argon2/gyp, compatibility packages, and tini
-RUN apk add --no-cache python3 make g++ gcc build-base tini ca-certificates libc6-compat gcompat
+# Install native dependencies and tini
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tini \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy workspace / root files if any
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
@@ -37,5 +41,5 @@ WORKDIR /usr/src/app/apps/server
 
 EXPOSE 3000
 
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["./start.sh"]
