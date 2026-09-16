@@ -12,6 +12,7 @@ import { IntegrationsModule } from './modules/integrations/integrations.module'
 import { WorkspacesModule } from './modules/workspaces/workspaces.module'
 import { NotificationsModule } from './modules/notifications/notifications.module'
 import { ContactModule } from './modules/contact/contact.module'
+import { TestimonialsModule } from './modules/testimonials/testimonials.module'
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { ContactModule } from './modules/contact/contact.module'
     WorkspacesModule,
     NotificationsModule,
     ContactModule,
+    TestimonialsModule,
   ],
   controllers: [],
   providers: [

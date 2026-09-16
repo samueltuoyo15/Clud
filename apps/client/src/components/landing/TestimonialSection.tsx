@@ -1,50 +1,54 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { NewTwitterIcon, ArrowLeft01Icon, ArrowRight01Icon } from "hugeicons-react"
+import { SubmitTestimonialModal } from "./SubmitTestimonialModal"
 
-const TESTIMONIALS = [
+interface TestimonialItem {
+  id?: string
+  quote: string
+  name: string
+  handle?: string | null
+  role?: string | null
+  company?: string | null
+  avatar_url?: string | null
+  rating?: number | null
+}
+
+const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
   {
     quote: "Clud has completely changed how our frontend and backend teams communicate. We catch breaking changes instantly before they hit production.",
     name: "Sarah Jenkins",
     handle: "@sarahjenkins",
-    avatar: "https://i.pravatar.cc/150?img=47",
+    avatar_url: "https://i.pravatar.cc/150?img=47",
   },
   {
     quote: "I used to spend hours debugging silent failures. Now Clud just pings our Slack channel the second an API spec drifts. Unbelievably good.",
     name: "Marcus Chen",
     handle: "@marcuschen_dev",
-    avatar: "https://i.pravatar.cc/150?img=11",
+    avatar_url: "https://i.pravatar.cc/150?img=11",
   },
   {
     quote: "The easiest setup I have ever experienced. Dropped our OpenAPI spec URL in and it immediately started protecting our mobile team from unexpected breaks.",
     name: "Elena Rodriguez",
     handle: "@elena_codes",
-    avatar: "https://i.pravatar.cc/150?img=32",
+    avatar_url: "https://i.pravatar.cc/150?img=32",
   },
 ]
 
 export const TestimonialSection: React.FC = () => {
-  const [testimonials, setTestimonials] = useState(TESTIMONIALS)
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(DEFAULT_TESTIMONIALS)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const testimonialSpace = import.meta.env.VITE_TESTIMONIAL_SPACE || "clud"
-  const testimonialApiKey = import.meta.env.VITE_TESTIMONIAL_API_KEY
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  React.useEffect(() => {
-    if (!testimonialApiKey) return
-    fetch(`https://api.testimonial.to/api/v1/reviews?key=${testimonialApiKey}`)
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL || ""}/testimonials`)
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((item: any) => ({
-            quote: item.text || item.message || item.quote,
-            name: item.name || "Happy Customer",
-            handle: item.handle || (item.twitter_username ? `@${item.twitter_username}` : ""),
-            avatar: item.avatar || item.photo_url || "https://i.pravatar.cc/150?img=47",
-          }))
-          setTestimonials(mapped)
+      .then((resData) => {
+        if (Array.isArray(resData?.data) && resData.data.length > 0) {
+          setTestimonials(resData.data)
         }
       })
       .catch(() => {})
-  }, [testimonialApiKey])
+  }, [])
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length)
@@ -54,7 +58,12 @@ export const TestimonialSection: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
-  const current = testimonials[currentIndex] || TESTIMONIALS[0]
+  const handleSuccess = (newReview: any) => {
+    setTestimonials((prev) => [newReview, ...prev])
+    setCurrentIndex(0)
+  }
+
+  const current = testimonials[currentIndex] || DEFAULT_TESTIMONIALS[0]
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
@@ -82,7 +91,7 @@ export const TestimonialSection: React.FC = () => {
           <div className="flex items-center justify-between mt-12">
             <div className="flex items-center gap-4">
               <img
-                src={current.avatar}
+                src={current.avatar_url || "https://i.pravatar.cc/150?img=47"}
                 alt={current.name}
                 width={48}
                 height={48}
@@ -91,7 +100,7 @@ export const TestimonialSection: React.FC = () => {
               />
               <div>
                 <div className="font-semibold text-neutral-900">{current.name}</div>
-                <div className="text-sm text-neutral-500">{current.handle}</div>
+                <div className="text-sm text-neutral-500">{current.handle || current.role || ""}</div>
               </div>
             </div>
             
@@ -123,26 +132,22 @@ export const TestimonialSection: React.FC = () => {
             See what more of our amazing customers have to say!
           </p>
           <div className="flex items-center gap-4">
-            <a
-              href={`https://testimonial.to/${testimonialSpace}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-semibold text-primary hover:underline underline-offset-4"
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-sm font-semibold text-primary hover:underline underline-offset-4 cursor-pointer"
             >
-              Leave a testimonial →
-            </a>
-            <a
-              href={`https://testimonial.to/${testimonialSpace}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-semibold text-neutral-900 underline underline-offset-4 hover:opacity-80"
-            >
-              Visit wall of love
-            </a>
+              Leave a review →
+            </button>
           </div>
         </div>
 
       </div>
+
+      <SubmitTestimonialModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+      />
     </section>
   )
 }
