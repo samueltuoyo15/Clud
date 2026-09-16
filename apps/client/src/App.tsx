@@ -1,8 +1,20 @@
-import React, { lazy, Suspense } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import React, { lazy, Suspense, useEffect } from "react"
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { Toaster } from "sonner"
 import { Analytics } from "@vercel/analytics/react"
 import { Home } from "./pages/Home"
+
+const ScrollToTop: React.FC = () => {
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, hash])
+
+  return null
+}
 
 const SignIn = lazy(() => import("./pages/SignIn").then((m) => ({ default: m.SignIn })))
 const SignUp = lazy(() => import("./pages/SignUp").then((m) => ({ default: m.SignUp })))
@@ -22,6 +34,7 @@ export const App: React.FC = () => {
       <Toaster position="top-right" richColors closeButton />
       <Analytics />
       <Router>
+        <ScrollToTop />
         <Suspense>
           <Routes>
             <Route path="/" element={<Home />} />

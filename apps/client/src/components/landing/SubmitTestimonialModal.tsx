@@ -31,6 +31,18 @@ export const SubmitTestimonialModal: React.FC<SubmitTestimonialModalProps> = ({
       return
     }
 
+    const trimmedHandle = formData.handle.trim()
+    const formattedHandle = trimmedHandle
+      ? trimmedHandle.startsWith("@")
+        ? trimmedHandle
+        : `@${trimmedHandle}`
+      : ""
+
+    if (formattedHandle && !/^@[A-Za-z0-9_]{1,15}$/.test(formattedHandle)) {
+      toast.error("Please enter a valid Twitter / X handle (e.g. @username)")
+      return
+    }
+
     setIsSubmitting(true)
     try {
       const response = await fetch(
@@ -38,18 +50,25 @@ export const SubmitTestimonialModal: React.FC<SubmitTestimonialModalProps> = ({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            handle: formattedHandle || undefined,
+          }),
         },
       )
 
       if (!response.ok) {
-        throw new Error("Failed to submit review")
+        const errData = await response.json().catch(() => ({}))
+        const msg = Array.isArray(errData?.message)
+          ? errData.message.join(", ")
+          : errData?.message || "Failed to submit review"
+        throw new Error(msg)
       }
 
       toast.success("Thank you! Your review has been submitted for review.")
       onClose()
-    } catch (_err) {
-      toast.error("Could not submit review. Please try again.")
+    } catch (err: any) {
+      toast.error(err?.message || "Could not submit review. Please try again.")
     } finally {
       setIsSubmitting(false)
     }

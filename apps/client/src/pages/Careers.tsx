@@ -1,12 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Navbar } from "../components/navbar"
 import { Footer } from "../components/layout/Footer"
 import { SEO } from "../components/shared/Seo"
 import { Button } from "../components/ui/button"
-import { Briefcase01Icon, Mail01Icon } from "hugeicons-react"
+import { Mail01Icon } from "hugeicons-react"
 import { Link } from "react-router-dom"
 
 export const Careers: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" })
+  }, [])
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col">
       <SEO
@@ -20,16 +23,7 @@ export const Careers: React.FC = () => {
 
       <main className="flex-1 py-16 sm:py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-neutral-100 text-neutral-800 mb-6 border border-neutral-200">
-            <Briefcase01Icon size={28} />
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-neutral-950 tracking-tight mb-4">
-            Build the future of API reliability
-          </h1>
-          <p className="text-base sm:text-lg text-neutral-600 max-w-xl mx-auto mb-12">
-            We are a small, focused team passionate about eliminating silent breakages between frontend and backend engineers.
-          </p>
+        
 
           <div className="max-w-2xl mx-auto bg-neutral-50 border border-neutral-200 rounded-2xl p-8 sm:p-12 text-center">
             <h2 className="text-xl font-bold text-neutral-900 mb-3">

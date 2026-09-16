@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength, IsInt, Min, Max } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString, MaxLength, IsInt, Min, Max, Matches } from 'class-validator'
 
 export class CreateTestimonialDto {
   @IsNotEmpty({ message: 'Name is required' })
@@ -9,6 +9,9 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)
+  @Matches(/^@[A-Za-z0-9_]{1,15}$/, {
+    message: 'Handle must be a valid Twitter handle starting with @ (e.g. @username)',
+  })
   handle?: string
 
   @IsOptional()

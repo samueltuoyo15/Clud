@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { NewTwitterIcon, Linkedin01Icon } from "hugeicons-react"
 import { Select } from "../ui/Select"
 
 const LANGUAGE_OPTIONS = [
@@ -31,15 +30,8 @@ export const Footer: React.FC = () => {
               Autonomous API monitoring. We watch the unseen boundaries of your APIs, catching drift the moment it happens, protecting your team from silent breakages.
             </p>
             
-            <div className="flex flex-col gap-6 mt-4">
-              <div className="flex items-center gap-6">
-                <a href="#" aria-label="Clud on X" className="text-neutral-400 hover:text-primary transition-colors">
-                  <NewTwitterIcon size={24} />
-                </a>
-                <a href="#" aria-label="Clud on LinkedIn" className="text-neutral-400 hover:text-primary transition-colors">
-                  <Linkedin01Icon size={24} />
-                </a>
-                <div className="w-px h-5 bg-neutral-200"></div>
+            <div className="flex flex-col gap-4 mt-4">
+              <div className="flex items-center">
                 <Select 
                   value={language} 
                   onChange={setLanguage} 
