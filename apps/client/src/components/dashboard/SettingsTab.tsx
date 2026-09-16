@@ -156,11 +156,54 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     }
   }
 
+  // Billing state
+  const [billingData, setBillingData] = useState<{
+    plan: string
+    subscription_status: string
+    subscription?: any
+  } | null>(null)
+  const [isStartingCheckout, setIsStartingCheckout] = useState(false)
+
+  const loadBilling = async () => {
+    if (!activeWorkspace?.id) return
+    try {
+      const data = await fetchApi<{
+        plan: string
+        subscription_status: string
+        subscription?: any
+      }>(`/payments/billing/${activeWorkspace.id}`)
+      setBillingData(data)
+    } catch {
+      // Keep default if billing fetch fails
+    }
+  }
+
   useEffect(() => {
-    if (activeSubTab === "members") {
-      loadMembers()
+    if (activeSubTab === "billing" && activeWorkspace?.id) {
+      loadBilling()
     }
   }, [activeSubTab, activeWorkspace?.id])
+
+  const handleUpgrade = async () => {
+    if (!activeWorkspace?.id) return
+    setIsStartingCheckout(true)
+    try {
+      const data = await fetchApi<{ checkout_url?: string }>("/payments/checkout", {
+        method: "POST",
+        data: {
+          workspace_id: activeWorkspace.id,
+        },
+      })
+      if (data?.checkout_url) {
+        window.location.href = data.checkout_url
+      } else {
+        throw new Error("Could not retrieve checkout URL")
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to start checkout. Please try again.")
+      setIsStartingCheckout(false)
+    }
+  }
 
   const handleSaveWorkspace = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -756,25 +799,31 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   Current Plan
                 </span>
                 <h3 className="text-2xl font-bold text-neutral-900">
-                  Hobby Plan (Free)
+                  {billingData?.plan === "pro" ? "Pro Plan ($10/mo)" : "Hobby Plan (Free)"}
                 </h3>
                 <p className="text-xs text-neutral-500 mt-1">
-                  Essential contract drift tracking for small teams.
+                  {billingData?.plan === "pro"
+                    ? "Unlimited OpenAPI specs, priority queue polling, and automated alert delivery."
+                    : "Essential contract drift tracking for small teams."}
                 </p>
               </div>
-              <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
-                Active
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${
+                billingData?.plan === "pro"
+                  ? "bg-primary/10 text-primary border-primary/20"
+                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
+              }`}>
+                {billingData?.plan === "pro" ? "Pro Active" : "Active"}
               </span>
             </div>
 
             <div className="border-t border-neutral-100 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-neutral-600 mb-8">
               <div className="flex items-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Up to 3 monitored API specs</span>
+                <span>{billingData?.plan === "pro" ? "Unlimited OpenAPI specs" : "Up to 3 monitored API specs"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>5-minute automated background polling</span>
+                <span>{billingData?.plan === "pro" ? "Priority queue polling" : "5-minute automated polling"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -786,19 +835,36 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               </div>
             </div>
 
-            <div className="bg-neutral-50 rounded-xl p-4 flex items-center justify-between border border-neutral-200">
-              <div>
-                <p className="text-xs font-semibold text-neutral-900">
-                  Upgrade to Pro ($10/mo)
+            {billingData?.plan !== "pro" ? (
+              <div className="bg-neutral-50 rounded-xl p-4 flex items-center justify-between border border-neutral-200">
+                <div>
+                  <p className="text-xs font-semibold text-neutral-900">
+                    Upgrade to Pro ($10/mo)
+                  </p>
+                  <p className="text-[11px] text-neutral-500">
+                    Unlimited specs, custom webhooks, priority queue polling, and unlimited team members.
+                  </p>
+                </div>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  isLoading={isStartingCheckout}
+                  onClick={handleUpgrade}
+                  className="rounded-lg"
+                >
+                  Upgrade to Pro
+                </Button>
+              </div>
+            ) : (
+              <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+                <p className="text-xs font-semibold text-emerald-900">
+                  You are on the Pro Plan
                 </p>
-                <p className="text-[11px] text-neutral-500">
-                  Unlimited specs, custom webhooks, priority queue polling, and unlimited team members.
+                <p className="text-[11px] text-emerald-700 mt-0.5">
+                  Your workspace has full access to all features and unlimited monitoring.
                 </p>
               </div>
-              <Button variant="primary" size="sm" className="rounded-lg">
-                Upgrade to Pro
-              </Button>
-            </div>
+            )}
           </div>
         </div>
       )}

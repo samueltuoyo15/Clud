@@ -55,7 +55,7 @@ export const PricingSection: React.FC = () => {
           </div>
 
           {/* Pro Tier */}
-          <div className="bg-primary rounded-3xl p-8 md:p-10 flex flex-col relative overflow-hidden text-white shadow-xl">
+          <div className="bg-primary rounded-3xl p-8 md:p-10 flex flex-col relative overflow-hidden text-white border border-primary">
             {/* Subtle glow effect inside the card */}
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white opacity-5 blur-3xl rounded-full pointer-events-none"></div>
 

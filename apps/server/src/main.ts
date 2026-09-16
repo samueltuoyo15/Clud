@@ -7,7 +7,9 @@ import { join } from 'path'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  })
 
   app.getHttpAdapter().get('/', (_req: any, res: any) => {
     res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() })

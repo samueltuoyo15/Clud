@@ -4,7 +4,10 @@ interface FetchOptions extends RequestInit {
   data?: any
 }
 
-export async function fetchApi(endpoint: string, options: FetchOptions = {}) {
+export async function fetchApi<T = any>(
+  endpoint: string,
+  options: FetchOptions = {},
+): Promise<T> {
   const url = `${API_URL}${endpoint}`
   const token = localStorage.getItem("accessToken")
 
@@ -32,6 +35,6 @@ export async function fetchApi(endpoint: string, options: FetchOptions = {}) {
     throw error
   }
 
-  if (response.status === 204) return null
+  if (response.status === 204) return null as T
   return response.json().catch(() => null)
 }
