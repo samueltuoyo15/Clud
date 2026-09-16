@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tini \
     ca-certificates \
     curl \
+    python3 \
+    make \
+    g++ \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy workspace / root files if any
