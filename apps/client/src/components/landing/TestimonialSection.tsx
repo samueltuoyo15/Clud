@@ -134,9 +134,10 @@ export const TestimonialSection: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="text-sm font-semibold text-primary hover:underline underline-offset-4 cursor-pointer"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4 cursor-pointer"
             >
-              Leave a review →
+              <span>Leave a review</span>
+              <ArrowRight01Icon size={16} />
             </button>
           </div>
         </div>
