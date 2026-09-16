@@ -217,4 +217,57 @@ export class MailService {
       throw new InternalServerErrorException('Failed to deliver inquiry email')
     }
   }
+
+  async sendNewReviewAlert(review: {
+    name: string
+    handle?: string | null
+    role?: string | null
+    company?: string | null
+    rating?: number
+    quote: string
+  }): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey) return
+
+    const html = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; padding: 24px; color: #171717; text-align: left;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Testimonial Submitted</h2>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
+          <strong>Name:</strong> ${review.name}<br>
+          <strong>Handle:</strong> ${review.handle || 'N/A'}<br>
+          <strong>Role / Company:</strong> ${review.role || ''} ${review.company ? `@ ${review.company}` : ''}<br>
+          <strong>Rating:</strong> ${'★'.repeat(review.rating || 5)} (${review.rating || 5}/5)
+        </p>
+        <div style="margin: 20px 0; padding: 16px; background-color: #fff0f6; border: 1px solid #fbcfe8; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
+          "${review.quote.replace(/\n/g, '<br>')}"
+        </div>
+        <p style="font-size: 12px; color: #6b7280; margin-top: 24px; text-align: left;">
+          This review is saved with <code>is_approved = false</code>. To make it visible on the landing page, update <code>is_approved = true</code> in the database.
+        </p>
+      </div>
+    `
+
+    const body: Record<string, any> = {
+      to: 'support@samueltuoyo.com',
+      subject: `[Clud Review] New ${review.rating || 5}-star testimonial from ${review.name}`,
+      html,
+    }
+    if (this.from?.trim()) body.from = this.from
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+      })
+      if (!response.ok) {
+        this.logger.error(`Failed to dispatch review alert email: ${await response.text()}`)
+      }
+    } catch (err: any) {
+      this.logger.error(`Sendlib review alert error: ${err.message}`)
+    }
+  }
 }

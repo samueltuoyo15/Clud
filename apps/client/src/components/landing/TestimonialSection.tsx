@@ -112,22 +112,24 @@ export const TestimonialSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="absolute bottom-10 left-10 flex items-center gap-4">
-            <button 
-              onClick={handlePrev}
-              aria-label="Previous testimonial"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors"
-            >
-              <ArrowLeft01Icon size={20} />
-            </button>
-            <button 
-              onClick={handleNext}
-              aria-label="Next testimonial"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors"
-            >
-              <ArrowRight01Icon size={20} />
-            </button>
-          </div>
+          {testimonials.length > 1 && (
+            <div className="absolute bottom-10 left-10 flex items-center gap-4">
+              <button 
+                onClick={handlePrev}
+                aria-label="Previous testimonial"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
+              >
+                <ArrowLeft01Icon size={20} />
+              </button>
+              <button 
+                onClick={handleNext}
+                aria-label="Next testimonial"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
+              >
+                <ArrowRight01Icon size={20} />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-4">

@@ -4,6 +4,8 @@ import { testimonials } from '../../db/schema/testimonials'
 import { desc, eq } from 'drizzle-orm'
 import { CreateTestimonialDto } from './dto/create-testimonial.dto'
 
+import { MailService } from '../mail/mail.service'
+
 const DEFAULT_TESTIMONIALS = [
   {
     id: 'seed-1',
@@ -40,6 +42,8 @@ const DEFAULT_TESTIMONIALS = [
 @Injectable()
 export class TestimonialsService {
   private readonly logger = new Logger(TestimonialsService.name)
+
+  constructor(private readonly mailService: MailService) {}
 
   async getApproved() {
     try {
@@ -80,9 +84,22 @@ export class TestimonialsService {
         role: dto.role || null,
         company: dto.company || null,
         rating: dto.rating || 5,
-        is_approved: true,
+        is_approved: false,
       })
       .returning()
+
+    this.mailService
+      .sendNewReviewAlert({
+        name: dto.name,
+        handle: cleanHandle ? `@${cleanHandle}` : null,
+        role: dto.role || null,
+        company: dto.company || null,
+        rating: dto.rating || 5,
+        quote: dto.quote,
+      })
+      .catch((err) =>
+        this.logger.error(`Failed to send new review alert email: ${err.message}`),
+      )
 
     return inserted
   }
