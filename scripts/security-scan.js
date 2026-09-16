@@ -4,8 +4,8 @@ const { exec } = require('child_process');
 
 const rootDir = path.join(__dirname, '..');
 const srcDirs = [
-  path.join(rootDir, 'server', 'src'),
-  path.join(rootDir, 'client', 'src'),
+  path.join(rootDir, 'apps', 'server', 'src'),
+  path.join(rootDir, 'apps', 'client', 'src'),
 ];
 
 console.log('Starting Clud security scan...');
