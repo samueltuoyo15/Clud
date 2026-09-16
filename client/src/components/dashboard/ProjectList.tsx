@@ -1,7 +1,7 @@
 import React from "react"
 import type { Project } from "../../api/projects"
 import { Button } from "../ui/button"
-import { ProjectCard, ProjectCardMember } from "./ProjectCard"
+import { ProjectCard, type ProjectCardMember } from "./ProjectCard"
 
 interface ProjectListProps {
   projects: Project[]

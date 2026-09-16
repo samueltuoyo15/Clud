@@ -20,7 +20,6 @@ export interface InAppNotification {
 }
 
 interface DashboardHeaderProps {
-  activeNav?: "dashboard" | "apis" | "integrations" | "settings" | "teams"
   displayName: string
   email?: string
   initial: string
@@ -33,7 +32,6 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
-  activeNav = "dashboard",
   displayName,
   email,
   initial,

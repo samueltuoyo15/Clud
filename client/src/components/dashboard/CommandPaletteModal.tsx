@@ -3,7 +3,6 @@ import {
   Home01Icon,
   PuzzleIcon,
   Settings01Icon,
-  UserMultiple02Icon,
   PlusSignIcon,
   Search01Icon,
 } from "hugeicons-react"

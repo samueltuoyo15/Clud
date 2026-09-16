@@ -3,29 +3,22 @@ import { PlusSignIcon, PuzzleIcon } from "hugeicons-react"
 import { Button } from "../ui/button"
 import { Checkbox } from "../ui/Checkbox"
 
+export interface ProjectFormData {
+  name: string
+  spec_url: string
+  check_interval_minutes: number
+  auth_type: "none" | "basic"
+  auth_username?: string
+  auth_password?: string
+}
+
 interface AddProjectModalProps {
   isOpen: boolean
   isCreating: boolean
   integrationsCount?: number
   onGoToIntegrations?: () => void
-  newProject: {
-    name: string
-    spec_url: string
-    check_interval_minutes: number
-    auth_type?: "none" | "basic"
-    auth_username?: string
-    auth_password?: string
-  }
-  setNewProject: React.Dispatch<
-    React.SetStateAction<{
-      name: string
-      spec_url: string
-      check_interval_minutes: number
-      auth_type?: "none" | "basic"
-      auth_username?: string
-      auth_password?: string
-    }>
-  >
+  newProject: ProjectFormData
+  setNewProject: React.Dispatch<React.SetStateAction<ProjectFormData>>
   onClose: () => void
   onSubmit: (e: React.FormEvent) => void
 }
