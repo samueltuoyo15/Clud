@@ -1,5 +1,5 @@
 FROM node:20-slim
-RUN npm install -g pnpm
+RUN npm install -g pnpm node-gyp
 
 ENV CI=true
 
