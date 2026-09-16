@@ -5,8 +5,8 @@ ENV CI=true
 
 WORKDIR /usr/src/app
 
-# Install native compatibility packages for Linux binaries and tini
-RUN apk add --no-cache tini ca-certificates libc6-compat gcompat
+# Install native build tools for argon2/gyp, compatibility packages, and tini
+RUN apk add --no-cache python3 make g++ gcc build-base tini ca-certificates libc6-compat gcompat
 
 # Copy workspace / root files if any
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
