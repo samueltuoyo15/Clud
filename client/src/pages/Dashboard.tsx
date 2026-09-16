@@ -274,7 +274,6 @@ export const Dashboard: React.FC = () => {
       />
       <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FAFAFA]">
         <DashboardHeader
-          activeNav={activeNav}
           displayName={displayName}
           email={user?.email}
           initial={displayName.charAt(0).toUpperCase()}
