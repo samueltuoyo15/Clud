@@ -45,7 +45,7 @@ export const PrivacyPolicy: React.FC = () => {
 
           <section>
             <h2 className="text-lg font-bold text-neutral-900 mb-3">5. Contact Us</h2>
-            <p>If you have any questions about this privacy policy or our privacy practices, please contact us at privacy@clud.samueltuoyo.com.</p>
+            <p>If you have any questions about this privacy policy or our privacy practices, please contact us at support@samueltuoyo.com.</p>
           </section>
         </div>
       </main>

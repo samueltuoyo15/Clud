@@ -1,6 +1,7 @@
 import React from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { Toaster } from "sonner"
+import { Analytics } from "@vercel/analytics/react"
 import { Home } from "./pages/Home"
 import { SignIn } from "./pages/SignIn"
 import { SignUp } from "./pages/SignUp"
@@ -14,6 +15,7 @@ export const App: React.FC = () => {
   return (
     <>
       <Toaster position="top-right" richColors closeButton />
+      <Analytics />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

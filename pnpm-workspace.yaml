@@ -1,10 +1,10 @@
 packages:
   - "apps/*"
 
-allowBuilds:
-  '@biomejs/biome': true
-  '@parcel/watcher': true
-  argon2: true
-  esbuild: true
-  msgpackr-extract: true
-  unrs-resolver: true
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - "@parcel/watcher"
+  - "argon2"
+  - "esbuild"
+  - "msgpackr-extract"
+  - "unrs-resolver"

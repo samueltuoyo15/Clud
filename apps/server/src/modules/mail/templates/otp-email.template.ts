@@ -5,7 +5,7 @@ export function getOtpEmailTemplate(code: string): {
 } {
   return {
     subject: `${code} is your Clud verification code`,
-    text: `Let's get this done\n\nYou're just one step away from verifying your email. Use the code below to proceed:\n\n${code}\n\nThis code will expire in 10 minutes.\nIf you did not request this code, you can safely ignore this email.\n\nContact support@clud.samueltuoyo.com`,
+    text: `Let's get this done\n\nYou're just one step away from verifying your email. Use the code below to proceed:\n\n${code}\n\nThis code will expire in 10 minutes.\nIf you did not request this code, you can safely ignore this email.\n\nContact support@samueltuoyo.com`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +52,7 @@ export function getOtpEmailTemplate(code: string): {
                             This code will expire in 10 minutes.<br>If you did not request this code, you can safely ignore this email.
                         </p>
                         <p style="margin: 0; font-size: 13px; color: #64748b; text-align: left;">
-                            Contact <a href="mailto:support@clud.samueltuoyo.com" style="color: #611F69; text-decoration: underline; font-weight: 500;">support@clud.samueltuoyo.com</a>
+                            Contact <a href="mailto:support@samueltuoyo.com" style="color: #611F69; text-decoration: underline; font-weight: 500;">support@samueltuoyo.com</a>
                         </p>
                     </div>
                 </div>
