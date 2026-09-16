@@ -60,12 +60,21 @@ export class TestimonialsService {
   }
 
   async create(dto: CreateTestimonialDto) {
-    const avatar = dto.avatar_url?.trim() || `https://i.pravatar.cc/150?u=${encodeURIComponent(dto.name)}`
+    const cleanHandle = dto.handle?.replace(/^@+/, '').trim()
+    let avatar = dto.avatar_url?.trim()
+    if (!avatar) {
+      if (cleanHandle) {
+        avatar = `https://unavatar.io/x/${encodeURIComponent(cleanHandle)}?fallback=https://api.dicebear.com/7.x/big-smile/svg?seed=${encodeURIComponent(cleanHandle)}`
+      } else {
+        avatar = `https://api.dicebear.com/7.x/big-smile/svg?seed=${encodeURIComponent(dto.name)}`
+      }
+    }
+
     const [inserted] = await db
       .insert(testimonials)
       .values({
         name: dto.name,
-        handle: dto.handle?.startsWith('@') ? dto.handle : dto.handle ? `@${dto.handle}` : null,
+        handle: cleanHandle ? `@${cleanHandle}` : null,
         avatar_url: avatar,
         quote: dto.quote,
         role: dto.role || null,

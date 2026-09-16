@@ -58,8 +58,11 @@ export const TestimonialSection: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
-  const handleSuccess = (newReview: any) => {
-    setTestimonials((prev) => [newReview, ...prev])
+  const handleSuccess = (newReview: TestimonialItem) => {
+    setTestimonials((prev) => {
+      const isMock = prev.some((t) => t.handle === "@sarahjenkins" || t.handle === "@marcuschen_dev")
+      return isMock ? [newReview] : [newReview, ...prev]
+    })
     setCurrentIndex(0)
   }
 
