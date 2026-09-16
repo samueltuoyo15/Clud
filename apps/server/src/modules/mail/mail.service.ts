@@ -121,20 +121,35 @@ export class MailService {
     if (!apiKey) return
 
     const html = `
-      <div style="font-family: sans-serif; max-width: 540px; margin: 0 auto; padding: 24px; color: #171717;">
-        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">You've been invited to ${workspaceName}</h2>
-        <p style="font-size: 14px; line-height: 1.6; color: #525252;">
-          ${inviterName} has added you as a team member to the <strong>${workspaceName}</strong> workspace on Clud.
-        </p>
-        <div style="margin: 24px 0;">
-          <a href="https://clud.samueltuoyo.com/signin" style="background-color: #401246; color: #ffffff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
-            Open Dashboard
-          </a>
-        </div>
-        <p style="font-size: 12px; color: #a3a3a3; margin-top: 32px;">
-          Clud &bull; Autonomous API Contract Drift Detection
-        </p>
-      </div>
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; background-color: #FAFAFA; margin: 0; padding: 0;">
+        <tr>
+          <td align="center" style="padding: 32px 16px; text-align: center;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 540px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #E5E5E5; border-radius: 16px; overflow: hidden; text-align: left; border-collapse: separate;">
+              <tr>
+                <td style="background-color: #611F69; padding: 22px 28px; text-align: left;">
+                  <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">Clud</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 32px 28px; text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #171717;">
+                  <h2 style="font-size: 20px; font-weight: 700; margin: 0 0 16px 0; text-align: left; color: #111827;">You've been invited to ${workspaceName}</h2>
+                  <p style="font-size: 14px; line-height: 1.6; color: #525252; margin: 0 0 24px 0; text-align: left;">
+                    ${inviterName} has added you as a team member to the <strong>${workspaceName}</strong> workspace on Clud.
+                  </p>
+                  <div style="margin: 24px 0; text-align: left;">
+                    <a href="https://clud.samueltuoyo.com/signin" style="background-color: #611F69; color: #ffffff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
+                      Open Dashboard
+                    </a>
+                  </div>
+                  <p style="font-size: 12px; color: #a3a3a3; margin: 32px 0 0 0; text-align: left;">
+                    Clud &bull; Automated API Contract Drift Detection
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     `
     const body: Record<string, any> = {
       to,
@@ -173,20 +188,35 @@ export class MailService {
     }
 
     const html = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; text-align: left;">
-        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Contact / Sales Inquiry</h2>
-        <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
-          <strong>Name:</strong> ${senderName}<br>
-          <strong>Email:</strong> ${senderEmail}<br>
-          <strong>Company:</strong> ${company || 'N/A'}
-        </p>
-        <div style="margin: 20px 0; padding: 16px; background-color: #f3f4f6; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
-          ${message.replace(/\n/g, '<br>')}
-        </div>
-        <p style="font-size: 12px; color: #6b7280; margin-top: 32px; text-align: left;">
-          Sent from Clud Contact Sales Form
-        </p>
-      </div>
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; background-color: #f8fafc; margin: 0; padding: 0;">
+        <tr>
+          <td align="center" style="padding: 32px 16px; text-align: center;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 580px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; text-align: left; border-collapse: separate;">
+              <tr>
+                <td style="padding: 22px 28px; background-color: #611F69; text-align: left;">
+                  <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">Clud</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 32px 28px; text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                  <h2 style="font-size: 20px; font-weight: 700; margin: 0 0 16px 0; text-align: left; color: #0f172a;">New Contact / Sales Inquiry</h2>
+                  <p style="font-size: 14px; line-height: 1.6; color: #374151; margin: 0 0 16px 0; text-align: left;">
+                    <strong>Name:</strong> ${senderName}<br>
+                    <strong>Email:</strong> ${senderEmail}<br>
+                    <strong>Company:</strong> ${company || 'N/A'}
+                  </p>
+                  <div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
+                    ${message.replace(/\n/g, '<br>')}
+                  </div>
+                  <p style="font-size: 12px; color: #6b7280; margin: 24px 0 0 0; text-align: left;">
+                    Sent from Clud Contact Sales Form
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     `
 
     const body: Record<string, any> = {
@@ -230,21 +260,36 @@ export class MailService {
     if (!apiKey) return
 
     const html = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; text-align: left;">
-        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Testimonial Submitted</h2>
-        <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
-          <strong>Name:</strong> ${review.name}<br>
-          <strong>Handle:</strong> ${review.handle || 'N/A'}<br>
-          <strong>Role / Company:</strong> ${review.role || ''} ${review.company ? `@ ${review.company}` : ''}<br>
-          <strong>Rating:</strong> ${'★'.repeat(review.rating || 5)} (${review.rating || 5}/5)
-        </p>
-        <div style="margin: 20px 0; padding: 16px; background-color: #fff0f6; border: 1px solid #fbcfe8; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
-          "${review.quote.replace(/\n/g, '<br>')}"
-        </div>
-        <p style="font-size: 12px; color: #6b7280; margin-top: 24px; text-align: left;">
-          This review is saved with <code>is_approved = false</code>. To make it visible on the landing page, update <code>is_approved = true</code> in the database.
-        </p>
-      </div>
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; background-color: #f8fafc; margin: 0; padding: 0;">
+        <tr>
+          <td align="center" style="padding: 32px 16px; text-align: center;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 580px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; text-align: left; border-collapse: separate;">
+              <tr>
+                <td style="padding: 22px 28px; background-color: #611F69; text-align: left;">
+                  <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">Clud</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 32px 28px; text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                  <h2 style="font-size: 20px; font-weight: 700; margin: 0 0 16px 0; text-align: left; color: #0f172a;">New Testimonial Submitted</h2>
+                  <p style="font-size: 14px; line-height: 1.6; color: #374151; margin: 0 0 16px 0; text-align: left;">
+                    <strong>Name:</strong> ${review.name}<br>
+                    <strong>Handle:</strong> ${review.handle || 'N/A'}<br>
+                    <strong>Role / Company:</strong> ${review.role || ''} ${review.company ? `@ ${review.company}` : ''}<br>
+                    <strong>Rating:</strong> ${'★'.repeat(review.rating || 5)} (${review.rating || 5}/5)
+                  </p>
+                  <div style="margin: 20px 0; padding: 16px; background-color: #fff0f6; border: 1px solid #fbcfe8; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1f2937; text-align: left;">
+                    "${review.quote.replace(/\n/g, '<br>')}"
+                  </div>
+                  <p style="font-size: 12px; color: #6b7280; margin: 24px 0 0 0; text-align: left;">
+                    This review is saved with <code>is_approved = false</code>. To make it visible on the landing page, update <code>is_approved = true</code> in the database.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     `
 
     const body: Record<string, any> = {
