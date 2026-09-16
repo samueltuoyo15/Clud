@@ -7,7 +7,11 @@ if [ -f "./bin/oasdiff-linux" ]; then
 fi
 
 echo "Applying database migrations..."
-pnpm db:migrate || echo "Migration completed or skipped"
+./node_modules/.bin/drizzle-kit migrate || npx drizzle-kit migrate || echo "Migration completed or skipped"
 
 echo "Starting Clud server..."
-exec node dist/main.js
+if [ -f "dist/src/main.js" ]; then
+  exec node dist/src/main.js
+else
+  exec node dist/main.js
+fi

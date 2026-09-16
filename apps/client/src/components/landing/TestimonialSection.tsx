@@ -23,17 +23,38 @@ const TESTIMONIALS = [
 ]
 
 export const TestimonialSection: React.FC = () => {
+  const [testimonials, setTestimonials] = useState(TESTIMONIALS)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const testimonialSpace = import.meta.env.VITE_TESTIMONIAL_SPACE || "clud"
+  const testimonialApiKey = import.meta.env.VITE_TESTIMONIAL_API_KEY
+
+  React.useEffect(() => {
+    if (!testimonialApiKey) return
+    fetch(`https://api.testimonial.to/api/v1/reviews?key=${testimonialApiKey}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((item: any) => ({
+            quote: item.text || item.message || item.quote,
+            name: item.name || "Happy Customer",
+            handle: item.handle || (item.twitter_username ? `@${item.twitter_username}` : ""),
+            avatar: item.avatar || item.photo_url || "https://i.pravatar.cc/150?img=47",
+          }))
+          setTestimonials(mapped)
+        }
+      })
+      .catch(() => {})
+  }, [testimonialApiKey])
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length)
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
   }
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
-  const current = TESTIMONIALS[currentIndex]
+  const current = testimonials[currentIndex] || TESTIMONIALS[0]
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
@@ -97,13 +118,28 @@ export const TestimonialSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-between px-4">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-4">
           <p className="text-sm font-medium text-neutral-900">
             See what more of our amazing customers have to say!
           </p>
-          <a href="#" className="text-sm font-semibold text-neutral-900 underline underline-offset-4 hover:opacity-80">
-            Visit wall of love
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href={`https://testimonial.to/${testimonialSpace}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-primary hover:underline underline-offset-4"
+            >
+              Leave a testimonial →
+            </a>
+            <a
+              href={`https://testimonial.to/${testimonialSpace}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-neutral-900 underline underline-offset-4 hover:opacity-80"
+            >
+              Visit wall of love
+            </a>
+          </div>
         </div>
 
       </div>

@@ -126,16 +126,36 @@ export const VisualIntegration: React.FC = () => {
             </div>
           </div>
 
-          {/* Center Node: Slack #api-alerts */}
+          {/* Center Hub: Multi-Channel Alerts (Slack, Email, Discord) */}
           <div className="absolute top-[155px] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-            <div className="bg-neutral-900 text-white rounded-full px-5 py-2.5 flex items-center gap-2.5 border-2 border-white shadow-xs">
-              <svg width="18" height="18" viewBox="0 0 24.5 24.5" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.3 15.3c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1.1 2.4-2.4v-2.4H5.3zm1.2-1.2c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4V8.9c0-1.3-1.1-2.4-2.4-2.4s-2.4 1.1-2.4 2.4v5.2z" fill="#E01E5A"/>
-                <path d="M9.1 5.3c0-1.3-1.1-2.4-2.4-2.4S4.3 4 4.3 5.3s1.1 2.4 2.4 2.4h2.4V5.3zm1.2 1.2c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4h5.2c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4h-5.2z" fill="#36C5F0"/>
-                <path d="M19.1 9.1c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4-2.4 1.1-2.4 2.4v2.4h2.4zm-1.2 1.2c0-1.3-1.1-2.4-2.4-2.4s-2.4 1.1-2.4 2.4v5.2c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4v-5.2z" fill="#2EB67D"/>
-                <path d="M15.3 19.1c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4-1.1-2.4-2.4-2.4h-2.4v2.4zm-1.2-1.2c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4H8.9c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4h5.2z" fill="#ECB22E"/>
-              </svg>
-              <span className="font-semibold text-xs">#api-alerts</span>
+            <div className="bg-neutral-950 text-white rounded-2xl px-4 py-2 flex items-center gap-3 border-2 border-white shadow-xs">
+              {/* Slack */}
+              <div className="flex items-center gap-1.5 pr-2.5 border-r border-neutral-700">
+                <svg width="15" height="15" viewBox="0 0 24.5 24.5" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.3 15.3c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4 2.4-1.1 2.4-2.4v-2.4H5.3zm1.2-1.2c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4V8.9c0-1.3-1.1-2.4-2.4-2.4s-2.4 1.1-2.4 2.4v5.2z" fill="#E01E5A"/>
+                  <path d="M9.1 5.3c0-1.3-1.1-2.4-2.4-2.4S4.3 4 4.3 5.3s1.1 2.4 2.4 2.4h2.4V5.3zm1.2 1.2c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4h5.2c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4h-5.2z" fill="#36C5F0"/>
+                  <path d="M19.1 9.1c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4-2.4 1.1-2.4 2.4v2.4h2.4zm-1.2 1.2c0-1.3-1.1-2.4-2.4-2.4s-2.4 1.1-2.4 2.4v5.2c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4v-5.2z" fill="#2EB67D"/>
+                  <path d="M15.3 19.1c0 1.3 1.1 2.4 2.4 2.4s2.4-1.1 2.4-2.4-1.1-2.4-2.4-2.4h-2.4v2.4zm-1.2-1.2c1.3 0 2.4-1.1 2.4-2.4s-1.1-2.4-2.4-2.4H8.9c-1.3 0-2.4 1.1-2.4 2.4s1.1 2.4 2.4 2.4h5.2z" fill="#ECB22E"/>
+                </svg>
+                <span className="font-semibold text-xs text-white">#api-alerts</span>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-1.5 pr-2.5 border-r border-neutral-700">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-rose-400">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span className="font-semibold text-xs text-white">Email</span>
+              </div>
+
+              {/* Discord */}
+              <div className="flex items-center gap-1.5">
+                <svg width="15" height="15" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-19.32-72.1M42.02,65.22c-5.36,0-9.82-4.95-9.82-11s4.38-11,9.82-11,9.91,4.95,9.82,11-4.46,11-9.82,11m43.1,0c-5.36,0-9.82-4.95-9.82-11s4.38-11,9.82-11,9.91,4.95,9.82,11-4.46,11-9.82,11" fill="#5865F2"/>
+                </svg>
+                <span className="font-semibold text-xs text-white">Discord</span>
+              </div>
             </div>
           </div>
 
