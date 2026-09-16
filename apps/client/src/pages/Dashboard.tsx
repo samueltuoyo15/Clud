@@ -318,7 +318,10 @@ export const Dashboard: React.FC = () => {
             )}
           </div>
         ) : activeNav === "integrations" ? (
-          <IntegrationsTab />
+          <IntegrationsTab
+            workspacePlan={activeWorkspace?.plan}
+            onGoToBilling={() => navigate("/dashboard/settings?tab=billing")}
+          />
         ) : (
           <SettingsTab
             displayName={displayName}
@@ -337,7 +340,10 @@ export const Dashboard: React.FC = () => {
         isOpen={showAddModal}
         isCreating={isCreating}
         integrationsCount={integrationsCount}
+        projectsCount={projects.length}
+        workspacePlan={activeWorkspace?.plan}
         onGoToIntegrations={() => navigate("/dashboard/integrations")}
+        onGoToBilling={() => navigate("/dashboard/settings?tab=billing")}
         newProject={newProject}
         setNewProject={setNewProject}
         onClose={() => setShowAddModal(false)}

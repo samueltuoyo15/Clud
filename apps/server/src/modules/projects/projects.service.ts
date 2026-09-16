@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common'
 import { eq, and } from 'drizzle-orm'
 import { CreateProjectDTO } from './dto/create-project.dto'
 import { fetchSpec, SpecAuth } from './utils/fetch-spec'
@@ -26,6 +26,27 @@ export class ProjectsService {
       .where(eq(workspaceMembers.user_id, userId))
       .limit(1)
     if (!member) throw new UnauthorizedException('User has no workspace')
+
+    const [workspace] = await db
+      .select({ id: workspaces.id, plan: workspaces.plan })
+      .from(workspaces)
+      .where(eq(workspaces.id, member.workspace_id))
+      .limit(1)
+
+    if (!workspace) throw new UnauthorizedException('Workspace not found')
+
+    if (workspace.plan !== 'pro') {
+      const existingProjects = await db
+        .select({ id: projects.id })
+        .from(projects)
+        .where(eq(projects.workspace_id, member.workspace_id))
+
+      if (existingProjects.length >= 1) {
+        throw new BadRequestException(
+          'Free plan is limited to 1 monitored API project. Please upgrade to Pro for unlimited projects.',
+        )
+      }
+    }
 
     const spec = await fetchSpec(spec_url, auth)
     validateOpenApiSpec(spec)

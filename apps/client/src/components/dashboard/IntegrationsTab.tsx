@@ -14,9 +14,18 @@ interface SlackIntegration {
   }
 }
 
+interface IntegrationsTabProps {
+  workspacePlan?: string
+  onGoToBilling?: () => void
+}
+
 type CategoryType = "all" | "alerting" | "devtools" | "tracking"
 
-export const IntegrationsTab: React.FC = () => {
+export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
+  workspacePlan = "free",
+  onGoToBilling,
+}) => {
+  const isPro = workspacePlan === "pro"
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [showDisconnectSlack, setShowDisconnectSlack] = useState(false)
   const [configuredEmails, setConfiguredEmails] = useState<string[]>([])
@@ -101,6 +110,17 @@ export const IntegrationsTab: React.FC = () => {
           onClick={() => setShowDisconnectSlack(true)}
         >
           Disconnect
+        </Button>
+      ) : !isPro ? (
+        <Button
+          size="sm"
+          className="w-full text-xs rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 border-transparent cursor-pointer flex items-center justify-center gap-1.5"
+          onClick={() => {
+            toast.info("Slack integration is a Pro feature. Please upgrade to Pro.")
+            if (onGoToBilling) onGoToBilling()
+          }}
+        >
+          <span>Upgrade to Connect</span>
         </Button>
       ) : (
         <Button

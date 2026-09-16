@@ -12,6 +12,8 @@ export interface Workspace {
   name: string
   logo_url?: string | null
   role: string
+  plan?: string
+  subscription_status?: string
 }
 
 interface DashboardSidebarProps {

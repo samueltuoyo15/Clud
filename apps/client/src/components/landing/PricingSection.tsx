@@ -38,6 +38,10 @@ export const PricingSection: React.FC = () => {
               </li>
               <li className="flex items-start gap-3">
                 <CheckmarkBadge01Icon className="text-emerald-500 shrink-0" size={20} />
+                <span className="text-sm text-neutral-700">PWA Desktop &amp; Mobile Push Alerts</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckmarkBadge01Icon className="text-emerald-500 shrink-0" size={20} />
                 <span className="text-sm text-neutral-700">5-minute polling interval</span>
               </li>
               <li className="flex items-start gap-3 opacity-50">
@@ -75,7 +79,11 @@ export const PricingSection: React.FC = () => {
               </li>
               <li className="flex items-start gap-3">
                 <CheckmarkBadge01Icon className="text-white shrink-0" size={20} />
-                <span className="text-sm">Instant Slack &amp; Email Alerts</span>
+                <span className="text-sm">Instant Slack, Email &amp; PWA Alerts</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckmarkBadge01Icon className="text-white shrink-0" size={20} />
+                <span className="text-sm">2-minute polling interval</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckmarkBadge01Icon className="text-white shrink-0" size={20} />

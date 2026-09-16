@@ -87,6 +87,20 @@ export class IntegrationsService {
 
     if (!member) throw new BadRequestException('User has no workspace')
 
+    const [workspace] = await db
+      .select({ id: workspaces.id, plan: workspaces.plan })
+      .from(workspaces)
+      .where(eq(workspaces.id, member.workspace_id))
+      .limit(1)
+
+    if (!workspace) throw new BadRequestException('Workspace not found')
+
+    if (workspace.plan !== 'pro') {
+      throw new BadRequestException(
+        'Slack integration is a Pro feature. Please upgrade to Pro in Settings to connect Slack.',
+      )
+    }
+
     const clientId = process.env.SLACK_CLIENT_ID
     const clientSecret = process.env.SLACK_CLIENT_SECRET
     if (!clientId || !clientSecret) {

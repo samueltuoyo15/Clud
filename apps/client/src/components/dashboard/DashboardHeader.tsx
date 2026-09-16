@@ -7,7 +7,10 @@ import { getShortcutKey } from "../../lib/platform"
 export interface Workspace {
   id: string
   name: string
+  logo_url?: string | null
   role: string
+  plan?: string
+  subscription_status?: string
 }
 
 export interface InAppNotification {

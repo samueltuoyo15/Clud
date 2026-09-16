@@ -16,7 +16,10 @@ interface AddProjectModalProps {
   isOpen: boolean
   isCreating: boolean
   integrationsCount?: number
+  projectsCount?: number
+  workspacePlan?: string
   onGoToIntegrations?: () => void
+  onGoToBilling?: () => void
   newProject: ProjectFormData
   setNewProject: React.Dispatch<React.SetStateAction<ProjectFormData>>
   onClose: () => void
@@ -27,7 +30,10 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
   isOpen,
   isCreating,
   integrationsCount,
+  projectsCount = 0,
+  workspacePlan = "free",
   onGoToIntegrations,
+  onGoToBilling,
   newProject,
   setNewProject,
   onClose,
@@ -35,12 +41,41 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 }) => {
   if (!isOpen) return null
 
+  const isPro = workspacePlan === "pro"
+  const isProjectLimitReached = !isPro && projectsCount >= 1
   const hasIntegrations = integrationsCount !== undefined ? integrationsCount > 0 : true
 
   return (
     <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-xs flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-neutral-200">
-        {!hasIntegrations ? (
+        {isProjectLimitReached ? (
+          <div className="text-center py-6">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-purple-50 text-primary">
+              <PlusSignIcon size={28} />
+            </div>
+            <h3 className="text-lg font-bold text-neutral-900 mb-2">
+              Free Plan Limit Reached
+            </h3>
+            <p className="text-sm text-neutral-500 mb-8 px-4 leading-relaxed">
+              The Hobby plan is limited to 1 monitored OpenAPI project. Upgrade to Pro for unlimited projects, instant Slack alerts, and 2-minute polling intervals.
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <Button type="button" variant="light" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => {
+                  onClose()
+                  if (onGoToBilling) onGoToBilling()
+                }}
+              >
+                Upgrade to Pro &rarr;
+              </Button>
+            </div>
+          </div>
+        ) : !hasIntegrations ? (
           <div className="text-center py-6">
             <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-amber-50 text-amber-600">
               <PuzzleIcon size={28} />
