@@ -14,36 +14,36 @@ export const Hero: React.FC = () => {
         <div className="flex items-center gap-3 bg-white border border-neutral-200 rounded-full py-1.5 px-2 pr-4 mb-6 w-fit">
           <div className="flex -space-x-2">
             <img
-              src="https://i.pravatar.cc/150?u=a"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Sarah&backgroundColor=e9d5ff"
               alt="User 1"
               width={32}
               height={32}
               loading="lazy"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://i.pravatar.cc/150?u=b"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Alex&backgroundColor=d8b4fe"
               alt="User 2"
               width={32}
               height={32}
               loading="lazy"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://i.pravatar.cc/150?u=c"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Taylor&backgroundColor=c084fc"
               alt="User 3"
               width={32}
               height={32}
               loading="lazy"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
             <img
-              src="https://i.pravatar.cc/150?u=d"
+              src="https://api.dicebear.com/7.x/big-smile/svg?seed=Jordan&backgroundColor=a855f7"
               alt="User 4"
               width={32}
               height={32}
               loading="lazy"
-              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100 grayscale"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover bg-neutral-100"
             />
           </div>
           <span className="text-sm text-neutral-600 font-medium">

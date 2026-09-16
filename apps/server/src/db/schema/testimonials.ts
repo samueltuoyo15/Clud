@@ -19,7 +19,7 @@ export const testimonials = pgTable(
     role: text('role'),
     company: text('company'),
     rating: integer('rating').notNull().default(5),
-    is_approved: boolean('is_approved').notNull().default(true),
+    is_approved: boolean('is_approved').notNull().default(false),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),

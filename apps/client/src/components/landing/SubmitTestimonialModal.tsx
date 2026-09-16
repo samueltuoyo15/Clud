@@ -6,13 +6,11 @@ import { toast } from "sonner"
 interface SubmitTestimonialModalProps {
   isOpen: boolean
   onClose: () => void
-  onSuccess: (newReview: any) => void
 }
 
 export const SubmitTestimonialModal: React.FC<SubmitTestimonialModalProps> = ({
   isOpen,
   onClose,
-  onSuccess,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -48,11 +46,7 @@ export const SubmitTestimonialModal: React.FC<SubmitTestimonialModalProps> = ({
         throw new Error("Failed to submit review")
       }
 
-      const resData = await response.json()
-      toast.success("Thank you! Your review has been submitted.")
-      if (resData?.data) {
-        onSuccess(resData.data)
-      }
+      toast.success("Thank you! Your review has been submitted for review.")
       onClose()
     } catch (_err) {
       toast.error("Could not submit review. Please try again.")

@@ -18,19 +18,19 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
     quote: "Clud has completely changed how our frontend and backend teams communicate. We catch breaking changes instantly before they hit production.",
     name: "Sarah Jenkins",
     handle: "@sarahjenkins",
-    avatar_url: "https://i.pravatar.cc/150?img=47",
+    avatar_url: "https://api.dicebear.com/7.x/big-smile/svg?seed=SarahJenkins&backgroundColor=e9d5ff",
   },
   {
     quote: "I used to spend hours debugging silent failures. Now Clud just pings our Slack channel the second an API spec drifts. Unbelievably good.",
     name: "Marcus Chen",
     handle: "@marcuschen_dev",
-    avatar_url: "https://i.pravatar.cc/150?img=11",
+    avatar_url: "https://api.dicebear.com/7.x/big-smile/svg?seed=MarcusChen&backgroundColor=d8b4fe",
   },
   {
     quote: "The easiest setup I have ever experienced. Dropped our OpenAPI spec URL in and it immediately started protecting our mobile team from unexpected breaks.",
     name: "Elena Rodriguez",
     handle: "@elena_codes",
-    avatar_url: "https://i.pravatar.cc/150?img=32",
+    avatar_url: "https://api.dicebear.com/7.x/big-smile/svg?seed=ElenaRodriguez&backgroundColor=c084fc",
   },
 ]
 
@@ -56,14 +56,6 @@ export const TestimonialSection: React.FC = () => {
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-  }
-
-  const handleSuccess = (newReview: TestimonialItem) => {
-    setTestimonials((prev) => {
-      const isMock = prev.some((t) => t.handle === "@sarahjenkins" || t.handle === "@marcuschen_dev")
-      return isMock ? [newReview] : [newReview, ...prev]
-    })
-    setCurrentIndex(0)
   }
 
   const current = testimonials[currentIndex] || DEFAULT_TESTIMONIALS[0]
@@ -94,7 +86,7 @@ export const TestimonialSection: React.FC = () => {
           <div className="flex items-center justify-between mt-12">
             <div className="flex items-center gap-4">
               <img
-                src={current.avatar_url || "https://i.pravatar.cc/150?img=47"}
+                src={current.avatar_url || "https://api.dicebear.com/7.x/big-smile/svg?seed=Clud&backgroundColor=e9d5ff"}
                 alt={current.name}
                 width={48}
                 height={48}
@@ -152,7 +144,6 @@ export const TestimonialSection: React.FC = () => {
       <SubmitTestimonialModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={handleSuccess}
       />
     </section>
   )
