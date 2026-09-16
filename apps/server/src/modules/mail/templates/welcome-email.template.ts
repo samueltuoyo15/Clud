@@ -14,12 +14,11 @@ export const getWelcomeEmailTemplate = (firstName: string): string => {
       margin: 0;
       padding: 32px 16px;
       background-color: #FAFAFA;
-      text-align: left;
     }
     .container {
       width: 100%;
       max-width: 580px;
-      margin: 0;
+      margin: 0 auto;
       background-color: #ffffff;
       border: 1px solid #E5E5E5;
       border-radius: 16px;
@@ -63,7 +62,7 @@ export const getWelcomeEmailTemplate = (firstName: string): string => {
       padding: 24px 28px;
       border-top: 1px solid #F1F5F9;
       background-color: #FAFAFA;
-      text-align: left;
+      text-align: center;
     }
     .footer-text {
       font-size: 12px;
@@ -75,7 +74,7 @@ export const getWelcomeEmailTemplate = (firstName: string): string => {
 <body>
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td align="left">
+      <td align="center">
         <div class="container">
           <div class="header">
             <span class="logo-text">Clud</span>

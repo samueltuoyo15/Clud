@@ -173,7 +173,7 @@ export class MailService {
     }
 
     const html = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; padding: 24px; color: #171717; text-align: left;">
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; text-align: left;">
         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Contact / Sales Inquiry</h2>
         <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
           <strong>Name:</strong> ${senderName}<br>
@@ -230,7 +230,7 @@ export class MailService {
     if (!apiKey) return
 
     const html = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; padding: 24px; color: #171717; text-align: left;">
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; text-align: left;">
         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; text-align: left;">New Testimonial Submitted</h2>
         <p style="font-size: 14px; line-height: 1.6; color: #374151; text-align: left;">
           <strong>Name:</strong> ${review.name}<br>

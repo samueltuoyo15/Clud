@@ -9,20 +9,20 @@ export function getDriftAlertEmailTemplate(projectName: string, diffText: string
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Drift Detected - Clud</title>
   <style>
-    body { margin: 0; padding: 32px 16px; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; text-align: left; }
-    .card-wrapper { width: 100%; max-width: 580px; margin: 0; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; text-align: left; }
+    body { margin: 0; padding: 32px 16px; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    .card-wrapper { width: 100%; max-width: 580px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; text-align: left; }
     .header-cell { padding: 22px 28px; background-color: #611F69; text-align: left; }
     .body-cell { padding: 32px 28px; text-align: left; }
     .main-heading { margin: 0 0 10px 0; font-size: 20px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; text-align: left; }
     .sub-text { margin: 0 0 20px 0; font-size: 14px; color: #475569; line-height: 1.55; text-align: left; }
     .diff-box { background-color: #f8fafc; color: #0f172a; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; margin-bottom: 24px; text-align: left; }
-    .footer-text { text-align: left; color: #94a3b8; font-size: 12px; margin-top: 24px; line-height: 1.5; }
+    .footer-text { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 24px; line-height: 1.5; }
   </style>
 </head>
 <body>
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td align="left">
+      <td align="center">
         <div class="card-wrapper">
           <div class="header-cell">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0">

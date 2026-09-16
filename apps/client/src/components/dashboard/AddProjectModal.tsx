@@ -55,9 +55,9 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
               <Button type="button" variant="light" onClick={onClose}>
                 Cancel
               </Button>
-              <Button 
-                type="button" 
-                variant="primary" 
+              <Button
+                type="button"
+                variant="primary"
                 onClick={() => {
                   onClose()
                   if (onGoToIntegrations) onGoToIntegrations()
@@ -118,7 +118,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                       auth_type: checked ? "basic" : "none",
                     })
                   }
-                  label="Protected with HTTP Basic Auth"
+                  label="Protected with HTTP Basic Auth?"
                   description="Supply credentials if this endpoint requires authentication"
                 />
 
