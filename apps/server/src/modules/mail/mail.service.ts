@@ -112,6 +112,79 @@ export class MailService {
     }))
   }
 
+  async sendSpecUnreachableAlert(
+    toEmails: string[],
+    projectName: string,
+    specUrl: string,
+    reason?: string,
+  ): Promise<void> {
+    const apiKey = this.apiKey || process.env.SENDLIB_API_KEY
+    if (!apiKey || !toEmails.length) return
+
+    const subject = `API Spec Unreachable: ${projectName}`
+    const html = `
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; background-color: #f8fafc; margin: 0; padding: 0;">
+        <tr>
+          <td align="center" style="padding: 32px 16px; text-align: center;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="max-width: 580px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; text-align: left; border-collapse: separate;">
+              <tr>
+                <td style="padding: 22px 28px; background-color: #611F69; text-align: left;">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr>
+                      <td style="vertical-align: middle; padding-right: 10px;">
+                        <img src="https://clud.samueltuoyo.com/clud-logo-white-512x512.png" width="28" height="28" alt="Clud" style="display: block; width: 28px; height: 28px; border: 0; outline: none; text-decoration: none;" />
+                      </td>
+                      <td style="vertical-align: middle;">
+                        <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; line-height: 1;">Clud</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 32px 28px; text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                  <h2 style="font-size: 20px; font-weight: 700; margin: 0 0 16px 0; text-align: left; color: #dc2626;">API Spec Unreachable</h2>
+                  <p style="font-size: 14px; line-height: 1.6; color: #374151; margin: 0 0 16px 0; text-align: left;">
+                    Clud attempted to monitor the OpenAPI specification for <strong>${projectName}</strong>, but the endpoint failed to respond.
+                  </p>
+                  <div style="margin: 20px 0; padding: 16px; background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px; line-height: 1.6; color: #991b1b; text-align: left;">
+                    <strong>Spec URL:</strong> ${specUrl}<br>
+                    <strong>Error:</strong> ${reason || 'HTTP fetch failed or service unreachable'}
+                  </div>
+                  <p style="font-size: 13px; color: #6b7280; margin: 20px 0 0 0; text-align: left;">
+                    Please check if your backend server is down, protected by a firewall, or if the OpenAPI contract endpoint was moved.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    `
+
+    await Promise.allSettled(
+      toEmails.map(async (to) => {
+        const body: Record<string, any> = { to, subject, html }
+        if (this.from?.trim()) body.from = this.from
+        try {
+          const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify(body),
+          })
+          if (!response.ok) {
+            this.logger.error(`Failed to send unreachable alert to ${to}: ${await response.text()}`)
+          }
+        } catch (err: any) {
+          this.logger.error(`Failed request for unreachable alert to ${to}: ${err.message}`)
+        }
+      }),
+    )
+  }
+
   async sendWorkspaceInviteEmail(
     to: string,
     workspaceName: string,

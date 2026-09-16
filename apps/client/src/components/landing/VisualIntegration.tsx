@@ -64,7 +64,7 @@ const APPS = [
 
 export const VisualIntegration: React.FC = () => {
   return (
-    <section className="py-24 bg-white relative overflow-hidden border-b border-neutral-100">
+    <section id="how-it-works" className="py-24 bg-white relative overflow-hidden border-b border-neutral-100 scroll-mt-16">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-neutral-900 tracking-tight mb-4">

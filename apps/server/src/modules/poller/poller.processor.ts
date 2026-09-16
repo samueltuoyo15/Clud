@@ -57,8 +57,79 @@ export class PollerProcessor extends WorkerHost {
         : undefined,
     }
 
-    const spec = await fetchSpec(project.spec_url, auth)
-    validateOpenApiSpec(spec)
+    let spec: any
+    try {
+      spec = await fetchSpec(project.spec_url, auth)
+      validateOpenApiSpec(spec)
+    } catch (fetchErr: any) {
+      this.logger.error(
+        `Spec unreachable for "${project.name}": ${fetchErr.message}`,
+      )
+
+      const unreachableMsg = `OpenAPI spec at ${project.spec_url} is no longer accessible (${fetchErr.message || 'Endpoint unreachable'}). Your service might be down or returning an error.`
+
+      const [ws] = await db
+        .select({ alert_emails: workspaces.alert_emails })
+        .from(workspaces)
+        .where(eq(workspaces.id, project.workspace_id))
+
+      const slacks = await db
+        .select()
+        .from(integrations)
+        .where(
+          and(
+            eq(integrations.workspace_id, project.workspace_id),
+            eq(integrations.provider, 'slack'),
+          ),
+        )
+
+      const alertEmails = (ws?.alert_emails as string[]) || []
+      if (alertEmails.length) {
+        this.mailService
+          .sendSpecUnreachableAlert(
+            alertEmails,
+            project.name,
+            project.spec_url,
+            fetchErr.message,
+          )
+          .catch((err) =>
+            this.logger.error(`Mail unreachable alert failed: ${err.message}`),
+          )
+      }
+
+      for (const slack of slacks) {
+        const webhookUrl = (slack.metadata as any)?.webhook_url
+        if (webhookUrl) {
+          const text = `*API Spec Unreachable: ${project.name}*\n\n${unreachableMsg}`
+          fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text }),
+          }).catch((err) =>
+            this.logger.error(`Slack alert failed: ${err.message}`),
+          )
+        }
+      }
+
+      // Insert in-app notification
+      await db
+        .insert(notifications)
+        .values({
+          workspace_id: project.workspace_id,
+          project_id: project.id,
+          title: `API Spec Unreachable: ${project.name}`,
+          message: unreachableMsg,
+          type: 'error',
+        })
+        .catch(() => {})
+
+      await db
+        .update(projects)
+        .set({ last_polled_at: now })
+        .where(eq(projects.id, project.id))
+
+      return
+    }
 
     const newHash = hashSpec(spec)
     if (newHash === project.last_hash) {

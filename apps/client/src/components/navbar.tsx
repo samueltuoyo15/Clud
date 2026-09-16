@@ -5,6 +5,20 @@ import { ArrowRight01Icon } from "hugeicons-react"
 export const Navbar: React.FC = () => {
   const isLoggedIn = !!localStorage.getItem("accessToken")
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string,
+  ) => {
+    if (window.location.pathname === "/") {
+      e.preventDefault()
+      const el = document.getElementById(targetId)
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" })
+        window.history.pushState(null, "", `/#${targetId}`)
+      }
+    }
+  }
+
   return (
     <header className="w-full max-w-6xl mx-auto px-6 lg:px-8 py-6 flex items-center justify-between relative z-50">
       <div className="flex items-center gap-8 lg:gap-12">
@@ -29,13 +43,15 @@ export const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[15px] text-neutral-600 font-medium">
           <a
             href="/#features"
-            className="hover:text-neutral-950 transition-colors"
+            onClick={(e) => handleNavClick(e, "features")}
+            className="hover:text-neutral-950 transition-colors cursor-pointer"
           >
             Features
           </a>
           <a
             href="/#how-it-works"
-            className="hover:text-neutral-950 transition-colors"
+            onClick={(e) => handleNavClick(e, "how-it-works")}
+            className="hover:text-neutral-950 transition-colors cursor-pointer"
           >
             How it works
           </a>
@@ -45,7 +61,11 @@ export const Navbar: React.FC = () => {
           >
             Changelog
           </Link>
-          <a href="/#pricing" className="hover:text-neutral-950 transition-colors">
+          <a
+            href="/#pricing"
+            onClick={(e) => handleNavClick(e, "pricing")}
+            className="hover:text-neutral-950 transition-colors cursor-pointer"
+          >
             Pricing
           </a>
         </nav>

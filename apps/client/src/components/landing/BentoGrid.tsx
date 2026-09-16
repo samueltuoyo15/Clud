@@ -2,7 +2,7 @@ import React from "react"
 
 export const BentoGrid: React.FC = () => {
   return (
-    <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+    <div id="features" className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4 scroll-mt-20">
       <div className="md:col-span-2 bg-neutral-50 rounded-3xl p-8 border border-neutral-200 min-h-75 flex flex-col justify-between items-start text-left">
         <div>
           <h2 className="text-xl font-semibold text-neutral-900 mb-2">

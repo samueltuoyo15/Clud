@@ -4,7 +4,7 @@ import { CheckmarkBadge01Icon } from "hugeicons-react"
 
 export const PricingSection: React.FC = () => {
   return (
-    <section id="pricing" className="py-24 bg-neutral-50 relative overflow-hidden">
+    <section id="pricing" className="py-24 bg-neutral-50 relative overflow-hidden scroll-mt-16">
       <div className="max-w-5xl mx-auto px-6">
         <div className="text-center mb-16 max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-neutral-900 tracking-tight mb-4">
