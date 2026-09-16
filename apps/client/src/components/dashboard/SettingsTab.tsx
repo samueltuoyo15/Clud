@@ -179,6 +179,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   }
 
   useEffect(() => {
+    if (activeSubTab === "members" && activeWorkspace?.id) {
+      loadMembers()
+    }
+  }, [activeSubTab, activeWorkspace?.id])
+
+  useEffect(() => {
     if (activeSubTab === "billing" && activeWorkspace?.id) {
       loadBilling()
     }
