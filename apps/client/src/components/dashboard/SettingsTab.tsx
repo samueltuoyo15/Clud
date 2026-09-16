@@ -5,6 +5,7 @@ import { Button } from "../ui/button"
 import { Checkbox } from "../ui/Checkbox"
 import { fetchApi } from "../../lib/fetch"
 import type { Workspace } from "./DashboardSidebar"
+import { CancelSubscriptionModal } from "./CancelSubscriptionModal"
 
 interface Member {
   id: string
@@ -164,6 +165,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   } | null>(null)
   const [isStartingCheckout, setIsStartingCheckout] = useState(false)
   const [isCancelling, setIsCancelling] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
 
   const loadBilling = async () => {
     if (!activeWorkspace?.id) return
@@ -212,13 +214,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     }
   }
 
-  const handleCancelSubscription = async () => {
+  const handleConfirmCancel = async () => {
     if (!activeWorkspace?.id) return
-    if (!window.confirm("Are you sure you want to cancel your Pro subscription?")) return
     setIsCancelling(true)
     try {
       await fetchApi(`/payments/cancel/${activeWorkspace.id}`, { method: "POST" })
       toast.success("Subscription cancelled successfully.")
+      setShowCancelModal(false)
       loadBilling()
       if (onProfileUpdated) onProfileUpdated()
     } catch (err: any) {
@@ -834,11 +836,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               {billingData?.plan === "pro" ? (
                 <button
                   type="button"
-                  onClick={handleCancelSubscription}
-                  disabled={isCancelling}
-                  className="self-start px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50 shrink-0"
+                  onClick={() => setShowCancelModal(true)}
+                  className="self-start px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-semibold transition-colors cursor-pointer shrink-0"
                 >
-                  {isCancelling ? "Cancelling..." : "Cancel Subscription"}
+                  Cancel Subscription
                 </button>
               ) : (
                 <span className="self-start text-xs font-semibold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200 shrink-0">
@@ -899,6 +900,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </div>
       )}
+
+      <CancelSubscriptionModal
+        isOpen={showCancelModal}
+        isLoading={isCancelling}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleConfirmCancel}
+      />
     </div>
   )
 }
