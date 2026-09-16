@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import db from '../../db'
 import { testimonials } from '../../db/schema/testimonials'
 import { desc, eq } from 'drizzle-orm'
@@ -65,6 +65,26 @@ export class TestimonialsService {
 
   async create(dto: CreateTestimonialDto) {
     const cleanHandle = dto.handle?.replace(/^@+/, '').trim()
+
+    if (cleanHandle) {
+      try {
+        const checkRes = await fetch(
+          `https://unavatar.io/x/${encodeURIComponent(cleanHandle)}?fallback=false`,
+          { method: 'HEAD', signal: AbortSignal.timeout(4000) },
+        )
+        if (checkRes.status === 404) {
+          throw new BadRequestException(
+            `Twitter / X account "@${cleanHandle}" was not found. Please check your handle.`,
+          )
+        }
+      } catch (err: any) {
+        if (err instanceof BadRequestException) {
+          throw err
+        }
+        this.logger.warn(`Could not verify Twitter handle @${cleanHandle}: ${err.message}`)
+      }
+    }
+
     let avatar = dto.avatar_url?.trim()
     if (!avatar) {
       if (cleanHandle) {

@@ -882,9 +882,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   size="sm"
                   isLoading={isStartingCheckout}
                   onClick={handleUpgrade}
-                  className="rounded-lg"
+                  className="rounded-lg shrink-0 whitespace-nowrap ml-4"
                 >
-                  Upgrade to Pro
+                  Upgrade
                 </Button>
               </div>
             ) : (
